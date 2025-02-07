@@ -24,6 +24,8 @@ public class Lander {
     @JsonIgnoreProperties("LanderID")
     private Set<ProcessedFLNTUHead> FLNTUHeads;
 
+    public Lander() {
+    }
 
     public Lander(String ASDBLanderID, String landerPlatform, String ASDBROVDiveID) {
         this.ASDBLanderID = ASDBLanderID;
