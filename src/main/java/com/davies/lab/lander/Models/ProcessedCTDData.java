@@ -1,9 +1,7 @@
 package com.davies.lab.lander.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
 @Entity
 public class ProcessedCTDData {
@@ -17,12 +15,15 @@ public class ProcessedCTDData {
     private Double Ec25UsCm;
     private Double BattV;
     //TODO: Connect to CTD Head Entity
-    private Integer HeadID;
+    @ManyToOne
+    @JoinColumn(name = "Head", referencedColumnName = "HeadID")
+    @JsonIgnoreProperties("data")
+    private ProcessedCTDHead HeadID;
 
     public ProcessedCTDData() {
     }
 
-    public ProcessedCTDData(Integer ID, String date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Integer headID) {
+    public ProcessedCTDData(Integer ID, String date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, ProcessedCTDHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -89,11 +90,11 @@ public class ProcessedCTDData {
         BattV = battV;
     }
 
-    public Integer getHeadID() {
+    public ProcessedCTDHead getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(ProcessedCTDHead headID) {
         HeadID = headID;
     }
 }

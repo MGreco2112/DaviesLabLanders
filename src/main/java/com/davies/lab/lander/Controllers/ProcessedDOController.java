@@ -1,12 +1,13 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.Models.ProcessedCTDData;
 import com.davies.lab.lander.Models.ProcessedDOData;
 import com.davies.lab.lander.Repositories.ProcessedDODataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,5 +21,10 @@ public class ProcessedDOController {
     @GetMapping
     public List<ProcessedDOData> findAllEntries() {
         return repository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProcessedCTDData> findById(@PathVariable Integer id) {
+        return new ResponseEntity(repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)), HttpStatus.OK);
     }
 }
