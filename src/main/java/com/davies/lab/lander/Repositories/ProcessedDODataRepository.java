@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProcessedDODataRepository extends JpaRepository<Integer, ProcessedDOData> {
+public interface ProcessedDODataRepository extends JpaRepository<ProcessedDOData, Integer> {
     //TODO: Add custom SQL Query routes as needed
 }

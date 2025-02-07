@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProcessedCTDDataRepository extends JpaRepository<Integer, ProcessedCTDData> {
+public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDData, Integer> {
     //TODO Add custom SQL Query routes as needed by Frontend
 }
