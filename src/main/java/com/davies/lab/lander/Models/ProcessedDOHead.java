@@ -1,9 +1,9 @@
 package com.davies.lab.lander.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class ProcessedDOHead {
@@ -33,12 +33,18 @@ public class ProcessedDOHead {
     private Integer DepM;
     private Integer SetSal;
     private String FilmNo;
-    private String LanderID;
+    @ManyToOne
+    @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
+    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+    private Lander LanderID;
+    @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("HeadID")
+    private Set<ProcessedDOData> data;
 
     public ProcessedDOHead() {
     }
 
-    public ProcessedDOHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer interval, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Double coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
+    public ProcessedDOHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer interval, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Double coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -67,6 +73,7 @@ public class ProcessedDOHead {
         SetSal = setSal;
         FilmNo = filmNo;
         LanderID = landerID;
+        this.data = data;
     }
 
     public Integer getHeadID() {
@@ -285,11 +292,19 @@ public class ProcessedDOHead {
         FilmNo = filmNo;
     }
 
-    public String getLanderID() {
+    public Lander getLanderID() {
         return LanderID;
     }
 
-    public void setLanderID(String landerID) {
+    public void setLanderID(Lander landerID) {
         LanderID = landerID;
+    }
+
+    public Set<ProcessedDOData> getData() {
+        return data;
+    }
+
+    public void setData(Set<ProcessedDOData> data) {
+        this.data = data;
     }
 }

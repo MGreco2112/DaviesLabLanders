@@ -37,7 +37,10 @@ public class ProcessedCTDHead {
     private Integer BuzzerNumber;
     private Integer DepM;
     private Integer CondDepB;
-    private String LanderID;
+    @ManyToOne
+    @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
+    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+    private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("HeadID")
     private Set<ProcessedCTDData> data;
@@ -45,38 +48,7 @@ public class ProcessedCTDHead {
     public ProcessedCTDHead() {
     }
 
-    public ProcessedCTDHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
-        HeadID = headID;
-        SondeName = sondeName;
-        SondeNo = sondeNo;
-        SensorType = sensorType;
-        Channel = channel;
-        DelayTime = delayTime;
-        PreHeat = preHeat;
-        MeasMode = measMode;
-        BurstTime = burstTime;
-        BurstCnt = burstCnt;
-        Interval = interval;
-        SampleCnt = sampleCnt;
-        StartTime = startTime;
-        EndTime = endTime;
-        DepAdiRho = depAdiRho;
-        this.ECA = ECA;
-        this.ECB = ECB;
-        this.ECDeg = ECDeg;
-        this.ECCoef = ECCoef;
-        CoefDate = coefDate;
-        Ch1 = ch1;
-        Ch2 = ch2;
-        Ch3 = ch3;
-        Ch4 = ch4;
-        BuzzerEN = buzzerEN;
-        BuzzerInterval = buzzerInterval;
-        this.COMMENT = COMMENT;
-        SensorType2 = sensorType2;
-        BuzzerNumber = buzzerNumber;
-        DepM = depM;
-        CondDepB = condDepB;
+    public void setLanderID(Lander landerID) {
         LanderID = landerID;
     }
 
@@ -328,12 +300,8 @@ public class ProcessedCTDHead {
         CondDepB = condDepB;
     }
 
-    public String getLanderID() {
+    public Lander getLanderID() {
         return LanderID;
-    }
-
-    public void setLanderID(String landerID) {
-        LanderID = landerID;
     }
 
     public Set<ProcessedCTDData> getData() {

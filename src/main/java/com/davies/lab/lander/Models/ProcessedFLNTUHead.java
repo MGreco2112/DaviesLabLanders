@@ -1,9 +1,9 @@
 package com.davies.lab.lander.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class ProcessedFLNTUHead {
@@ -31,12 +31,18 @@ public class ProcessedFLNTUHead {
     private String Comment;
     private String SensorType2;
     private Integer BuzzerNumber;
-    private String LanderID;
+    @ManyToOne
+    @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
+    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+    private Lander LanderID;
+    @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("HeadID")
+    private Set<ProcessedFLNTUData> data;
 
     public ProcessedFLNTUHead() {
     }
 
-    public ProcessedFLNTUHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer wiperInterval, Integer sampleCnt, String startTime, String endTime, Integer CHLA, Integer CHLB, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
+    public ProcessedFLNTUHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer wiperInterval, Integer sampleCnt, String startTime, String endTime, Integer CHLA, Integer CHLB, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -65,6 +71,7 @@ public class ProcessedFLNTUHead {
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
         LanderID = landerID;
+        this.data = data;
     }
 
     public Integer getHeadID() {
@@ -283,11 +290,19 @@ public class ProcessedFLNTUHead {
         BuzzerNumber = buzzerNumber;
     }
 
-    public String getLanderID() {
+    public Lander getLanderID() {
         return LanderID;
     }
 
-    public void setLanderID(String landerID) {
+    public void setLanderID(Lander landerID) {
         LanderID = landerID;
+    }
+
+    public Set<ProcessedFLNTUData> getData() {
+        return data;
+    }
+
+    public void setData(Set<ProcessedFLNTUData> data) {
+        this.data = data;
     }
 }

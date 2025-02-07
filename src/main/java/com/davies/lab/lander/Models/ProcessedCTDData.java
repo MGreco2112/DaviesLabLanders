@@ -16,7 +16,7 @@ public class ProcessedCTDData {
     private Double BattV;
     //TODO: Connect to CTD Head Entity
     @ManyToOne
-    @JoinColumn(name = "Head", referencedColumnName = "HeadID")
+    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     @JsonIgnoreProperties("data")
     private ProcessedCTDHead HeadID;
 

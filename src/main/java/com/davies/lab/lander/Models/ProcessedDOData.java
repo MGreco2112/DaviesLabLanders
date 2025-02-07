@@ -1,9 +1,7 @@
 package com.davies.lab.lander.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
 @Entity
 public class ProcessedDOData {
@@ -17,12 +15,15 @@ public class ProcessedDOData {
     private Double BattV;
     private Double GGDOMgL;
     private Double BKDOMgL;
-    private Integer HeadID;
+    @ManyToOne
+    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
+    @JsonIgnoreProperties("data")
+    private ProcessedDOHead HeadID;
 
     public ProcessedDOData() {
     }
 
-    public ProcessedDOData(Integer ID, String date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, Integer headID) {
+    public ProcessedDOData(Integer ID, String date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, ProcessedDOHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -98,11 +99,11 @@ public class ProcessedDOData {
         this.BKDOMgL = BKDOMgL;
     }
 
-    public Integer getHeadID() {
+    public ProcessedDOHead getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(ProcessedDOHead headID) {
         HeadID = headID;
     }
 }
