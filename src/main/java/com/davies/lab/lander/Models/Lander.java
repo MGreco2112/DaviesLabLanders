@@ -1,29 +1,28 @@
 package com.davies.lab.lander.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 public class Lander {
     @Id
     private String ASDBLanderID;
+    @JsonIgnore
     private String LanderPlatform;
     private String ASDBROVDiveID;
     @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<ProcessedCTDHead> CTDHeads;
     @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-    @JsonIncludeProperties(value = {"headID"})
+//    @JsonIncludeProperties(value = {"headID"})
+    @JsonIgnore
     private Set<ProcessedDOHead> DOHeads;
     @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-    @JsonIncludeProperties(value = {"headID"})
+//    @JsonIncludeProperties(value = {"headID"})
+    @JsonIgnore
     private Set<ProcessedFLNTUHead> FLNTUHeads;
 
     public Lander() {
@@ -59,13 +58,13 @@ public class Lander {
         this.ASDBROVDiveID = ASDBROVDiveID;
     }
 
-    public Set<ProcessedCTDHead> getCTDHeads() {
-        return CTDHeads;
-    }
-
-    public void setCTDHeads(Set<ProcessedCTDHead> CTDHeads) {
-        this.CTDHeads = CTDHeads;
-    }
+//    public Set<ProcessedCTDHead> getCTDHeads() {
+//        return CTDHeads;
+//    }
+//
+//    public void setCTDHeads(Set<ProcessedCTDHead> CTDHeads) {
+//        this.CTDHeads = CTDHeads;
+//    }
 //
 //    public Set<ProcessedDOHead> getDOHeads() {
 //        return DOHeads;
