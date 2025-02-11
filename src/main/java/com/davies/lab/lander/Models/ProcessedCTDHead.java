@@ -19,7 +19,7 @@ public class ProcessedCTDHead {
     private Integer MeasMode;
     private Integer BurstTime;
     private Integer BurstCnt;
-    private Integer Interval;
+    private Integer IntervalData;
     private Integer SampleCnt;
     private String StartTime;
     private String EndTime;
@@ -29,7 +29,10 @@ public class ProcessedCTDHead {
     private Integer ECDeg;
     private Double ECCoef;
     private String CoefDate;
-    private Double Ch1, Ch2, Ch3, Ch4;
+    private Double Ch1;
+    private Double Ch2;
+    private Double Ch3;
+    private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
     private String COMMENT;
@@ -48,7 +51,7 @@ public class ProcessedCTDHead {
     public ProcessedCTDHead() {
     }
 
-    public ProcessedCTDHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, Set<ProcessedCTDData> data) {
+    public ProcessedCTDHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, Set<ProcessedCTDData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -59,7 +62,7 @@ public class ProcessedCTDHead {
         MeasMode = measMode;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
-        Interval = interval;
+        IntervalData = intervalData;
         SampleCnt = sampleCnt;
         StartTime = startTime;
         EndTime = endTime;
@@ -82,10 +85,6 @@ public class ProcessedCTDHead {
         CondDepB = condDepB;
         LanderID = landerID;
         this.data = data;
-    }
-
-    public void setLanderID(Lander landerID) {
-        LanderID = landerID;
     }
 
     public Integer getHeadID() {
@@ -168,12 +167,12 @@ public class ProcessedCTDHead {
         BurstCnt = burstCnt;
     }
 
-    public Integer getInterval() {
-        return Interval;
+    public Integer getIntervalData() {
+        return IntervalData;
     }
 
-    public void setInterval(Integer interval) {
-        Interval = interval;
+    public void setIntervalData(Integer intervalData) {
+        IntervalData = intervalData;
     }
 
     public Integer getSampleCnt() {
@@ -338,6 +337,10 @@ public class ProcessedCTDHead {
 
     public Lander getLanderID() {
         return LanderID;
+    }
+
+    public void setLanderID(Lander landerID) {
+        LanderID = landerID;
     }
 
     public Set<ProcessedCTDData> getData() {

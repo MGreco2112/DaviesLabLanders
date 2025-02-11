@@ -19,13 +19,16 @@ public class ProcessedFLNTUHead {
     private Integer MeasMode;
     private Integer BurstTime;
     private Integer BurstCnt;
-    private Integer Interval;
+    private Integer IntervalData;
     private Integer WiperInterval;
     private Integer SampleCnt;
     private String StartTime, EndTime;
     private Integer CHLA, CHLB;
     private String CoefDate;
-    private Double Ch1, Ch2, Ch3, Ch4;
+    private Double Ch1;
+    private Double Ch2;
+    private Double Ch3;
+    private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
     private String Comment;
@@ -53,7 +56,7 @@ public class ProcessedFLNTUHead {
         MeasMode = measMode;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
-        Interval = interval;
+        IntervalData = interval;
         WiperInterval = wiperInterval;
         SampleCnt = sampleCnt;
         StartTime = startTime;
@@ -154,12 +157,12 @@ public class ProcessedFLNTUHead {
         BurstCnt = burstCnt;
     }
 
-    public Integer getInterval() {
-        return Interval;
+    public Integer getIntervalData() {
+        return IntervalData;
     }
 
-    public void setInterval(Integer interval) {
-        Interval = interval;
+    public void setIntervalData(Integer intervalData) {
+        IntervalData = intervalData;
     }
 
     public Integer getWiperInterval() {

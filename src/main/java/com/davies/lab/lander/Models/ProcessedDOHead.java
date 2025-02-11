@@ -19,12 +19,14 @@ public class ProcessedDOHead {
     private Integer MeasModel;
     private Integer BurstTime;
     private Integer BurstCnt;
-    private Integer Interval;
+    private Integer IntervalData;
     private Integer SampleCnt;
     private String StartTime, EndTime;
     private Double DepAdiRho;
     private Double CoefDate;
-    private Double Ch1, Ch2, Ch3;
+    private Double Ch1;
+    private Double Ch2;
+    private Double Ch3;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
     private String COMMENT;
@@ -55,7 +57,7 @@ public class ProcessedDOHead {
         MeasModel = measModel;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
-        Interval = interval;
+        IntervalData = interval;
         SampleCnt = sampleCnt;
         StartTime = startTime;
         EndTime = endTime;
@@ -156,12 +158,12 @@ public class ProcessedDOHead {
         BurstCnt = burstCnt;
     }
 
-    public Integer getInterval() {
-        return Interval;
+    public Integer getIntervalData() {
+        return IntervalData;
     }
 
-    public void setInterval(Integer interval) {
-        Interval = interval;
+    public void setIntervalData(Integer intervalData) {
+        IntervalData = intervalData;
     }
 
     public Integer getSampleCnt() {
