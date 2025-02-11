@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -17,7 +18,8 @@ public class ProcessedDOData {
     private Double BKDOMgL;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
-    @JsonIgnoreProperties("data")
+//    @JsonIgnoreProperties("data")
+    @JsonIgnore()
     private ProcessedDOHead HeadID;
 
     public ProcessedDOData() {

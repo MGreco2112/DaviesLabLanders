@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -23,7 +24,7 @@ public class ProcessedDOHead {
     private Integer SampleCnt;
     private String StartTime, EndTime;
     private Double DepAdiRho;
-    private Double CoefDate;
+    private String CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
@@ -37,16 +38,18 @@ public class ProcessedDOHead {
     private String FilmNo;
     @ManyToOne
     @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
-    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+//    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+    @JsonIgnore()
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("HeadID")
+//    @JsonIgnoreProperties("HeadID")
+    @JsonIgnore()
     private Set<ProcessedDOData> data;
 
     public ProcessedDOHead() {
     }
 
-    public ProcessedDOHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer interval, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Double coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
+    public ProcessedDOHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, String coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -57,7 +60,7 @@ public class ProcessedDOHead {
         MeasModel = measModel;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
-        IntervalData = interval;
+        IntervalData = intervalData;
         SampleCnt = sampleCnt;
         StartTime = startTime;
         EndTime = endTime;
@@ -198,11 +201,11 @@ public class ProcessedDOHead {
         DepAdiRho = depAdiRho;
     }
 
-    public Double getCoefDate() {
+    public String getCoefDate() {
         return CoefDate;
     }
 
-    public void setCoefDate(Double coefDate) {
+    public void setCoefDate(String coefDate) {
         CoefDate = coefDate;
     }
 

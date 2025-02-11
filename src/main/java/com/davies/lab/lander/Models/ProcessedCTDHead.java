@@ -1,6 +1,9 @@
 package com.davies.lab.lander.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -42,10 +45,12 @@ public class ProcessedCTDHead {
     private Integer CondDepB;
     @ManyToOne
     @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
-    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+//    @JsonIncludeProperties({"landerplatform"})
+    @JsonProperty("LanderID")
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("HeadID")
+//    @JsonIgnoreProperties({"headID"})
+    @JsonProperty("data")
     private Set<ProcessedCTDData> data;
 
     public ProcessedCTDHead() {

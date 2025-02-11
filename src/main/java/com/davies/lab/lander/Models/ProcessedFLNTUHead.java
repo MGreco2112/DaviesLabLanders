@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -36,10 +37,12 @@ public class ProcessedFLNTUHead {
     private Integer BuzzerNumber;
     @ManyToOne
     @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
-    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+//    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
+    @JsonIgnore()
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("HeadID")
+//    @JsonIgnoreProperties("HeadID")
+    @JsonIgnore()
     private Set<ProcessedFLNTUData> data;
 
     public ProcessedFLNTUHead() {

@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -17,7 +18,8 @@ public class ProcessedCTDData {
     //TODO: Connect to CTD Head Entity
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
-    @JsonIgnoreProperties("data")
+//    @JsonIgnoreProperties("Data")
+    @JsonIgnore()
     private ProcessedCTDHead HeadID;
 
     public ProcessedCTDData() {
