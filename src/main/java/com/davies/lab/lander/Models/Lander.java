@@ -10,19 +10,13 @@ import java.util.Set;
 public class Lander {
     @Id
     private String ASDBLanderID;
-    @JsonIgnore
     private String LanderPlatform;
     private String ASDBROVDiveID;
     @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-    @JsonIgnore
     private Set<ProcessedCTDHead> CTDHeads;
     @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-//    @JsonIncludeProperties(value = {"headID"})
-    @JsonIgnore
     private Set<ProcessedDOHead> DOHeads;
     @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-//    @JsonIncludeProperties(value = {"headID"})
-    @JsonIgnore
     private Set<ProcessedFLNTUHead> FLNTUHeads;
 
     public Lander() {
@@ -58,27 +52,27 @@ public class Lander {
         this.ASDBROVDiveID = ASDBROVDiveID;
     }
 
-//    public Set<ProcessedCTDHead> getCTDHeads() {
-//        return CTDHeads;
-//    }
-//
-//    public void setCTDHeads(Set<ProcessedCTDHead> CTDHeads) {
-//        this.CTDHeads = CTDHeads;
-//    }
-//
-//    public Set<ProcessedDOHead> getDOHeads() {
-//        return DOHeads;
-//    }
-//
-//    public void setDOHeads(Set<ProcessedDOHead> DOHeads) {
-//        this.DOHeads = DOHeads;
-//    }
-//
-//    public Set<ProcessedFLNTUHead> getFLNTUHeads() {
-//        return FLNTUHeads;
-//    }
-//
-//    public void setFLNTUHeads(Set<ProcessedFLNTUHead> FLNTUHeads) {
-//        this.FLNTUHeads = FLNTUHeads;
-//    }
+    public Set<ProcessedCTDHead> getCTDHeads() {
+        return CTDHeads;
+    }
+
+    public void setCTDHeads(Set<ProcessedCTDHead> CTDHeads) {
+        this.CTDHeads = CTDHeads;
+    }
+
+    public Set<ProcessedDOHead> getDOHeads() {
+        return DOHeads;
+    }
+
+    public void setDOHeads(Set<ProcessedDOHead> DOHeads) {
+        this.DOHeads = DOHeads;
+    }
+
+    public Set<ProcessedFLNTUHead> getFLNTUHeads() {
+        return FLNTUHeads;
+    }
+
+    public void setFLNTUHeads(Set<ProcessedFLNTUHead> FLNTUHeads) {
+        this.FLNTUHeads = FLNTUHeads;
+    }
 }
