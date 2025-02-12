@@ -1,15 +1,11 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.davies.lab.lander.Models.ProcessedCTDData;
 
-
-import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-public class ProcessedCTDHead {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CTDHeadResponse {
     private Integer HeadID;
     private String SondeName;
     private String SondeNo;
@@ -41,16 +37,10 @@ public class ProcessedCTDHead {
     private Integer BuzzerNumber;
     private Integer DepM;
     private Integer CondDepB;
-    @ManyToOne
-    @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
-    private Lander LanderID;
-    @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    private Set<ProcessedCTDData> data;
+    private String ASDBLanderID;
+    private Set<CTDDataResponse> data = new HashSet<>();
 
-    public ProcessedCTDHead() {
-    }
-
-    public ProcessedCTDHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, Set<ProcessedCTDData> data) {
+    public CTDHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -82,8 +72,12 @@ public class ProcessedCTDHead {
         BuzzerNumber = buzzerNumber;
         DepM = depM;
         CondDepB = condDepB;
-        LanderID = landerID;
-        this.data = data;
+        ASDBLanderID = landerID;
+    }
+
+    public void createDataResponse(ProcessedCTDData CTDData) {
+        CTDDataResponse res = new CTDDataResponse(CTDData.getID(), CTDData.getDate());
+        data.add(res);
     }
 
     public Integer getHeadID() {
@@ -334,19 +328,45 @@ public class ProcessedCTDHead {
         CondDepB = condDepB;
     }
 
-    public Lander getLanderID() {
-        return LanderID;
+    public String getASDBLanderID() {
+        return ASDBLanderID;
     }
 
-    public void setLanderID(Lander landerID) {
-        LanderID = landerID;
+    public void setASDBLanderID(String landerID) {
+        ASDBLanderID = landerID;
     }
 
-    public Set<ProcessedCTDData> getData() {
+    public Set<CTDDataResponse> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedCTDData> data) {
+    public void setData(Set<CTDDataResponse> data) {
         this.data = data;
+    }
+
+    private class CTDDataResponse {
+        private Integer ID;
+        private String Date;
+
+        public CTDDataResponse(Integer ID, String date) {
+            this.ID = ID;
+            Date = date;
+        }
+
+        public Integer getID() {
+            return ID;
+        }
+
+        public void setID(Integer ID) {
+            this.ID = ID;
+        }
+
+        public String getDate() {
+            return Date;
+        }
+
+        public void setDate(String date) {
+            Date = date;
+        }
     }
 }
