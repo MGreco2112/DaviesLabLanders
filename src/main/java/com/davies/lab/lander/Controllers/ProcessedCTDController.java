@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
 import com.davies.lab.lander.Models.ProcessedCTDData;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,12 +129,48 @@ public class ProcessedCTDController {
 
     //Data Routes
     @GetMapping("/data")
-    public List<ProcessedCTDData> findAllEntries() {
-        return repository.findAll();
+    public List<CTDDataResponse> findAllEntries() {
+        List<ProcessedCTDData> data = repository.findAll();
+        List<CTDDataResponse> res = new ArrayList<>();
+
+        for (ProcessedCTDData dataPoint : data) {
+            CTDDataResponse temp = new CTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getTempDegC(),
+                    dataPoint.getSal(),
+                    dataPoint.getCondMsCm(),
+                    dataPoint.getEc25UsCm(),
+                    dataPoint.getBattV(),
+                    dataPoint.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return res;
     }
 
     @GetMapping("/data/{id}")
-    public ResponseEntity<ProcessedCTDData> findDataById(@PathVariable Integer id) {
-        return new ResponseEntity<ProcessedCTDData>(repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)), HttpStatus.OK);
+    public ResponseEntity<CTDDataResponse> findDataById(@PathVariable Integer id) {
+        Optional<ProcessedCTDData> data = repository.findById(id);
+        CTDDataResponse res;
+
+        if (data.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new CTDDataResponse(
+                data.get().getID(),
+                data.get().getDate(),
+                data.get().getTempDegC(),
+                data.get().getSal(),
+                data.get().getCondMsCm(),
+                data.get().getEc25UsCm(),
+                data.get().getBattV(),
+                data.get().getHeadID().getHeadID()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

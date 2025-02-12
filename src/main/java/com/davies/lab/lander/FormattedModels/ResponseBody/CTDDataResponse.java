@@ -1,11 +1,6 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import javax.persistence.*;
-
-@Entity
-public class ProcessedCTDData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CTDDataResponse {
     private Integer ID;
     private String Date;
     private Double TempDegC;
@@ -13,14 +8,9 @@ public class ProcessedCTDData {
     private Double CondMsCm;
     private Double Ec25UsCm;
     private Double BattV;
-    @ManyToOne
-    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
-    private ProcessedCTDHead HeadID;
+    private Integer HeadID;
 
-    public ProcessedCTDData() {
-    }
-
-    public ProcessedCTDData(Integer ID, String date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, ProcessedCTDHead headID) {
+    public CTDDataResponse(Integer ID, String date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Integer headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -87,11 +77,11 @@ public class ProcessedCTDData {
         BattV = battV;
     }
 
-    public ProcessedCTDHead getHeadID() {
+    public Integer getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(ProcessedCTDHead headID) {
+    public void setHeadID(Integer headID) {
         HeadID = headID;
     }
 }
