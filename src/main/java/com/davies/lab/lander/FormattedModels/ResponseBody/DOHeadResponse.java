@@ -1,14 +1,11 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.davies.lab.lander.Models.ProcessedDOData;
 
-import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-public class ProcessedDOHead {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class DOHeadResponse {
     private Integer HeadID;
     private String SondeName;
     private String SondeNo;
@@ -35,16 +32,10 @@ public class ProcessedDOHead {
     private Integer DepM;
     private Integer SetSal;
     private String FilmNo;
-    @ManyToOne
-    @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
-    private Lander LanderID;
-    @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    private Set<ProcessedDOData> data;
+    private String LanderID;
+    private Set<DODataResponse> data = new HashSet<>();
 
-    public ProcessedDOHead() {
-    }
-
-    public ProcessedDOHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, String coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
+    public DOHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, String coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -73,7 +64,15 @@ public class ProcessedDOHead {
         SetSal = setSal;
         FilmNo = filmNo;
         LanderID = landerID;
-        this.data = data;
+    }
+
+    public void createDODataResponse(ProcessedDOData dataPoint) {
+        DODataResponse temp = new DODataResponse(
+                dataPoint.getID(),
+                dataPoint.getDate()
+        );
+
+        data.add(temp);
     }
 
     public Integer getHeadID() {
@@ -292,19 +291,45 @@ public class ProcessedDOHead {
         FilmNo = filmNo;
     }
 
-    public Lander getLanderID() {
+    public String getLanderID() {
         return LanderID;
     }
 
-    public void setLanderID(Lander landerID) {
+    public void setLanderID(String landerID) {
         LanderID = landerID;
     }
 
-    public Set<ProcessedDOData> getData() {
+    public Set<DODataResponse> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedDOData> data) {
+    public void setData(Set<DODataResponse> data) {
         this.data = data;
+    }
+
+    private class DODataResponse {
+        private Integer ID;
+        private String Date;
+
+        public DODataResponse(Integer ID, String date) {
+            this.ID = ID;
+            Date = date;
+        }
+
+        public Integer getID() {
+            return ID;
+        }
+
+        public void setID(Integer ID) {
+            this.ID = ID;
+        }
+
+        public String getDate() {
+            return Date;
+        }
+
+        public void setDate(String date) {
+            Date = date;
+        }
     }
 }
