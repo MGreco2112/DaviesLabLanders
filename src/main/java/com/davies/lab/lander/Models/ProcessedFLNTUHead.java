@@ -36,12 +36,8 @@ public class ProcessedFLNTUHead {
     private Integer BuzzerNumber;
     @ManyToOne
     @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
-//    @JsonIgnoreProperties({"CTDHeads", "DOHeads", "FLNTUHeads"})
-    @JsonIgnore()
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-//    @JsonIgnoreProperties("HeadID")
-    @JsonIgnore()
     private Set<ProcessedFLNTUData> data;
 
     public ProcessedFLNTUHead() {

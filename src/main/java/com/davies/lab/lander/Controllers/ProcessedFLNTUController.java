@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUHeadResponse;
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
 import com.davies.lab.lander.Models.ProcessedFLNTUHead;
 import com.davies.lab.lander.Repositories.ProcessedFLNTUDataRepository;
@@ -10,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -23,11 +26,97 @@ public class ProcessedFLNTUController {
 
     //Header Routes
     @GetMapping("/headers")
-    public List<ProcessedFLNTUHead> findAllHeads() { return headRepository.findAll(); }
+    public List<FLNTUHeadResponse> findAllHeads() {
+        List<ProcessedFLNTUHead> heads = headRepository.findAll();
+        List<FLNTUHeadResponse> res = new ArrayList<>();
+
+        for (ProcessedFLNTUHead selHead : heads) {
+            FLNTUHeadResponse temp = new FLNTUHeadResponse(
+                    selHead.getHeadID(),
+                    selHead.getSondeName(),
+                    selHead.getSondeNo(),
+                    selHead.getSensorType(),
+                    selHead.getChannel(),
+                    selHead.getDelayTime(),
+                    selHead.getPreHeat(),
+                    selHead.getMeasMode(),
+                    selHead.getBurstTime(),
+                    selHead.getBurstCnt(),
+                    selHead.getIntervalData(),
+                    selHead.getWiperInterval(),
+                    selHead.getSampleCnt(),
+                    selHead.getStartTime(),
+                    selHead.getEndTime(),
+                    selHead.getCHLA(),
+                    selHead.getCHLB(),
+                    selHead.getCoefDate(),
+                    selHead.getCh1(),
+                    selHead.getCh2(),
+                    selHead.getCh3(),
+                    selHead.getCh4(),
+                    selHead.getBuzzerEN(),
+                    selHead.getBuzzerInterval(),
+                    selHead.getComment(),
+                    selHead.getSensorType2(),
+                    selHead.getBuzzerNumber(),
+                    selHead.getLanderID().getASDBLanderID()
+            );
+
+            for (ProcessedFLNTUData selData : selHead.getData()) {
+                temp.createFLNTUDataResponse(selData);
+            }
+
+            res.add(temp);
+        }
+
+        return res;
+    }
 
     @GetMapping("/headers/{id}")
-    public ResponseEntity<ProcessedFLNTUHead> findHeadByID(@PathVariable Integer id) {
-        return new ResponseEntity<ProcessedFLNTUHead>(headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)), HttpStatus.OK);
+    public ResponseEntity<FLNTUHeadResponse> findHeadByID(@PathVariable Integer id) {
+        Optional<ProcessedFLNTUHead> head = headRepository.findById(id);
+        FLNTUHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new FLNTUHeadResponse(
+                head.get().getHeadID(),
+                head.get().getSondeName(),
+                head.get().getSondeNo(),
+                head.get().getSensorType(),
+                head.get().getChannel(),
+                head.get().getDelayTime(),
+                head.get().getPreHeat(),
+                head.get().getMeasMode(),
+                head.get().getBurstTime(),
+                head.get().getBurstCnt(),
+                head.get().getIntervalData(),
+                head.get().getWiperInterval(),
+                head.get().getSampleCnt(),
+                head.get().getStartTime(),
+                head.get().getEndTime(),
+                head.get().getCHLA(),
+                head.get().getCHLB(),
+                head.get().getCoefDate(),
+                head.get().getCh1(),
+                head.get().getCh2(),
+                head.get().getCh3(),
+                head.get().getCh4(),
+                head.get().getBuzzerEN(),
+                head.get().getBuzzerInterval(),
+                head.get().getComment(),
+                head.get().getSensorType2(),
+                head.get().getBuzzerNumber(),
+                head.get().getLanderID().getASDBLanderID()
+        );
+
+        for (ProcessedFLNTUData data : head.get().getData()) {
+            res.createFLNTUDataResponse(data);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     //Data Routes
