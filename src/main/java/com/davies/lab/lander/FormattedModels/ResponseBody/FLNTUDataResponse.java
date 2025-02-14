@@ -1,11 +1,6 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import javax.persistence.*;
-
-@Entity
-public class ProcessedFLNTUData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FLNTUDataResponse {
     private Integer ID;
     private String Date;
     private Double TempDegC;
@@ -13,14 +8,9 @@ public class ProcessedFLNTUData {
     private Double ChlAUgL;
     private Double TurbMFTU;
     private Double BattV;
-    @ManyToOne
-    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
-    private ProcessedFLNTUHead HeadID;
+    private Integer HeadID;
 
-    public ProcessedFLNTUData() {
-    }
-
-    public ProcessedFLNTUData(Integer ID, String date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
+    public FLNTUDataResponse(Integer ID, String date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, Integer headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -87,11 +77,11 @@ public class ProcessedFLNTUData {
         BattV = battV;
     }
 
-    public ProcessedFLNTUHead getHeadID() {
+    public Integer getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(ProcessedFLNTUHead headID) {
+    public void setHeadID(Integer headID) {
         HeadID = headID;
     }
 }

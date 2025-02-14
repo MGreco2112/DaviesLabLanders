@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUHeadResponse;
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
 import com.davies.lab.lander.Models.ProcessedFLNTUHead;
@@ -121,13 +122,49 @@ public class ProcessedFLNTUController {
 
     //Data Routes
     @GetMapping("/data")
-    public List<ProcessedFLNTUData> findAllEntries() {
-        return repository.findAll();
+    public List<FLNTUDataResponse> findAllEntries() {
+        List<ProcessedFLNTUData> data = repository.findAll();
+        List<FLNTUDataResponse> res = new ArrayList<>();
+
+        for (ProcessedFLNTUData selData : data) {
+            FLNTUDataResponse temp = new FLNTUDataResponse(
+                    selData.getID(),
+                    selData.getDate(),
+                    selData.getTempDegC(),
+                    selData.getChlFluPPB(),
+                    selData.getChlAUgL(),
+                    selData.getTurbMFTU(),
+                    selData.getBattV(),
+                    selData.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return res;
     }
 
     @GetMapping("/data/{id}")
-    public ResponseEntity<ProcessedFLNTUData> findDataById(@PathVariable Integer id) {
-        return new ResponseEntity<ProcessedFLNTUData>(repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)), HttpStatus.OK);
+    public ResponseEntity<FLNTUDataResponse> findDataById(@PathVariable Integer id) {
+        Optional<ProcessedFLNTUData> data = repository.findById(id);
+        FLNTUDataResponse res;
+
+        if (data.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new FLNTUDataResponse(
+                data.get().getID(),
+                data.get().getDate(),
+                data.get().getTempDegC(),
+                data.get().getChlFluPPB(),
+                data.get().getChlAUgL(),
+                data.get().getTurbMFTU(),
+                data.get().getBattV(),
+                data.get().getHeadID().getHeadID()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 
