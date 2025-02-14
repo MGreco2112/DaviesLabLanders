@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.DODataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DOHeadResponse;
 import com.davies.lab.lander.Models.ProcessedDOData;
 import com.davies.lab.lander.Models.ProcessedDOHead;
@@ -121,12 +122,50 @@ public class ProcessedDOController {
 
     //Data Routes
     @GetMapping("/data")
-    public List<ProcessedDOData> findAllEntries() {
-        return repository.findAll();
+    public List<DODataResponse> findAllEntries() {
+        List<ProcessedDOData> data = repository.findAll();
+        List<DODataResponse> res = new ArrayList<>();
+
+        for (ProcessedDOData selData : data) {
+            DODataResponse temp = new DODataResponse(
+                    selData.getID(),
+                    selData.getDate(),
+                    selData.getTempDegC(),
+                    selData.getDO(),
+                    selData.getWeissDoMgL(),
+                    selData.getBattV(),
+                    selData.getGGDOMgL(),
+                    selData.getBKDOMgL(),
+                    selData.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return res;
     }
 
     @GetMapping("/data/{id}")
-    public ResponseEntity<ProcessedDOData> findDataById(@PathVariable Integer id) {
-        return new ResponseEntity<ProcessedDOData>(repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)), HttpStatus.OK);
+    public ResponseEntity<DODataResponse> findDataById(@PathVariable Integer id) {
+        Optional<ProcessedDOData> data = repository.findById(id);
+        DODataResponse res;
+
+        if (data.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new DODataResponse(
+                data.get().getID(),
+                data.get().getDate(),
+                data.get().getTempDegC(),
+                data.get().getDO(),
+                data.get().getWeissDoMgL(),
+                data.get().getBattV(),
+                data.get().getGGDOMgL(),
+                data.get().getBKDOMgL(),
+                data.get().getHeadID().getHeadID()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

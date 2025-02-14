@@ -1,14 +1,6 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
-@Entity
-public class ProcessedDOData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class DODataResponse {
     private Integer ID;
     private String Date;
     private Double TempDegC;
@@ -17,14 +9,9 @@ public class ProcessedDOData {
     private Double BattV;
     private Double GGDOMgL;
     private Double BKDOMgL;
-    @ManyToOne
-    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
-    private ProcessedDOHead HeadID;
+    private Integer HeadID;
 
-    public ProcessedDOData() {
-    }
-
-    public ProcessedDOData(Integer ID, String date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, ProcessedDOHead headID) {
+    public DODataResponse(Integer ID, String date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, Integer headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -100,11 +87,11 @@ public class ProcessedDOData {
         this.BKDOMgL = BKDOMgL;
     }
 
-    public ProcessedDOHead getHeadID() {
+    public Integer getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(ProcessedDOHead headID) {
+    public void setHeadID(Integer headID) {
         HeadID = headID;
     }
 }
