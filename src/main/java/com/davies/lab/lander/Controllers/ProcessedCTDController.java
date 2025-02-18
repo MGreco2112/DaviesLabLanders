@@ -76,6 +76,53 @@ public class ProcessedCTDController {
         return res;
     }
 
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<CTDHeadResponse> findHeadWithoutDataById(@PathVariable Integer id) {
+        Optional<ProcessedCTDHead> head = headRepository.findById(id);
+        CTDHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new CTDHeadResponse(
+                head.get().getHeadID(),
+                head.get().getSondeName(),
+                head.get().getSondeNo(),
+                head.get().getSensorType(),
+                head.get().getChannel(),
+                head.get().getDelayTime(),
+                head.get().getPreHeat(),
+                head.get().getMeasMode(),
+                head.get().getBurstTime(),
+                head.get().getBurstCnt(),
+                head.get().getIntervalData(),
+                head.get().getSampleCnt(),
+                head.get().getStartTime(),
+                head.get().getEndTime(),
+                head.get().getDepAdiRho(),
+                head.get().getECA(),
+                head.get().getECB(),
+                head.get().getECDeg(),
+                head.get().getECCoef(),
+                head.get().getCoefDate(),
+                head.get().getCh1(),
+                head.get().getCh2(),
+                head.get().getCh3(),
+                head.get().getCh4(),
+                head.get().getBuzzerEN(),
+                head.get().getBuzzerInterval(),
+                head.get().getCOMMENT(),
+                head.get().getSensorType2(),
+                head.get().getBuzzerNumber(),
+                head.get().getDepM(),
+                head.get().getCondDepB(),
+                head.get().getLanderID().getASDBLanderID()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/headers/{id}")
     public ResponseEntity<CTDHeadResponse> findHeadById(@PathVariable Integer id) {
         Optional<ProcessedCTDHead> head = headRepository.findById(id);
