@@ -73,6 +73,48 @@ public class ProcessedDOController {
         return res;
     }
 
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<DOHeadResponse> findHeadWithoutData(@PathVariable Integer id) {
+        Optional<ProcessedDOHead> head = headRepository.findById(id);
+        DOHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new DOHeadResponse(
+                head.get().getHeadID(),
+                head.get().getSondeName(),
+                head.get().getSondeNo(),
+                head.get().getSensorType(),
+                head.get().getChannel(),
+                head.get().getDelayTime(),
+                head.get().getPreHeat(),
+                head.get().getMeasModel(),
+                head.get().getBurstTime(),
+                head.get().getBurstCnt(),
+                head.get().getIntervalData(),
+                head.get().getSampleCnt(),
+                head.get().getStartTime(),
+                head.get().getEndTime(),
+                head.get().getDepAdiRho(),
+                head.get().getCoefDate(),
+                head.get().getCh1(),
+                head.get().getCh2(),
+                head.get().getCh3(),
+                head.get().getBuzzerEN(),
+                head.get().getBuzzerInterval(),
+                head.get().getCOMMENT(),
+                head.get().getSensorType2(),
+                head.get().getBuzzerNumber(),
+                head.get().getDepM(),
+                head.get().getSetSal(),
+                head.get().getFilmNo(),
+                head.get().getLanderID().getASDBLanderID()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
     @GetMapping("/headers/{id}")
     public ResponseEntity<DOHeadResponse> findHeadById(@PathVariable Integer id) {
         Optional<ProcessedDOHead> head = headRepository.findById(id);

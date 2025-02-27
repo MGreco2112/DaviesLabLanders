@@ -72,6 +72,49 @@ public class ProcessedFLNTUController {
         return res;
     }
 
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<FLNTUHeadResponse> findHeadWithoutDataById(@PathVariable Integer id) {
+        Optional<ProcessedFLNTUHead> head = headRepository.findById(id);
+        FLNTUHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new FLNTUHeadResponse(
+                head.get().getHeadID(),
+                head.get().getSondeName(),
+                head.get().getSondeNo(),
+                head.get().getSensorType(),
+                head.get().getChannel(),
+                head.get().getDelayTime(),
+                head.get().getPreHeat(),
+                head.get().getMeasMode(),
+                head.get().getBurstTime(),
+                head.get().getBurstCnt(),
+                head.get().getIntervalData(),
+                head.get().getWiperInterval(),
+                head.get().getSampleCnt(),
+                head.get().getStartTime(),
+                head.get().getEndTime(),
+                head.get().getCHLA(),
+                head.get().getCHLB(),
+                head.get().getCoefDate(),
+                head.get().getCh1(),
+                head.get().getCh2(),
+                head.get().getCh3(),
+                head.get().getCh4(),
+                head.get().getBuzzerEN(),
+                head.get().getBuzzerInterval(),
+                head.get().getComment(),
+                head.get().getSensorType2(),
+                head.get().getBuzzerNumber(),
+                head.get().getLanderID().getASDBLanderID()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/headers/{id}")
     public ResponseEntity<FLNTUHeadResponse> findHeadByID(@PathVariable Integer id) {
         Optional<ProcessedFLNTUHead> head = headRepository.findById(id);
