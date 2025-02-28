@@ -210,4 +210,31 @@ public class ProcessedDOController {
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/data/headId/{id}")
+    public ResponseEntity<List<DODataResponse>> findDataByHeadId(@PathVariable Integer id) {
+        List<ProcessedDOData> data = repository.findDoDataByHeadId(id);
+        List<DODataResponse> res = new ArrayList<>();
+
+        if (data.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        for (ProcessedDOData elem : data) {
+            res.add(new DODataResponse(
+                    elem.getID(),
+                    elem.getDate(),
+                    elem.getTempDegC(),
+                    elem.getDO(),
+                    elem.getWeissDoMgL(),
+                    elem.getBattV(),
+                    elem.getGGDOMgL(),
+                    elem.getBKDOMgL(),
+                    elem.getHeadID().getHeadID()
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }

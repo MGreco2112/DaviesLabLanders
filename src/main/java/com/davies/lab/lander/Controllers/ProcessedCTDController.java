@@ -220,4 +220,29 @@ public class ProcessedCTDController {
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/data/headId/{id}")
+    public ResponseEntity<List<CTDDataResponse>> findDataByHeadId(@PathVariable Integer id) {
+        List<ProcessedCTDData> data = repository.findDataByHeadId(id);
+        List<CTDDataResponse> res = new ArrayList<>();
+
+        if (data.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        for (ProcessedCTDData elem : data) {
+            res.add(new CTDDataResponse(
+                    elem.getID(),
+                    elem.getDate(),
+                    elem.getTempDegC(),
+                    elem.getSal(),
+                    elem.getCondMsCm(),
+                    elem.getEc25UsCm(),
+                    elem.getBattV(),
+                    elem.getHeadID().getHeadID()
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

@@ -209,5 +209,30 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/headId/{id}")
+    public ResponseEntity<List<FLNTUDataResponse>> findDataByHeadId(@PathVariable Integer id) {
+        List<ProcessedFLNTUData> data = repository.findDataFromHeadId(id);
+        List<FLNTUDataResponse> res = new ArrayList<>();
+
+        if (data.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        for (ProcessedFLNTUData elem : data) {
+            res.add(new FLNTUDataResponse(
+                    elem.getID(),
+                    elem.getDate(),
+                    elem.getTempDegC(),
+                    elem.getChlFluPPB(),
+                    elem.getChlAUgL(),
+                    elem.getTurbMFTU(),
+                    elem.getBattV(),
+                    elem.getHeadID().getHeadID()
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 
 }
