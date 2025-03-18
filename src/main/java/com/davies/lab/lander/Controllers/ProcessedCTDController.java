@@ -6,11 +6,19 @@ import com.davies.lab.lander.Models.ProcessedCTDData;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
 import com.davies.lab.lander.Repositories.ProcessedCTDDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedCTDHeadRepository;
+import com.opencsv.CSVReader;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.IterableCSVToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -244,5 +252,21 @@ public class ProcessedCTDController {
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/upload_csv")
+    public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Empty File", HttpStatus.BAD_REQUEST);
+        }
+
+        try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            //TODO Finish this Method
+        } catch (IOException e) {
+            return new ResponseEntity<>("IOException" + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 }
