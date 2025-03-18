@@ -1,14 +1,14 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CTD_CSV_Request;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
 import com.davies.lab.lander.Models.ProcessedCTDData;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
 import com.davies.lab.lander.Repositories.ProcessedCTDDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedCTDHeadRepository;
-import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.IterableCSVToBeanBuilder;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -254,19 +254,30 @@ public class ProcessedCTDController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/upload_csv")
-    public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+    @PostMapping("/upload_csv/test")
+    //TODO: Modify route to accept CSV with Header Data intact
+    //TODO: Modify route to save each row to DB
+    public ResponseEntity<List<CTD_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+        List<CTD_CSV_Request> dataList;
 
         if (processedFile.isEmpty()) {
-            return new ResponseEntity<>("Empty File", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+
 
         try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
-            //TODO Finish this Method
-        } catch (IOException e) {
-            return new ResponseEntity<>("IOException" + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+            CsvToBean<CTD_CSV_Request> csvToBean = new CsvToBeanBuilder<CTD_CSV_Request>(reader)
+                    .withType(CTD_CSV_Request.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+
+            dataList = csvToBean.parse();
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        return new ResponseEntity<>(dataList, HttpStatus.OK);
     }
 }

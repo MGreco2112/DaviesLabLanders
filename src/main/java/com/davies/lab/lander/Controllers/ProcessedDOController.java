@@ -1,17 +1,24 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.DO_CSV_Request;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DODataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DOHeadResponse;
 import com.davies.lab.lander.Models.ProcessedDOData;
 import com.davies.lab.lander.Models.ProcessedDOHead;
 import com.davies.lab.lander.Repositories.ProcessedDODataRepository;
 import com.davies.lab.lander.Repositories.ProcessedDOHeadRepository;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -237,4 +244,26 @@ public class ProcessedDOController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @PostMapping("/upload_csv/test")
+    public ResponseEntity<List<DO_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+        List<DO_CSV_Request> dataList;
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            CsvToBean<DO_CSV_Request> csvToBean = new CsvToBeanBuilder<DO_CSV_Request>(reader)
+                    .withType(DO_CSV_Request.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            dataList = csvToBean.parse();
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(dataList, HttpStatus.OK);
+    }
 }

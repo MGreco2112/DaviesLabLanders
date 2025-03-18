@@ -1,16 +1,23 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.FLNTU_CSV_Request;
 import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUHeadResponse;
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
 import com.davies.lab.lander.Models.ProcessedFLNTUHead;
 import com.davies.lab.lander.Repositories.ProcessedFLNTUDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedFLNTUHeadRepository;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -234,5 +241,26 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @PostMapping("/upload_csv/test")
+    public ResponseEntity<List<FLNTU_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+        List<FLNTU_CSV_Request> dataList;
 
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            CsvToBean<FLNTU_CSV_Request> csvToBean = new CsvToBeanBuilder<FLNTU_CSV_Request>(reader)
+                    .withType(FLNTU_CSV_Request.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            dataList = csvToBean.parse();
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(dataList, HttpStatus.OK);
+    }
 }
