@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -264,13 +261,11 @@ public class ProcessedCTDController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-
         try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             CsvToBean<CTD_CSV_Request> csvToBean = new CsvToBeanBuilder<CTD_CSV_Request>(reader)
                     .withType(CTD_CSV_Request.class)
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
-
 
             dataList = csvToBean.parse();
         } catch (Exception e) {
@@ -279,5 +274,76 @@ public class ProcessedCTDController {
         }
 
         return new ResponseEntity<>(dataList, HttpStatus.OK);
+    }
+
+    @PostMapping("/upload_csv/header/test")
+    public ResponseEntity<CTDHeadResponse> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead) {
+
+        if (processedHead.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {
+            String temp = "";
+            List<String> output = new ArrayList<>();
+            List<String> keyNames = new ArrayList<>();
+            Map<String, String> valuesMap = new HashMap<>();
+
+            while (!Objects.equals(temp, "[Item]")) {
+                temp = reader.readLine();
+
+                if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
+                    output.add(temp);
+                }
+            }
+
+            for (String datapoint : output) {
+                String[] hold = datapoint.split("=");
+                keyNames.add(hold[0]);
+
+                valuesMap.put(hold[0], hold[1].stripTrailing());
+            }
+
+            CTDHeadResponse testResponse = new CTDHeadResponse (
+                    null,
+                    valuesMap.get(keyNames.get(0)),
+                    valuesMap.get(keyNames.get(1)),
+                    valuesMap.get(keyNames.get(2)),
+                    Integer.parseInt(valuesMap.get(keyNames.get(3))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(4))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(5))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(6))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(7))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(8))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(9))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(10))),
+                    valuesMap.get(keyNames.get(11)),
+                    valuesMap.get(keyNames.get(12)),
+                    Double.parseDouble(valuesMap.get(keyNames.get(13))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(14))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(15))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(16))),
+                    Double.parseDouble(valuesMap.get(keyNames.get(17))),
+                    valuesMap.get(keyNames.get(18)),
+                    Double.parseDouble(valuesMap.get(keyNames.get(19)).split(",")[0]),
+                    Double.parseDouble(valuesMap.get(keyNames.get(20)).split(",")[0]),
+                    Double.parseDouble(valuesMap.get(keyNames.get(21)).split(",")[0]),
+                    Double.parseDouble(valuesMap.get(keyNames.get(22)).split(",")[0]),
+                    Integer.parseInt(valuesMap.get(keyNames.get(23))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(24))),
+                    valuesMap.get(keyNames.get(25)),
+                    valuesMap.get(keyNames.get(26)),
+                    Integer.parseInt(valuesMap.get(keyNames.get(27))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(28))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(29))),
+                    null
+            );
+
+            return new ResponseEntity<>(testResponse, HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 }
