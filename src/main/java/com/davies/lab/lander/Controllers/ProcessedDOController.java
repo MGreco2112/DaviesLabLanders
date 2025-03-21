@@ -38,34 +38,34 @@ public class ProcessedDOController {
 
         for (ProcessedDOHead head : heads) {
             DOHeadResponse temp = new DOHeadResponse(
-              head.getHeadID(),
-              head.getSondeName(),
-              head.getSondeNo(),
-              head.getSensorType(),
-              head.getChannel(),
-              head.getDelayTime(),
-              head.getPreHeat(),
-              head.getMeasModel(),
-              head.getBurstTime(),
-              head.getBurstCnt(),
-              head.getIntervalData(),
-              head.getSampleCnt(),
-              head.getStartTime(),
-              head.getEndTime(),
-              head.getDepAdiRho(),
-              head.getCoefDate(),
-              head.getCh1(),
-              head.getCh2(),
-              head.getCh3(),
-              head.getBuzzerEN(),
-              head.getBuzzerInterval(),
-              head.getCOMMENT(),
-              head.getSensorType2(),
-              head.getBuzzerNumber(),
-              head.getDepM(),
-              head.getSetSal(),
-              head.getFilmNo(),
-              head.getLanderID().getASDBLanderID()
+                    head.getHeadID(),
+                    head.getSondeName(),
+                    head.getSondeNo(),
+                    head.getSensorType(),
+                    head.getChannel(),
+                    head.getDelayTime(),
+                    head.getPreHeat(),
+                    head.getMeasModel(),
+                    head.getBurstTime(),
+                    head.getBurstCnt(),
+                    head.getIntervalData(),
+                    head.getSampleCnt(),
+                    head.getStartTime(),
+                    head.getEndTime(),
+                    head.getDepAdiRho(),
+                    head.getCoefDate(),
+                    head.getCh1(),
+                    head.getCh2(),
+                    head.getCh3(),
+                    head.getBuzzerEN(),
+                    head.getBuzzerInterval(),
+                    head.getCOMMENT(),
+                    head.getSensorType2(),
+                    head.getBuzzerNumber(),
+                    head.getDepM(),
+                    head.getSetSal(),
+                    head.getFilmNo(),
+                    head.getLanderID().getASDBLanderID()
             );
 
             for (ProcessedDOData data : head.getData()) {
@@ -120,6 +120,7 @@ public class ProcessedDOController {
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
     @GetMapping("/headers/{id}")
     public ResponseEntity<DOHeadResponse> findHeadById(@PathVariable Integer id) {
         Optional<ProcessedDOHead> head = headRepository.findById(id);
@@ -328,6 +329,92 @@ public class ProcessedDOController {
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/upload_csv/combined/test")
+    public ResponseEntity<List<DO_CSV_Request>> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            String temp = "";
+            List<String> output = new ArrayList<>();
+            List<String> keyNames = new ArrayList<>();
+            Map<String, String> valuesMap = new HashMap<>();
+
+            while (!Objects.equals(temp, "[Item]")) {
+                temp = reader.readLine();
+
+                if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
+                    output.add(temp);
+                }
+            }
+
+            for (String datapoint : output) {
+                String[] hold = datapoint.split("=");
+                keyNames.add(hold[0]);
+
+                valuesMap.put(hold[0], hold[1].stripTrailing());
+            }
+
+            DOHeadResponse testResponse = new DOHeadResponse(
+                    null,
+                    valuesMap.get(keyNames.get(0)),
+                    valuesMap.get(keyNames.get(1)),
+                    valuesMap.get(keyNames.get(2)),
+                    Integer.parseInt(valuesMap.get(keyNames.get(3))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(4))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(5))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(6))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(7))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(8))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(9))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(10))),
+                    valuesMap.get(keyNames.get(11)),
+                    valuesMap.get(keyNames.get(12)),
+                    Double.parseDouble(valuesMap.get(keyNames.get(13))),
+                    valuesMap.get(keyNames.get(14)),
+                    Double.parseDouble(valuesMap.get(keyNames.get(15)).split(",")[0]),
+                    Double.parseDouble(valuesMap.get(keyNames.get(16)).split(",")[0]),
+                    Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
+                    Integer.parseInt(valuesMap.get(keyNames.get(18))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(19))),
+                    valuesMap.get(keyNames.get(20)),
+                    valuesMap.get(keyNames.get(21)),
+                    Integer.parseInt(valuesMap.get(keyNames.get(22))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(23))),
+                    Integer.parseInt(valuesMap.get(keyNames.get(24))),
+                    valuesMap.get(keyNames.get(25)),
+                    null
+            );
+
+            List<DO_CSV_Request> outputData = processData(reader, processedFile);
+
+            return new ResponseEntity<>(outputData, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private List<DO_CSV_Request> processData(BufferedReader reader, MultipartFile processedFile) {
+        List<DO_CSV_Request> dataList;
+
+        try {
+            CsvToBean<DO_CSV_Request> csvToBean = new CsvToBeanBuilder<DO_CSV_Request>(reader)
+                    .withType(DO_CSV_Request.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            dataList = csvToBean.parse();
+
+            return dataList;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return null;
         }
     }
 }
