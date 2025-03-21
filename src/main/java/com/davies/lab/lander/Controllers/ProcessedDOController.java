@@ -391,7 +391,7 @@ public class ProcessedDOController {
                     null
             );
 
-            List<DO_CSV_Request> outputData = processData(reader, processedFile);
+            List<DO_CSV_Request> outputData = processData(reader);
 
             return new ResponseEntity<>(outputData, HttpStatus.OK);
         } catch (Exception e) {
@@ -400,7 +400,7 @@ public class ProcessedDOController {
         }
     }
 
-    private List<DO_CSV_Request> processData(BufferedReader reader, MultipartFile processedFile) {
+    private List<DO_CSV_Request> processData(BufferedReader reader) {
         List<DO_CSV_Request> dataList;
 
         try {

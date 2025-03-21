@@ -387,7 +387,7 @@ public class ProcessedFLNTUController {
                     null
             );
 
-            List<FLNTU_CSV_Request> outputData = processData(reader, processedFile);
+            List<FLNTU_CSV_Request> outputData = processData(reader);
 
             return new ResponseEntity<>(outputData, HttpStatus.OK);
         } catch (Exception e) {
@@ -396,7 +396,7 @@ public class ProcessedFLNTUController {
         }
     }
 
-    private List<FLNTU_CSV_Request> processData(BufferedReader reader, MultipartFile processedFile) {
+    private List<FLNTU_CSV_Request> processData(BufferedReader reader) {
         List<FLNTU_CSV_Request> dataList;
 
         try {

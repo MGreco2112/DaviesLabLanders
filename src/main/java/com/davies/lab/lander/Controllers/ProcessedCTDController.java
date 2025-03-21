@@ -411,7 +411,7 @@ public class ProcessedCTDController {
             );
 
 
-            List<CTD_CSV_Request> outputData = processData(reader, processedFile);
+            List<CTD_CSV_Request> outputData = processData(reader);
 
             return new ResponseEntity<>(outputData, HttpStatus.OK);
         } catch (Exception e) {
@@ -421,7 +421,7 @@ public class ProcessedCTDController {
 
     }
 
-    private List<CTD_CSV_Request> processData(BufferedReader reader, MultipartFile processedFile) {
+    private List<CTD_CSV_Request> processData(BufferedReader reader) {
         List<CTD_CSV_Request> dataList;
 
         try {
