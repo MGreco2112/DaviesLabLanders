@@ -252,7 +252,6 @@ public class ProcessedCTDController {
     }
 
     @PostMapping("/upload_csv/test")
-    //TODO: Modify route to accept CSV with Header Data intact
     //TODO: Modify route to save each row to DB
     public ResponseEntity<List<CTD_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
         List<CTD_CSV_Request> dataList;
@@ -277,6 +276,7 @@ public class ProcessedCTDController {
     }
 
     @PostMapping("/upload_csv/header/test")
+    //TODO: Connect this method to main upload method, save header and datapoints to DB
     public ResponseEntity<CTDHeadResponse> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead) {
 
         if (processedHead.isEmpty()) {
