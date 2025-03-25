@@ -1,6 +1,7 @@
 package com.davies.lab.lander;
 
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,14 +50,14 @@ public class ExcelTesting {
                 Integer.parseInt(valuesMap.get(keyNames.get(8))),
                 Integer.parseInt(valuesMap.get(keyNames.get(9))),
                 Integer.parseInt(valuesMap.get(keyNames.get(10))),
-                valuesMap.get(keyNames.get(11)),
-                valuesMap.get(keyNames.get(12)),
+                StringFormatting.formatDateString(valuesMap.get(keyNames.get(11))),
+                StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
                 Double.parseDouble(valuesMap.get(keyNames.get(13))),
                 Integer.parseInt(valuesMap.get(keyNames.get(14))),
                 Integer.parseInt(valuesMap.get(keyNames.get(15))),
                 Integer.parseInt(valuesMap.get(keyNames.get(16))),
                 Double.parseDouble(valuesMap.get(keyNames.get(17))),
-                valuesMap.get(keyNames.get(18)),
+                StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(18))),
                 Double.parseDouble(valuesMap.get(keyNames.get(19)).split(",")[0]),
                 Double.parseDouble(valuesMap.get(keyNames.get(20)).split(",")[0]),
                 Double.parseDouble(valuesMap.get(keyNames.get(21)).split(",")[0]),

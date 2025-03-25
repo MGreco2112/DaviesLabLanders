@@ -2,6 +2,8 @@ package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedCTDData;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,14 +20,14 @@ public class CTDHeadResponse {
     private Integer BurstCnt;
     private Integer IntervalData;
     private Integer SampleCnt;
-    private String StartTime;
-    private String EndTime;
+    private LocalDateTime StartTime;
+    private LocalDateTime EndTime;
     private Double DepAdiRho;
     private Integer ECA;
     private Integer ECB;
     private Integer ECDeg;
     private Double ECCoef;
-    private String CoefDate;
+    private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
@@ -40,7 +42,7 @@ public class CTDHeadResponse {
     private String ASDBLanderID;
     private Set<CTDDataResponse> data = new HashSet<>();
 
-    public CTDHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
+    public CTDHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -176,19 +178,19 @@ public class CTDHeadResponse {
         SampleCnt = sampleCnt;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return StartTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         StartTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return EndTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         EndTime = endTime;
     }
 
@@ -232,11 +234,11 @@ public class CTDHeadResponse {
         this.ECCoef = ECCoef;
     }
 
-    public String getCoefDate() {
+    public Date getCoefDate() {
         return CoefDate;
     }
 
-    public void setCoefDate(String coefDate) {
+    public void setCoefDate(Date coefDate) {
         CoefDate = coefDate;
     }
 
@@ -346,9 +348,9 @@ public class CTDHeadResponse {
 
     private class CTDDataResponse {
         private Integer ID;
-        private String Date;
+        private LocalDateTime Date;
 
-        public CTDDataResponse(Integer ID, String date) {
+        public CTDDataResponse(Integer ID, LocalDateTime date) {
             this.ID = ID;
             Date = date;
         }
@@ -361,11 +363,11 @@ public class CTDHeadResponse {
             this.ID = ID;
         }
 
-        public String getDate() {
+        public LocalDateTime getDate() {
             return Date;
         }
 
-        public void setDate(String date) {
+        public void setDate(LocalDateTime date) {
             Date = date;
         }
     }

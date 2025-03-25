@@ -3,8 +3,11 @@ package com.davies.lab.lander.Controllers;
 import com.davies.lab.lander.FormattedModels.RequestBody.CTD_CSV_Request;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
+import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedCTDData;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
+import com.davies.lab.lander.Repositories.LanderRepository;
 import com.davies.lab.lander.Repositories.ProcessedCTDDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedCTDHeadRepository;
 import com.opencsv.bean.CsvToBean;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,6 +28,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/processed/ctd")
 public class ProcessedCTDController {
+    @Autowired
+    private LanderRepository landerRepository;
     @Autowired
     private ProcessedCTDDataRepository repository;
     @Autowired
@@ -317,14 +323,14 @@ public class ProcessedCTDController {
                     Integer.parseInt(valuesMap.get(keyNames.get(8))),
                     Integer.parseInt(valuesMap.get(keyNames.get(9))),
                     Integer.parseInt(valuesMap.get(keyNames.get(10))),
-                    valuesMap.get(keyNames.get(11)),
-                    valuesMap.get(keyNames.get(12)),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(11))),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
                     Double.parseDouble(valuesMap.get(keyNames.get(13))),
                     Integer.parseInt(valuesMap.get(keyNames.get(14))),
                     Integer.parseInt(valuesMap.get(keyNames.get(15))),
                     Integer.parseInt(valuesMap.get(keyNames.get(16))),
                     Double.parseDouble(valuesMap.get(keyNames.get(17))),
-                    valuesMap.get(keyNames.get(18)),
+                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(18))),
                     Double.parseDouble(valuesMap.get(keyNames.get(19)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(20)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(21)).split(",")[0]),
@@ -347,8 +353,10 @@ public class ProcessedCTDController {
         }
     }
 
-    @PostMapping("/upload_csv/combined/test")
-    public ResponseEntity<List<CTD_CSV_Request>> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+    @PostMapping("/upload_csv/combined/{lander_id}")
+    public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerId) {
+        Lander lander = landerRepository.findById(landerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
 
         if (processedFile.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -375,8 +383,7 @@ public class ProcessedCTDController {
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            CTDHeadResponse testResponse = new CTDHeadResponse (
-                    null,
+            ProcessedCTDHead ctdHead = new ProcessedCTDHead (
                     valuesMap.get(keyNames.get(0)),
                     valuesMap.get(keyNames.get(1)),
                     valuesMap.get(keyNames.get(2)),
@@ -388,14 +395,14 @@ public class ProcessedCTDController {
                     Integer.parseInt(valuesMap.get(keyNames.get(8))),
                     Integer.parseInt(valuesMap.get(keyNames.get(9))),
                     Integer.parseInt(valuesMap.get(keyNames.get(10))),
-                    valuesMap.get(keyNames.get(11)),
-                    valuesMap.get(keyNames.get(12)),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(11))),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
                     Double.parseDouble(valuesMap.get(keyNames.get(13))),
                     Integer.parseInt(valuesMap.get(keyNames.get(14))),
                     Integer.parseInt(valuesMap.get(keyNames.get(15))),
                     Integer.parseInt(valuesMap.get(keyNames.get(16))),
                     Double.parseDouble(valuesMap.get(keyNames.get(17))),
-                    valuesMap.get(keyNames.get(18)),
+                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(18))),
                     Double.parseDouble(valuesMap.get(keyNames.get(19)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(20)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(21)).split(",")[0]),
@@ -407,13 +414,34 @@ public class ProcessedCTDController {
                     Integer.parseInt(valuesMap.get(keyNames.get(27))),
                     Integer.parseInt(valuesMap.get(keyNames.get(28))),
                     Integer.parseInt(valuesMap.get(keyNames.get(29))),
-                    null
+                    lander
             );
 
+            ProcessedCTDHead newHead = headRepository.save(ctdHead);
 
             List<CTD_CSV_Request> outputData = processData(reader);
 
-            return new ResponseEntity<>(outputData, HttpStatus.OK);
+            if (outputData == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+
+            List<ProcessedCTDData> data = new ArrayList<>();
+
+            for (CTD_CSV_Request inputDataPoint : outputData) {
+                ProcessedCTDData newData = new ProcessedCTDData(
+                        StringFormatting.formatDateString(inputDataPoint.getDate()),
+                        inputDataPoint.getTempDegC(),
+                        inputDataPoint.getSal(),
+                        inputDataPoint.getCondMsCm(),
+                        inputDataPoint.geteC25uScM(),
+                        inputDataPoint.getBattV(),
+                        newHead
+                );
+
+                data.add(repository.save(newData));
+            }
+
+            return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
