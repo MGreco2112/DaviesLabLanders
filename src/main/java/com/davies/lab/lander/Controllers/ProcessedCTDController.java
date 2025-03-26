@@ -425,8 +425,6 @@ public class ProcessedCTDController {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
 
-            List<ProcessedCTDData> data = new ArrayList<>();
-
             for (CTD_CSV_Request inputDataPoint : outputData) {
                 ProcessedCTDData newData = new ProcessedCTDData(
                         StringFormatting.formatDateString(inputDataPoint.getDate()),
@@ -438,7 +436,7 @@ public class ProcessedCTDController {
                         newHead
                 );
 
-                data.add(repository.save(newData));
+                repository.save(newData);
             }
 
             return new ResponseEntity<>("Success", HttpStatus.OK);

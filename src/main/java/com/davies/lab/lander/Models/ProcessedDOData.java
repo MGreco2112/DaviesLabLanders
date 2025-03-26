@@ -1,16 +1,14 @@
 package com.davies.lab.lander.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class ProcessedDOData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer ID;
-    private String Date;
+    private LocalDateTime Date;
     private Double TempDegC;
     private Double DO;
     private Double WeissDoMgL;
@@ -24,7 +22,18 @@ public class ProcessedDOData {
     public ProcessedDOData() {
     }
 
-    public ProcessedDOData(Integer ID, String date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, ProcessedDOHead headID) {
+    public ProcessedDOData(LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, ProcessedDOHead headID) {
+        Date = date;
+        TempDegC = tempDegC;
+        this.DO = DO;
+        WeissDoMgL = weissDoMgL;
+        BattV = battV;
+        this.GGDOMgL = GGDOMgL;
+        this.BKDOMgL = BKDOMgL;
+        HeadID = headID;
+    }
+
+    public ProcessedDOData(Integer ID, LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, ProcessedDOHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -44,11 +53,11 @@ public class ProcessedDOData {
         this.ID = ID;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return Date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         Date = date;
     }
 

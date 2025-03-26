@@ -1,7 +1,5 @@
 package com.davies.lab.lander.Models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 
 import javax.persistence.*;
 import java.sql.Date;

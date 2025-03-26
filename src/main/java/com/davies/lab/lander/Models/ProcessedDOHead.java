@@ -1,8 +1,9 @@
 package com.davies.lab.lander.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -21,9 +22,9 @@ public class ProcessedDOHead {
     private Integer BurstCnt;
     private Integer IntervalData;
     private Integer SampleCnt;
-    private String StartTime, EndTime;
+    private LocalDateTime StartTime, EndTime;
     private Double DepAdiRho;
-    private String CoefDate;
+    private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
@@ -44,7 +45,37 @@ public class ProcessedDOHead {
     public ProcessedDOHead() {
     }
 
-    public ProcessedDOHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, String coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
+    public ProcessedDOHead(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID) {
+        SondeName = sondeName;
+        SondeNo = sondeNo;
+        SensorType = sensorType;
+        Channel = channel;
+        DelayTime = delayTime;
+        PreHeat = preHeat;
+        MeasModel = measModel;
+        BurstTime = burstTime;
+        BurstCnt = burstCnt;
+        IntervalData = intervalData;
+        SampleCnt = sampleCnt;
+        StartTime = startTime;
+        EndTime = endTime;
+        DepAdiRho = depAdiRho;
+        CoefDate = coefDate;
+        Ch1 = ch1;
+        Ch2 = ch2;
+        Ch3 = ch3;
+        BuzzerEN = buzzerEN;
+        BuzzerInterval = buzzerInterval;
+        this.COMMENT = COMMENT;
+        SensorType2 = sensorType2;
+        BuzzerNumber = buzzerNumber;
+        DepM = depM;
+        SetSal = setSal;
+        FilmNo = filmNo;
+        LanderID = landerID;
+    }
+
+    public ProcessedDOHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -172,19 +203,19 @@ public class ProcessedDOHead {
         SampleCnt = sampleCnt;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return StartTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         StartTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return EndTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         EndTime = endTime;
     }
 
@@ -196,11 +227,11 @@ public class ProcessedDOHead {
         DepAdiRho = depAdiRho;
     }
 
-    public String getCoefDate() {
+    public Date getCoefDate() {
         return CoefDate;
     }
 
-    public void setCoefDate(String coefDate) {
+    public void setCoefDate(Date coefDate) {
         CoefDate = coefDate;
     }
 

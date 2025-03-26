@@ -3,8 +3,11 @@ package com.davies.lab.lander.Controllers;
 import com.davies.lab.lander.FormattedModels.RequestBody.DO_CSV_Request;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DODataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DOHeadResponse;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
+import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedDOData;
 import com.davies.lab.lander.Models.ProcessedDOHead;
+import com.davies.lab.lander.Repositories.LanderRepository;
 import com.davies.lab.lander.Repositories.ProcessedDODataRepository;
 import com.davies.lab.lander.Repositories.ProcessedDOHeadRepository;
 import com.opencsv.bean.CsvToBean;
@@ -25,6 +28,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/processed/do")
 public class ProcessedDOController {
+    @Autowired
+    private LanderRepository landerRepository;
     @Autowired
     private ProcessedDODataRepository repository;
     @Autowired
@@ -307,10 +312,10 @@ public class ProcessedDOController {
                     Integer.parseInt(valuesMap.get(keyNames.get(8))),
                     Integer.parseInt(valuesMap.get(keyNames.get(9))),
                     Integer.parseInt(valuesMap.get(keyNames.get(10))),
-                    valuesMap.get(keyNames.get(11)),
-                    valuesMap.get(keyNames.get(12)),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(11))),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
                     Double.parseDouble(valuesMap.get(keyNames.get(13))),
-                    valuesMap.get(keyNames.get(14)),
+                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(14))),
                     Double.parseDouble(valuesMap.get(keyNames.get(15)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(16)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
@@ -332,8 +337,10 @@ public class ProcessedDOController {
         }
     }
 
-    @PostMapping("/upload_csv/combined/test")
-    public ResponseEntity<List<DO_CSV_Request>> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+    @PostMapping("/upload_csv/combined/{lander_id}")
+    public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerId) {
+        Lander lander = landerRepository.findById(landerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
 
         if (processedFile.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -360,8 +367,7 @@ public class ProcessedDOController {
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            DOHeadResponse testResponse = new DOHeadResponse(
-                    null,
+            ProcessedDOHead doHead = new ProcessedDOHead(
                     valuesMap.get(keyNames.get(0)),
                     valuesMap.get(keyNames.get(1)),
                     valuesMap.get(keyNames.get(2)),
@@ -373,13 +379,13 @@ public class ProcessedDOController {
                     Integer.parseInt(valuesMap.get(keyNames.get(8))),
                     Integer.parseInt(valuesMap.get(keyNames.get(9))),
                     Integer.parseInt(valuesMap.get(keyNames.get(10))),
-                    valuesMap.get(keyNames.get(11)),
-                    valuesMap.get(keyNames.get(12)),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(11))),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
                     Double.parseDouble(valuesMap.get(keyNames.get(13))),
-                    valuesMap.get(keyNames.get(14)),
-                    Double.parseDouble(valuesMap.get(keyNames.get(15)).split(",")[0]),
-                    Double.parseDouble(valuesMap.get(keyNames.get(16)).split(",")[0]),
-                    Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
+                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(14))),
+                    Double.parseDouble(valuesMap.get(keyNames.get(15))),
+                    Double.parseDouble(valuesMap.get(keyNames.get(16))),
+                    Double.parseDouble(valuesMap.get(keyNames.get(17))),
                     Integer.parseInt(valuesMap.get(keyNames.get(18))),
                     Integer.parseInt(valuesMap.get(keyNames.get(19))),
                     valuesMap.get(keyNames.get(20)),
@@ -388,12 +394,35 @@ public class ProcessedDOController {
                     Integer.parseInt(valuesMap.get(keyNames.get(23))),
                     Integer.parseInt(valuesMap.get(keyNames.get(24))),
                     valuesMap.get(keyNames.get(25)),
-                    null
+                    lander
             );
+
+            ProcessedDOHead newHead = headRepository.save(doHead);
 
             List<DO_CSV_Request> outputData = processData(reader);
 
-            return new ResponseEntity<>(outputData, HttpStatus.OK);
+            if (outputData == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+
+
+
+            for (DO_CSV_Request inputDataPoint : outputData) {
+                ProcessedDOData newData = new ProcessedDOData(
+                        StringFormatting.formatDateString(inputDataPoint.getDate()),
+                        inputDataPoint.getTempDegC(),
+                        inputDataPoint.getDo(),
+                        inputDataPoint.getWeissDoMgL(),
+                        inputDataPoint.getBattV(),
+                        inputDataPoint.getGgDoMgL(),
+                        inputDataPoint.getBkDoMgL(),
+                        newHead
+                );
+
+                repository.save(newData);
+            }
+
+            return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

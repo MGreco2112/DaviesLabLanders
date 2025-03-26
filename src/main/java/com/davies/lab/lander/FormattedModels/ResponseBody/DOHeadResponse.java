@@ -2,6 +2,8 @@ package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedDOData;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,9 +20,9 @@ public class DOHeadResponse {
     private Integer BurstCnt;
     private Integer IntervalData;
     private Integer SampleCnt;
-    private String StartTime, EndTime;
+    private LocalDateTime StartTime, EndTime;
     private Double DepAdiRho;
-    private String CoefDate;
+    private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
@@ -35,7 +37,7 @@ public class DOHeadResponse {
     private String LanderID;
     private Set<DODataResponse> data = new HashSet<>();
 
-    public DOHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, String startTime, String endTime, Double depAdiRho, String coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
+    public DOHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -171,19 +173,19 @@ public class DOHeadResponse {
         SampleCnt = sampleCnt;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return StartTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         StartTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return EndTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         EndTime = endTime;
     }
 
@@ -195,11 +197,11 @@ public class DOHeadResponse {
         DepAdiRho = depAdiRho;
     }
 
-    public String getCoefDate() {
+    public Date getCoefDate() {
         return CoefDate;
     }
 
-    public void setCoefDate(String coefDate) {
+    public void setCoefDate(Date coefDate) {
         CoefDate = coefDate;
     }
 
@@ -309,9 +311,9 @@ public class DOHeadResponse {
 
     private class DODataResponse {
         private Integer ID;
-        private String Date;
+        private LocalDateTime Date;
 
-        public DODataResponse(Integer ID, String date) {
+        public DODataResponse(Integer ID, LocalDateTime date) {
             this.ID = ID;
             Date = date;
         }
@@ -324,11 +326,11 @@ public class DOHeadResponse {
             this.ID = ID;
         }
 
-        public String getDate() {
+        public LocalDateTime getDate() {
             return Date;
         }
 
-        public void setDate(String date) {
+        public void setDate(LocalDateTime date) {
             Date = date;
         }
     }
