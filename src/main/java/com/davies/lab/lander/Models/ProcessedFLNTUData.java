@@ -1,13 +1,14 @@
 package com.davies.lab.lander.Models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class ProcessedFLNTUData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer ID;
-    private String Date;
+    private LocalDateTime Date;
     private Double TempDegC;
     private Double ChlFluPPB;
     private Double ChlAUgL;
@@ -20,7 +21,17 @@ public class ProcessedFLNTUData {
     public ProcessedFLNTUData() {
     }
 
-    public ProcessedFLNTUData(Integer ID, String date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
+    public ProcessedFLNTUData(LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
+        Date = date;
+        TempDegC = tempDegC;
+        ChlFluPPB = chlFluPPB;
+        ChlAUgL = chlAUgL;
+        TurbMFTU = turbMFTU;
+        BattV = battV;
+        HeadID = headID;
+    }
+
+    public ProcessedFLNTUData(Integer ID, LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -39,11 +50,11 @@ public class ProcessedFLNTUData {
         this.ID = ID;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return Date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         Date = date;
     }
 

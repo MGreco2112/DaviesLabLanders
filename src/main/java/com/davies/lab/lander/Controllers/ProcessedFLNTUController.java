@@ -3,8 +3,11 @@ package com.davies.lab.lander.Controllers;
 import com.davies.lab.lander.FormattedModels.RequestBody.FLNTU_CSV_Request;
 import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUHeadResponse;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
+import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
 import com.davies.lab.lander.Models.ProcessedFLNTUHead;
+import com.davies.lab.lander.Repositories.LanderRepository;
 import com.davies.lab.lander.Repositories.ProcessedFLNTUDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedFLNTUHeadRepository;
 import com.opencsv.bean.CsvToBean;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,6 +28,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/processed/flntu")
 public class ProcessedFLNTUController {
+    @Autowired
+    private LanderRepository landerRepository;
     @Autowired
     private ProcessedFLNTUDataRepository repository;
     @Autowired
@@ -304,11 +310,11 @@ public class ProcessedFLNTUController {
                     Integer.parseInt(valuesMap.get(keyNames.get(9))),
                     Integer.parseInt(valuesMap.get(keyNames.get(10))),
                     Integer.parseInt(valuesMap.get(keyNames.get(11))),
-                    valuesMap.get(keyNames.get(12)),
-                    valuesMap.get(keyNames.get(13)),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(13))),
                     Integer.parseInt(valuesMap.get(keyNames.get(14))),
                     Integer.parseInt(valuesMap.get(keyNames.get(15))),
-                    valuesMap.get(keyNames.get(16)),
+                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(16))),
                     Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(18)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(19)).split(",")[0]),
@@ -328,8 +334,10 @@ public class ProcessedFLNTUController {
         }
     }
 
-    @PostMapping("/upload_csv/combined/test")
-    public ResponseEntity<List<FLNTU_CSV_Request>> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile) {
+    @PostMapping("/upload_csv/combined/{lander_id}")
+    public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerId) {
+        Lander lander = landerRepository.findById(landerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
 
         if (processedFile.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -356,8 +364,7 @@ public class ProcessedFLNTUController {
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            FLNTUHeadResponse testResponse = new FLNTUHeadResponse(
-                    null,
+            ProcessedFLNTUHead flntuHead = new ProcessedFLNTUHead(
                     valuesMap.get(keyNames.get(0)),
                     valuesMap.get(keyNames.get(1)),
                     valuesMap.get(keyNames.get(2)),
@@ -370,11 +377,11 @@ public class ProcessedFLNTUController {
                     Integer.parseInt(valuesMap.get(keyNames.get(9))),
                     Integer.parseInt(valuesMap.get(keyNames.get(10))),
                     Integer.parseInt(valuesMap.get(keyNames.get(11))),
-                    valuesMap.get(keyNames.get(12)),
-                    valuesMap.get(keyNames.get(13)),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
+                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(13))),
                     Integer.parseInt(valuesMap.get(keyNames.get(14))),
                     Integer.parseInt(valuesMap.get(keyNames.get(15))),
-                    valuesMap.get(keyNames.get(16)),
+                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(16))),
                     Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(18)).split(",")[0]),
                     Double.parseDouble(valuesMap.get(keyNames.get(19)).split(",")[0]),
@@ -384,12 +391,32 @@ public class ProcessedFLNTUController {
                     valuesMap.get(keyNames.get(23)),
                     valuesMap.get(keyNames.get(24)),
                     Integer.parseInt(valuesMap.get(keyNames.get(25))),
-                    null
+                    lander
             );
+
+            ProcessedFLNTUHead newHead = headRepository.save(flntuHead);
 
             List<FLNTU_CSV_Request> outputData = processData(reader);
 
-            return new ResponseEntity<>(outputData, HttpStatus.OK);
+            if (outputData == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+
+            for (FLNTU_CSV_Request inputDataPoint : outputData) {
+                ProcessedFLNTUData newData = new ProcessedFLNTUData (
+                        StringFormatting.formatDateString(inputDataPoint.getDate()),
+                        inputDataPoint.getTempDegC(),
+                        inputDataPoint.getChlFluPpb(),
+                        inputDataPoint.getChlAUgL(),
+                        inputDataPoint.getTurbMFtu(),
+                        inputDataPoint.getBattV(),
+                        newHead
+                );
+
+                repository.save(newData);
+            }
+
+            return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

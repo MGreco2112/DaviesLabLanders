@@ -1,8 +1,10 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
+import java.time.LocalDateTime;
+
 public class FLNTUDataResponse {
     private Integer ID;
-    private String Date;
+    private LocalDateTime Date;
     private Double TempDegC;
     private Double ChlFluPPB;
     private Double ChlAUgL;
@@ -10,7 +12,7 @@ public class FLNTUDataResponse {
     private Double BattV;
     private Integer HeadID;
 
-    public FLNTUDataResponse(Integer ID, String date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, Integer headID) {
+    public FLNTUDataResponse(Integer ID, LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, Integer headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -29,11 +31,11 @@ public class FLNTUDataResponse {
         this.ID = ID;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return Date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         Date = date;
     }
 

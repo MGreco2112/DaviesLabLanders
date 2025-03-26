@@ -383,9 +383,9 @@ public class ProcessedDOController {
                     StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
                     Double.parseDouble(valuesMap.get(keyNames.get(13))),
                     StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(14))),
-                    Double.parseDouble(valuesMap.get(keyNames.get(15))),
-                    Double.parseDouble(valuesMap.get(keyNames.get(16))),
-                    Double.parseDouble(valuesMap.get(keyNames.get(17))),
+                    Double.parseDouble(valuesMap.get(keyNames.get(15)).split(",")[0]),
+                    Double.parseDouble(valuesMap.get(keyNames.get(16)).split(",")[0]),
+                    Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
                     Integer.parseInt(valuesMap.get(keyNames.get(18))),
                     Integer.parseInt(valuesMap.get(keyNames.get(19))),
                     valuesMap.get(keyNames.get(20)),
@@ -419,6 +419,7 @@ public class ProcessedDOController {
                         newHead
                 );
 
+                System.out.println(newData.getDate());
                 repository.save(newData);
             }
 

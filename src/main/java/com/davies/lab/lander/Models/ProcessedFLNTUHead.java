@@ -3,6 +3,8 @@ package com.davies.lab.lander.Models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -22,9 +24,9 @@ public class ProcessedFLNTUHead {
     private Integer IntervalData;
     private Integer WiperInterval;
     private Integer SampleCnt;
-    private String StartTime, EndTime;
+    private LocalDateTime StartTime, EndTime;
     private Integer CHLA, CHLB;
-    private String CoefDate;
+    private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
@@ -43,7 +45,37 @@ public class ProcessedFLNTUHead {
     public ProcessedFLNTUHead() {
     }
 
-    public ProcessedFLNTUHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer wiperInterval, Integer sampleCnt, String startTime, String endTime, Integer CHLA, Integer CHLB, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
+    public ProcessedFLNTUHead(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID) {
+        SondeName = sondeName;
+        SondeNo = sondeNo;
+        SensorType = sensorType;
+        Channel = channel;
+        DelayTime = delayTime;
+        PreHeat = preHeat;
+        MeasMode = measMode;
+        BurstTime = burstTime;
+        BurstCnt = burstCnt;
+        IntervalData = intervalData;
+        WiperInterval = wiperInterval;
+        SampleCnt = sampleCnt;
+        StartTime = startTime;
+        EndTime = endTime;
+        this.CHLA = CHLA;
+        this.CHLB = CHLB;
+        CoefDate = coefDate;
+        Ch1 = ch1;
+        Ch2 = ch2;
+        Ch3 = ch3;
+        Ch4 = ch4;
+        BuzzerEN = buzzerEN;
+        BuzzerInterval = buzzerInterval;
+        Comment = comment;
+        SensorType2 = sensorType2;
+        BuzzerNumber = buzzerNumber;
+        LanderID = landerID;
+    }
+
+    public ProcessedFLNTUHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -179,19 +211,19 @@ public class ProcessedFLNTUHead {
         SampleCnt = sampleCnt;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return StartTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         StartTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return EndTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         EndTime = endTime;
     }
 
@@ -211,11 +243,11 @@ public class ProcessedFLNTUHead {
         this.CHLB = CHLB;
     }
 
-    public String getCoefDate() {
+    public Date getCoefDate() {
         return CoefDate;
     }
 
-    public void setCoefDate(String coefDate) {
+    public void setCoefDate(Date coefDate) {
         CoefDate = coefDate;
     }
 

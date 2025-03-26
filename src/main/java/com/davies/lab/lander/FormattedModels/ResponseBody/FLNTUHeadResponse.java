@@ -2,6 +2,8 @@ package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,9 +21,9 @@ public class FLNTUHeadResponse {
     private Integer IntervalData;
     private Integer WiperInterval;
     private Integer SampleCnt;
-    private String StartTime, EndTime;
+    private LocalDateTime StartTime, EndTime;
     private Integer CHLA, CHLB;
-    private String CoefDate;
+    private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
@@ -34,7 +36,37 @@ public class FLNTUHeadResponse {
     private String LanderID;
     private Set<FLNTUDataResponse> data = new HashSet<>();
 
-    public FLNTUHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, String startTime, String endTime, Integer CHLA, Integer CHLB, String coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
+    public FLNTUHeadResponse(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
+        SondeName = sondeName;
+        SondeNo = sondeNo;
+        SensorType = sensorType;
+        Channel = channel;
+        DelayTime = delayTime;
+        PreHeat = preHeat;
+        MeasMode = measMode;
+        BurstTime = burstTime;
+        BurstCnt = burstCnt;
+        IntervalData = intervalData;
+        WiperInterval = wiperInterval;
+        SampleCnt = sampleCnt;
+        StartTime = startTime;
+        EndTime = endTime;
+        this.CHLA = CHLA;
+        this.CHLB = CHLB;
+        CoefDate = coefDate;
+        Ch1 = ch1;
+        Ch2 = ch2;
+        Ch3 = ch3;
+        Ch4 = ch4;
+        BuzzerEN = buzzerEN;
+        BuzzerInterval = buzzerInterval;
+        Comment = comment;
+        SensorType2 = sensorType2;
+        BuzzerNumber = buzzerNumber;
+        LanderID = landerID;
+    }
+
+    public FLNTUHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -178,19 +210,19 @@ public class FLNTUHeadResponse {
         SampleCnt = sampleCnt;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return StartTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         StartTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return EndTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         EndTime = endTime;
     }
 
@@ -210,11 +242,11 @@ public class FLNTUHeadResponse {
         this.CHLB = CHLB;
     }
 
-    public String getCoefDate() {
+    public Date getCoefDate() {
         return CoefDate;
     }
 
-    public void setCoefDate(String coefDate) {
+    public void setCoefDate(Date coefDate) {
         CoefDate = coefDate;
     }
 
@@ -308,9 +340,9 @@ public class FLNTUHeadResponse {
 
     private class FLNTUDataResponse {
         private Integer ID;
-        private String date;
+        private LocalDateTime date;
 
-        public FLNTUDataResponse(Integer ID, String date) {
+        public FLNTUDataResponse(Integer ID, LocalDateTime date) {
             this.ID = ID;
             this.date = date;
         }
@@ -323,11 +355,11 @@ public class FLNTUHeadResponse {
             this.ID = ID;
         }
 
-        public String getDate() {
+        public LocalDateTime getDate() {
             return date;
         }
 
-        public void setDate(String date) {
+        public void setDate(LocalDateTime date) {
             this.date = date;
         }
     }
