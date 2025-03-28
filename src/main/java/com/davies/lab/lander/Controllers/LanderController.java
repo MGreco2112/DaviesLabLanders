@@ -73,6 +73,25 @@ public class LanderController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/search/id/{landerID}")
+    public Set<LanderResponse> getLandersByIDQuery(@PathVariable("landerID") String landerID) {
+        Set<LanderResponse> res = new HashSet<>();
+
+        Set<Lander> landers = repository.selectLandersBySimilarID(landerID);
+
+        for (Lander lander : landers) {
+            res.add(
+                    new LanderResponse(
+                            lander.getASDBLanderID(),
+                            lander.getLanderPlatform(),
+                            lander.getASDBROVDiveID()
+                    )
+            );
+        }
+
+        return res;
+    }
+
     @GetMapping("/search/date/{inputDate}")
     public Set<LanderResponse> getLandersByDateQuery(@PathVariable("inputDate") String inputDate) {
         Set<Lander> landerSet = repository.selectLandersByDateRange(inputDate);

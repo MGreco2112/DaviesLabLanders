@@ -13,4 +13,7 @@ public interface LanderRepository extends JpaRepository<Lander, String> {
     //TODO: Add SQL Methods
     @Query(value = "SELECT * FROM lander WHERE deployment_date_and_time BETWEEN :inputDate AND recovery_date_and_time", nativeQuery = true)
     Set<Lander> selectLandersByDateRange(@Param("inputDate") String inputDate);
+
+    @Query(value = "SELECT * FROM lander WHERE asdblanderID LIKE %:landerID%", nativeQuery = true)
+    Set<Lander> selectLandersBySimilarID(@Param("landerID") String landerID);
 }
