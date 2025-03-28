@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
 import com.davies.lab.lander.Models.ProcessedDOHead;
@@ -11,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -71,5 +71,38 @@ public class LanderController {
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/date/{inputDate}")
+    public Set<LanderResponse> getLandersByDateQuery(@PathVariable("inputDate") String inputDate) {
+        Set<Lander> landerSet = repository.selectLandersByDateRange(inputDate);
+        Set<LanderResponse> res = new HashSet<>();
+
+        for (Lander selLander : landerSet) {
+            res.add(
+                    new LanderResponse(
+                            selLander.getASDBLanderID(),
+                            selLander.getLanderPlatform(),
+                            selLander.getASDBROVDiveID()
+                    )
+            );
+        }
+
+        return res;
+    }
+
+    @PostMapping("/new_lander")
+    public ResponseEntity<String> postNewLander(@RequestBody NewLanderRequest newLander) {
+        Lander lander = new Lander(
+                newLander.getASDBLanderID(),
+                newLander.getLanderPlatform(),
+                newLander.getASDBROVDiveID(),
+                StringFormatting.formatFrontendDateString(newLander.getDeploymentDateAndTime()),
+                StringFormatting.formatFrontendDateString(newLander.getRecoveryDateAndTime())
+        );
+
+        repository.save(lander);
+
+        return new ResponseEntity<>("Success", HttpStatus.CREATED);
     }
 }

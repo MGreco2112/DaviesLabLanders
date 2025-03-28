@@ -20,6 +20,15 @@ public class StringFormatting {
         return LocalDateTime.of(year, month, day, hour, minute);
     }
 
+    public static LocalDateTime formatFrontendDateString (String inputDate) {
+        String[] dateSplit = inputDate.split("-");
+        int year = Integer.parseInt(dateSplit[0]);
+        int month = Integer.parseInt(dateSplit[1]);
+        int day = Integer.parseInt(dateSplit[2]);
+
+        return LocalDateTime.of(year, month, day, 0, 0);
+    }
+
     public static Date formatCoefDateString(String coefDate) {
         String[] splitDate = coefDate.split("/");
 

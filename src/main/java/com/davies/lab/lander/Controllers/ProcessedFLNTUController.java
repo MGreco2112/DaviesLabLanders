@@ -413,7 +413,9 @@ public class ProcessedFLNTUController {
                         newHead
                 );
 
-                repository.save(newData);
+                ProcessedFLNTUData printData = repository.save(newData);
+
+                System.out.println(printData.getDate());
             }
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
