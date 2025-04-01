@@ -245,6 +245,30 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<FLNTUDataResponse>> getDataByRange(@PathVariable("id") Integer id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<FLNTUDataResponse> res = new ArrayList<>();
+
+        List<ProcessedFLNTUData> data = repository.findDataByHeadAndDateRange(id, startDate, endDate);
+
+        for (ProcessedFLNTUData selData : data) {
+            res.add(
+                    new FLNTUDataResponse(
+                            selData.getID(),
+                            selData.getDate(),
+                            selData.getTempDegC(),
+                            selData.getChlFluPPB(),
+                            selData.getChlAUgL(),
+                            selData.getTurbMFTU(),
+                            selData.getBattV(),
+                            selData.getHeadID().getHeadID()
+                    )
+            );
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @PostMapping("/upload_csv/test")
     public ResponseEntity<List<FLNTU_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
         List<FLNTU_CSV_Request> dataList;

@@ -248,6 +248,31 @@ public class ProcessedDOController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<DODataResponse>> getDataByRange(@PathVariable("id") Integer id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<DODataResponse> res = new ArrayList<>();
+
+        List<ProcessedDOData> data = repository.findDataByHeadAndDateRange(id, startDate, endDate);
+
+        for (ProcessedDOData selData: data) {
+            res.add(
+                    new DODataResponse(
+                            selData.getID(),
+                            selData.getDate(),
+                            selData.getTempDegC(),
+                            selData.getDO(),
+                            selData.getWeissDoMgL(),
+                            selData.getBattV(),
+                            selData.getGGDOMgL(),
+                            selData.getBKDOMgL(),
+                            selData.getHeadID().getHeadID()
+                    )
+            );
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @PostMapping("/upload_csv/test")
     public ResponseEntity<List<DO_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
         List<DO_CSV_Request> dataList;
