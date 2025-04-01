@@ -12,4 +12,7 @@ import java.util.List;
 public interface ProcessedDODataRepository extends JpaRepository<ProcessedDOData, Integer> {
     @Query(value = "SELECT * FROM processeddodata WHERE head_id = :id", nativeQuery = true)
     List<ProcessedDOData> findDoDataByHeadId(@Param("id") Integer id);
+
+    @Query(value = "SELECT * FROM processeddodata WHERE head_id = :id AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
+    List<ProcessedDOData> findDataByHeadAndDateRange(@Param("id") Integer id, @Param("startDate") String startDate, @Param("endDate") String endDate);
 }

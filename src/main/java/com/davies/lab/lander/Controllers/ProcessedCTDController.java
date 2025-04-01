@@ -257,6 +257,30 @@ public class ProcessedCTDController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<CTDDataResponse>> getDataByRange(@PathVariable("id") Integer headId, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<CTDDataResponse> res = new ArrayList<>();
+
+        List<ProcessedCTDData> data = repository.findDataByHeadAndDateRange(headId, startDate, endDate);
+
+        for (ProcessedCTDData selData : data) {
+            res.add(
+                    new CTDDataResponse(
+                            selData.getID(),
+                            selData.getDate(),
+                            selData.getTempDegC(),
+                            selData.getSal(),
+                            selData.getCondMsCm(),
+                            selData.getEc25UsCm(),
+                            selData.getBattV(),
+                            selData.getHeadID().getHeadID()
+                    )
+            );
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @PostMapping("/upload_csv/test")
     //TODO: Modify route to save each row to DB
     public ResponseEntity<List<CTD_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
