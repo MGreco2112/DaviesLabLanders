@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface ProcessedFLNTUHeadRepository extends JpaRepository<ProcessedFLNTUHead, Integer> {
     //TODO: Add SQL Methods
-
+    @Query(value = "SELECT * FROM processedflntuhead WHERE lander_id = :id", nativeQuery = true)
+    List<ProcessedFLNTUHead> getFLNTUHeadsByLanderID(@Param("id") String id);
 }

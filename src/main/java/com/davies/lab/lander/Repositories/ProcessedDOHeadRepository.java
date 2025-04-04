@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProcessedDOHeadRepository extends JpaRepository<ProcessedDOHead, Integer> {
-    //TODO: Add SQL Methods
-
+    @Query(value = "SELECT * FROM processeddohead WHERE lander_id = :id", nativeQuery = true)
+    List<ProcessedDOHead> getDOHeadsByLanderID(@Param("id") String id);
 }
