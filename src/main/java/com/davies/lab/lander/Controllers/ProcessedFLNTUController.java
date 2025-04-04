@@ -375,7 +375,6 @@ public class ProcessedFLNTUController {
 
             while (!Objects.equals(temp, "[Item]")) {
                 temp = reader.readLine();
-
                 if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
                     output.add(temp);
                 }
