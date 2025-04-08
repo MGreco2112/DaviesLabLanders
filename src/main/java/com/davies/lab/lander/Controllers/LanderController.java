@@ -1,6 +1,7 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -123,5 +125,58 @@ public class LanderController {
         repository.save(lander);
 
         return new ResponseEntity<>("Success", HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update/id/{id}")
+    public ResponseEntity<String> updateLander(@PathVariable("id") String id, @RequestBody UpdateLanderRequest updates) {
+       Lander selLander = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getLanderPlatform() != null) {
+            selLander.setLanderPlatform(updates.getLanderPlatform());
+        }
+        if (updates.getASDBROBDiveID() != null) {
+            selLander.setASDBROVDiveID(updates.getASDBROBDiveID());
+        }
+        if (updates.getDeploymentDateAndTime() != null) {
+            selLander.setDeploymentDateAndTime(updates.getDeploymentDateAndTime());
+        }
+        if (updates.getRecoveryDateAndTime() != null) {
+            selLander.setRecoveryDateAndTime(updates.getRecoveryDateAndTime());
+        }
+        if (updates.getCTDHeads() != null) {
+            selLander.setCTDHeads(updates.getCTDHeads());
+        }
+        if (updates.getDOHeads() != null) {
+            selLander.setDOHeads(updates.getDOHeads());
+        }
+        if (updates.getFLNTUHeads() != null) {
+            selLander.setFLNTUHeads(updates.getFLNTUHeads());
+        }
+
+        repository.save(selLander);
+
+        return new ResponseEntity<>("Updated", HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/delete/id/{id}")
+    public ResponseEntity<String> deleteLanderByID(@PathVariable("id") String id) {
+        Lander selLander = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        for (ProcessedCTDHead ctd : selLander.getCTDHeads()) {
+            ctd.setLanderID(null);
+        }
+
+        for (ProcessedDOHead doHead : selLander.getDOHeads()) {
+            doHead.setLanderID(null);
+        }
+
+        for (ProcessedFLNTUHead flntu : selLander.getFLNTUHeads()) {
+            flntu.setLanderID(null);
+        }
+
+        repository.save(selLander);
+        repository.delete(selLander);
+
+        return new ResponseEntity<>("Deleted Lander", HttpStatus.OK);
     }
 }

@@ -36,7 +36,9 @@ public class StringFormatting {
         int month = Integer.parseInt(splitDate[1]);
         int day = Integer.parseInt(splitDate[2]);
 
-        return new Date(year, month, day);
+        String newDate = year + "-" + month + "-" + day;
+
+        return Date.valueOf(newDate);
     }
 
 }

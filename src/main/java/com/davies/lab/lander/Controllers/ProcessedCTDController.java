@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.CTD_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
@@ -487,5 +489,164 @@ public class ProcessedCTDController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @PutMapping("update/header/{id}")
+    public ResponseEntity<String> updateCTDHeader(@PathVariable("id") Integer id, @RequestBody UpdateCTDHeaderRequest updates) {
+        ProcessedCTDHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getSondeName() != null) {
+            selHead.setSondeName(updates.getSondeName());
+        }
+        if (updates.getSondeNo() != null) {
+            selHead.setSondeNo(updates.getSondeNo());
+        }
+        if (updates.getSensorType() != null) {
+            selHead.setSensorType(updates.getSensorType());
+        }
+        if (updates.getChannel() != null) {
+            selHead.setChannel(updates.getChannel());
+        }
+        if (updates.getDelayTime() != null) {
+            selHead.setDelayTime(updates.getDelayTime());
+        }
+        if (updates.getPreHeat() != null) {
+            selHead.setPreHeat(updates.getPreHeat());
+        }
+        if (updates.getMeasMode() != null) {
+            selHead.setMeasMode(updates.getMeasMode());
+        }
+        if (updates.getBurstTime() != null) {
+            selHead.setBurstTime(updates.getBurstTime());
+        }
+        if (updates.getBurstCnt() != null) {
+            selHead.setBurstCnt(updates.getBurstCnt());
+        }
+        if (updates.getIntervalData() != null) {
+            selHead.setIntervalData(updates.getIntervalData());
+        }
+        if (updates.getSampleCnt() != null) {
+            selHead.setSampleCnt(updates.getSampleCnt());
+        }
+        if (updates.getStartTime() != null) {
+            selHead.setStartTime(updates.getStartTime());
+        }
+        if (updates.getEndTime() != null) {
+            selHead.setEndTime(updates.getEndTime());
+        }
+        if (updates.getDepAdiRho() != null) {
+            selHead.setDepAdiRho(updates.getDepAdiRho());
+        }
+        if (updates.getECA() != null) {
+            selHead.setECA(updates.getECA());
+        }
+        if (updates.getECB() != null) {
+            selHead.setECB(updates.getECB());
+        }
+        if (updates.getECDeg() != null) {
+            selHead.setECDeg(updates.getECDeg());
+        }
+        if (updates.getECCoef() != null) {
+            selHead.setECCoef(updates.getECCoef());
+        }
+        if (updates.getCoefDate() != null) {
+            selHead.setCoefDate(updates.getCoefDate());
+        }
+        if (updates.getCh1() != null) {
+            selHead.setCh1(updates.getCh1());
+        }
+        if (updates.getCh2() != null) {
+            selHead.setCh2(updates.getCh2());
+        }
+        if (updates.getCh3() != null) {
+            selHead.setCh3(updates.getCh3());
+        }
+        if (updates.getCh4() != null) {
+            selHead.setCh4(updates.getCh4());
+        }
+        if (updates.getBuzzerEN() != null) {
+            selHead.setBuzzerEN(updates.getBuzzerEN());
+        }
+        if (updates.getBuzzerInterval() != null) {
+            selHead.setBuzzerInterval(updates.getBuzzerInterval());
+        }
+        if (updates.getCOMMENT() != null) {
+            selHead.setCOMMENT(updates.getCOMMENT());
+        }
+        if (updates.getSensorType2() != null) {
+            selHead.setSensorType2(updates.getSensorType2());
+        }
+        if (updates.getBuzzerNumber() != null) {
+            selHead.setBuzzerNumber(updates.getBuzzerNumber());
+        }
+        if (updates.getDepM() != null) {
+            selHead.setDepM(updates.getDepM());
+        }
+        if (updates.getCondDepB() != null) {
+            selHead.setCondDepB(updates.getCondDepB());
+        }
+        if (updates.getLanderID() != null) {
+            selHead.setLanderID(updates.getLanderID());
+        }
+        if (updates.getData() != null) {
+            selHead.setData(updates.getData());
+        }
+
+        headRepository.save(selHead);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<String> updateCTDDataByID(@PathVariable("id") Integer id, @RequestBody UpdateCTDDataRequest updates) {
+        ProcessedCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getDate() != null) {
+            selData.setDate(updates.getDate());
+        }
+        if (updates.getTempDegC() != null) {
+            selData.setTempDegC(updates.getTempDegC());
+        }
+        if (updates.getSal() != null) {
+            selData.setSal(updates.getSal());
+        }
+        if (updates.getCondMsCm() != null) {
+            selData.setCondMsCm(updates.getCondMsCm());
+        }
+        if (updates.getEc25UsCm() != null) {
+            selData.setEc25UsCm(updates.getEc25UsCm());
+        }
+        if (updates.getBattV() != null) {
+            selData.setBattV(updates.getBattV());
+        }
+        if (updates.getHeadID() != null) {
+            updates.setHeadID(updates.getHeadID());
+        }
+
+        repository.save(selData);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/header/{id}")
+    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Integer id) {
+        ProcessedCTDHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        for (ProcessedCTDData data : selHead.getData()) {
+            repository.delete(data);
+        }
+
+        headRepository.delete(selHead);
+
+        return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/data/{id}")
+    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Integer id) {
+        ProcessedCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        repository.delete(selData);
+
+        return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
     }
 }
