@@ -54,8 +54,8 @@ public class FLNTUHeadResponseExternal {
         SampleCnt = head.getSampleCnt();
         StartTime = head.getStartTime();
         EndTime = head.getEndTime();
-        this.CHLA = head.getCHLA();
-        this.CHLB = head.getCHLB();
+        CHLA = head.getCHLA();
+        CHLB = head.getCHLB();
         CoefDate = head.getCoefDate();
         Ch1 = head.getCh1();
         Ch2 = head.getCh2();

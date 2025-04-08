@@ -1,11 +1,7 @@
 package com.davies.lab.lander.Controllers;
 
-import com.davies.lab.lander.FormattedModels.ResponseBody.DOHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.*;
-import com.davies.lab.lander.Models.Lander;
-import com.davies.lab.lander.Models.ProcessedCTDHead;
-import com.davies.lab.lander.Models.ProcessedDOHead;
-import com.davies.lab.lander.Models.ProcessedFLNTUHead;
+import com.davies.lab.lander.Models.*;
 import com.davies.lab.lander.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin
@@ -34,6 +32,7 @@ public class ExternalConnectionController {
     @Autowired
     private ProcessedFLNTUDataRepository flntuDataRepository;
 
+    //GET Full Lander
     @GetMapping("/lander/id/{id}")
     public ResponseEntity<LanderResponseExternal> testGetMapping(@PathVariable("id") String id) {
         //get and create Lander
@@ -88,4 +87,80 @@ public class ExternalConnectionController {
 
         return new ResponseEntity<>(selLander, HttpStatus.OK);
     }
+
+    //GET Lander CTD
+    @GetMapping("/lander/id/{id}/ctd")
+    public ResponseEntity<CTDHeadResponseExternal> getCTDByLanderID(@PathVariable("id") String landerID) {
+        List<ProcessedCTDHead> heads = ctdHeadRepository.getCTDHeadsByLanderId(landerID);
+
+        if (heads.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        ProcessedCTDHead selHead = heads.get(0);
+
+        CTDHeadResponseExternal newHead = new CTDHeadResponseExternal(selHead);
+        Set<CTDDataResponseExternal> newDataSet = new HashSet<>();
+
+        for (ProcessedCTDData selData : selHead.getData()) {
+            newDataSet.add(
+                    new CTDDataResponseExternal(selData)
+            );
+        }
+
+        newHead.setData(newDataSet);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
+    //GET Lander DO
+    @GetMapping("/lander/id/{id}/do")
+    public ResponseEntity<DOHeadResponseExternal> getDOByLanderID(@PathVariable("id") String landerID) {
+        List<ProcessedDOHead> heads = doHeadRepository.getDOHeadsByLanderID(landerID);
+
+        if (heads.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        ProcessedDOHead selHead = heads.get(0);
+
+        DOHeadResponseExternal newHead = new DOHeadResponseExternal(selHead);
+        Set<DODataResponseExternal> newDataSet = new HashSet<>();
+
+        for (ProcessedDOData selData : selHead.getData()) {
+            newDataSet.add(
+                    new DODataResponseExternal(selData)
+            );
+        }
+
+        newHead.setData(newDataSet);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
+    //GET Lander FLNTU
+    @GetMapping("/lander/id/{id}/flntu")
+    public ResponseEntity<FLNTUHeadResponseExternal> getFLNTUByLanderID(@PathVariable("id") String landerID) {
+        List<ProcessedFLNTUHead> heads = flntuHeadRepository.getFLNTUHeadsByLanderID(landerID);
+
+        if (heads.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        ProcessedFLNTUHead selHead = heads.get(0);
+
+        FLNTUHeadResponseExternal newHead = new FLNTUHeadResponseExternal(selHead);
+        Set<FLNTUDataResponseExternal> newDataSet = new HashSet<>();
+
+        for (ProcessedFLNTUData selData : selHead.getData()) {
+            newDataSet.add(
+                    new FLNTUDataResponseExternal(selData)
+            );
+        }
+
+        newHead.setData(newDataSet);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
 }

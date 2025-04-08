@@ -21,6 +21,7 @@ public class FLNTUDataResponseExternal {
     }
 
     public FLNTUDataResponseExternal(ProcessedFLNTUData data) {
+        ID = data.getID();
         Date = data.getDate();
         TempDegC = data.getTempDegC();
         ChlFluPPB = data.getChlFluPPB();

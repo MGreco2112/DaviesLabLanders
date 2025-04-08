@@ -40,6 +40,7 @@ public class DOHeadResponseExternal {
     }
 
     public DOHeadResponseExternal(ProcessedDOHead head) {
+        HeadID = head.getHeadID();
         SondeName = head.getSondeName();
         SondeNo = head.getSondeNo();
         SensorType = head.getSensorType();

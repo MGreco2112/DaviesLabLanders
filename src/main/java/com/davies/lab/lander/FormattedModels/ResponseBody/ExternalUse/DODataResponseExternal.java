@@ -22,14 +22,14 @@ public class DODataResponseExternal {
     }
 
     public DODataResponseExternal(ProcessedDOData data) {
-        this.ID = data.getID();
+        ID = data.getID();
         Date = data.getDate();
         TempDegC = data.getTempDegC();
-        this.DO = data.getDO();
+        DO = data.getDO();
         WeissDoMgL = data.getWeissDoMgL();
         BattV = data.getBattV();
-        this.GGDOMgL = data.getGGDOMgL();
-        this.BKDOMgL = data.getBKDOMgL();
+        GGDOMgL = data.getGGDOMgL();
+        BKDOMgL = data.getBKDOMgL();
         HeadID = data.getHeadID().getHeadID();
     }
 

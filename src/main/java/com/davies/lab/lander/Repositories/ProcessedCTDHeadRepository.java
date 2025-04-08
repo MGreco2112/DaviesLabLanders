@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface ProcessedCTDHeadRepository extends JpaRepository<ProcessedCTDHead, Integer> {
     @Query(value = "SELECT * FROM processedctdhead WHERE lander_id = :id", nativeQuery = true)
-    public List<ProcessedCTDHead> getCTDHeadsByLanderId(@Param("id") String id);
+    List<ProcessedCTDHead> getCTDHeadsByLanderId(@Param("id") String id);
 }
