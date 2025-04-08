@@ -308,7 +308,6 @@ public class ProcessedCTDController {
     }
 
     @PostMapping("/upload_csv/header/test")
-    //TODO: Connect this method to main upload method, save header and datapoints to DB
     public ResponseEntity<CTDHeadResponse> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead) {
 
         if (processedHead.isEmpty()) {
@@ -491,7 +490,7 @@ public class ProcessedCTDController {
         }
     }
 
-    @PutMapping("update/header/{id}")
+    @PutMapping("/update/header/{id}")
     public ResponseEntity<String> updateCTDHeader(@PathVariable("id") Integer id, @RequestBody UpdateCTDHeaderRequest updates) {
         ProcessedCTDHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
