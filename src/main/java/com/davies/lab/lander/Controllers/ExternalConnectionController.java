@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @CrossOrigin
@@ -32,9 +33,23 @@ public class ExternalConnectionController {
     @Autowired
     private ProcessedFLNTUDataRepository flntuDataRepository;
 
+    //GET Lander without sensors
+    @GetMapping("/basic_lander/id/{id}")
+    public ResponseEntity<BasicLanderResponseExternal> getBasicLander(@PathVariable("id") String id) {
+        Optional<Lander> lander = landerRepository.findById(id);
+
+        if (lander.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        BasicLanderResponseExternal newRes = new BasicLanderResponseExternal(lander.get());
+
+        return new ResponseEntity<>(newRes, HttpStatus.OK);
+    }
+
     //GET Full Lander
-    @GetMapping("/lander/id/{id}")
-    public ResponseEntity<LanderResponseExternal> testGetMapping(@PathVariable("id") String id) {
+    @GetMapping("/full_lander/id/{id}")
+    public ResponseEntity<LanderResponseExternal> getFullLander(@PathVariable("id") String id) {
         //get and create Lander
         Lander lander = landerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
