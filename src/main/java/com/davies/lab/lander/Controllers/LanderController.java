@@ -8,7 +8,7 @@ import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
 import com.davies.lab.lander.Models.ProcessedDOHead;
 import com.davies.lab.lander.Models.ProcessedFLNTUHead;
-import com.davies.lab.lander.Repositories.LanderRepository;
+import com.davies.lab.lander.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,17 @@ import java.util.*;
 public class LanderController {
     @Autowired
     private LanderRepository repository;
+    @Autowired
+    private ProcessedCTDHeadRepository ctdHeadRepository;
+    @Autowired
+    private ProcessedCTDDataRepository ctdDataRepository;
+    @Autowired
+    private ProcessedDOHeadRepository doHeadRepository;
+    @Autowired
+    private ProcessedDODataRepository doDataRepository;
+    @Autowired
+    private ProcessedFLNTUHeadRepository flntuHeadRepository;
+    @Autowired ProcessedFLNTUDataRepository flntuDataRepository;
 
     @GetMapping("/all")
     public List<LanderResponse> findAllLanders() {
@@ -158,11 +169,31 @@ public class LanderController {
     public ResponseEntity<String> deleteLanderByID(@PathVariable("id") String id) {
         Lander selLander = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        selLander.setCTDHead(null);
-        selLander.setDOHead(null);
-        selLander.setFLNTUHead(null);
 
-        repository.save(selLander);
+        if (selLander.getCTDHead() != null) {
+            Optional<ProcessedCTDHead> ctdHead = ctdHeadRepository.findById(selLander.getCTDHead().getHeadID());
+            selLander.setCTDHead(null);
+            repository.save(selLander);
+            ctdDataRepository.deleteAll(ctdHead.get().getData());
+            ctdHeadRepository.delete(ctdHead.get());
+        }
+
+        if (selLander.getDOHead() != null) {
+            Optional<ProcessedDOHead> doHead =  doHeadRepository.findById(selLander.getDOHead().getHeadID());
+            selLander.setDOHead(null);
+            repository.save(selLander);
+            doDataRepository.deleteAll(doHead.get().getData());
+            doHeadRepository.delete(doHead.get());
+        }
+
+        if (selLander.getFLNTUHead() != null) {
+            Optional<ProcessedFLNTUHead> flntuHead = flntuHeadRepository.findById(selLander.getFLNTUHead().getHeadID());
+            selLander.setFLNTUHead(null);
+            repository.save(selLander);
+            flntuDataRepository.deleteAll(flntuHead.get().getData());
+            flntuHeadRepository.delete(flntuHead.get());
+        }
+
         repository.delete(selLander);
 
         return new ResponseEntity<>("Deleted Lander", HttpStatus.OK);

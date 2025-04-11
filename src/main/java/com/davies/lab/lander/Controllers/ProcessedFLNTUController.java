@@ -600,6 +600,12 @@ public class ProcessedFLNTUController {
 
         repository.deleteAll(selHead.getData());
 
+        selHead.setData(null);
+
+        selHead.setLanderID(null);
+
+        headRepository.save(selHead);
+
         headRepository.delete(selHead);
 
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
