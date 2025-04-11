@@ -1,17 +1,13 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.davies.lab.lander.Models.Lander;
+import com.davies.lab.lander.Models.ProcessedFLNTUData;
 
-import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Entity
-public class ProcessedFLNTUHead {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer HeadID;
+public class UpdateFLNTUHeaderRequest {
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -36,16 +32,13 @@ public class ProcessedFLNTUHead {
     private String Comment;
     private String SensorType2;
     private Integer BuzzerNumber;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;
-    @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
     private Set<ProcessedFLNTUData> data;
 
-    public ProcessedFLNTUHead() {
+    public UpdateFLNTUHeaderRequest() {
     }
 
-    public ProcessedFLNTUHead(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID) {
+    public UpdateFLNTUHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
         SondeName = sondeName;
         SondeNo = sondeNo;
         SensorType = sensorType;
@@ -73,46 +66,7 @@ public class ProcessedFLNTUHead {
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
         LanderID = landerID;
-    }
-
-    public ProcessedFLNTUHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
-        HeadID = headID;
-        SondeName = sondeName;
-        SondeNo = sondeNo;
-        SensorType = sensorType;
-        Channel = channel;
-        DelayTime = delayTime;
-        PreHeat = preHeat;
-        MeasMode = measMode;
-        BurstTime = burstTime;
-        BurstCnt = burstCnt;
-        IntervalData = interval;
-        WiperInterval = wiperInterval;
-        SampleCnt = sampleCnt;
-        StartTime = startTime;
-        EndTime = endTime;
-        this.CHLA = CHLA;
-        this.CHLB = CHLB;
-        CoefDate = coefDate;
-        Ch1 = ch1;
-        Ch2 = ch2;
-        Ch3 = ch3;
-        Ch4 = ch4;
-        BuzzerEN = buzzerEN;
-        BuzzerInterval = buzzerInterval;
-        Comment = comment;
-        SensorType2 = sensorType2;
-        BuzzerNumber = buzzerNumber;
-        LanderID = landerID;
         this.data = data;
-    }
-
-    public Integer getHeadID() {
-        return HeadID;
-    }
-
-    public void setHeadID(Integer headID) {
-        HeadID = headID;
     }
 
     public String getSondeName() {

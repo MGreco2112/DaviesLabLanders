@@ -32,16 +32,14 @@ public class LanderController {
          for (Lander lander : landerList) {
              LanderResponse res = new LanderResponse(lander.getASDBLanderID(), lander.getLanderPlatform(), lander.getASDBROVDiveID());
 
-             for (ProcessedCTDHead head : lander.getCTDHeads()) {
-                 res.createCTDHeadResponse(head);
+             if (lander.getCTDHead() != null) {
+                 res.createCTDHeadResponse(lander.getCTDHead());
              }
-
-             for (ProcessedDOHead head : lander.getDOHeads()) {
-                 res.createDOHeadResponse(head);
+             if (lander.getDOHead() != null) {
+                 res.createDOHeadResponse(lander.getDOHead());
              }
-
-             for (ProcessedFLNTUHead head : lander.getFLNTUHeads()) {
-                 res.createFLNTUHeadResponse(head);
+             if (lander.getFLNTUHead() != null) {
+                 res.createFLNTUHeadResponse(lander.getFLNTUHead());
              }
 
              resList.add(res);
@@ -60,16 +58,14 @@ public class LanderController {
 
         res = new LanderResponse(lander.get().getASDBLanderID(), lander.get().getLanderPlatform(), lander.get().getASDBROVDiveID());
 
-        for (ProcessedCTDHead head : lander.get().getCTDHeads()) {
-            res.createCTDHeadResponse(head);
+        if (lander.get().getCTDHead() != null) {
+            res.createCTDHeadResponse(lander.get().getCTDHead());
         }
-
-        for (ProcessedDOHead head : lander.get().getDOHeads()) {
-            res.createDOHeadResponse(head);
+        if (lander.get().getDOHead() != null) {
+            res.createDOHeadResponse(lander.get().getDOHead());
         }
-
-        for (ProcessedFLNTUHead head : lander.get().getFLNTUHeads()) {
-            res.createFLNTUHeadResponse(head);
+        if (lander.get().getFLNTUHead() != null) {
+            res.createFLNTUHeadResponse(lander.get().getFLNTUHead());
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -143,14 +139,14 @@ public class LanderController {
         if (updates.getRecoveryDateAndTime() != null) {
             selLander.setRecoveryDateAndTime(updates.getRecoveryDateAndTime());
         }
-        if (updates.getCTDHeads() != null) {
-            selLander.setCTDHeads(updates.getCTDHeads());
+        if (updates.getCTDHead() != null) {
+            selLander.setCTDHead(updates.getCTDHead());
         }
-        if (updates.getDOHeads() != null) {
-            selLander.setDOHeads(updates.getDOHeads());
+        if (updates.getDOHead() != null) {
+            selLander.setDOHead(updates.getDOHead());
         }
-        if (updates.getFLNTUHeads() != null) {
-            selLander.setFLNTUHeads(updates.getFLNTUHeads());
+        if (updates.getFLNTUHead() != null) {
+            selLander.setFLNTUHead(updates.getFLNTUHead());
         }
 
         repository.save(selLander);
@@ -162,17 +158,9 @@ public class LanderController {
     public ResponseEntity<String> deleteLanderByID(@PathVariable("id") String id) {
         Lander selLander = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        for (ProcessedCTDHead ctd : selLander.getCTDHeads()) {
-            ctd.setLanderID(null);
-        }
-
-        for (ProcessedDOHead doHead : selLander.getDOHeads()) {
-            doHead.setLanderID(null);
-        }
-
-        for (ProcessedFLNTUHead flntu : selLander.getFLNTUHeads()) {
-            flntu.setLanderID(null);
-        }
+        selLander.setCTDHead(null);
+        selLander.setDOHead(null);
+        selLander.setFLNTUHead(null);
 
         repository.save(selLander);
         repository.delete(selLander);

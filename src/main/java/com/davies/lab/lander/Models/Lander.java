@@ -15,12 +15,12 @@ public class Lander {
     private String ASDBROVDiveID;
     private LocalDateTime deploymentDateAndTime;
     private LocalDateTime recoveryDateAndTime;
-    @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-    private Set<ProcessedCTDHead> CTDHeads;
-    @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-    private Set<ProcessedDOHead> DOHeads;
-    @OneToMany(mappedBy = "LanderID", fetch = FetchType.LAZY)
-    private Set<ProcessedFLNTUHead> FLNTUHeads;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedCTDHead CTDHead;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedDOHead DOHead;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedFLNTUHead FLNTUHead;
 
     public Lander() {
     }
@@ -79,27 +79,27 @@ public class Lander {
         this.recoveryDateAndTime = recoveryDateAndTime;
     }
 
-    public Set<ProcessedCTDHead> getCTDHeads() {
-        return CTDHeads;
+    public ProcessedCTDHead getCTDHead() {
+        return CTDHead;
     }
 
-    public void setCTDHeads(Set<ProcessedCTDHead> CTDHeads) {
-        this.CTDHeads = CTDHeads;
+    public void setCTDHead(ProcessedCTDHead CTDHead) {
+        this.CTDHead = CTDHead;
     }
 
-    public Set<ProcessedDOHead> getDOHeads() {
-        return DOHeads;
+    public ProcessedDOHead getDOHead() {
+        return DOHead;
     }
 
-    public void setDOHeads(Set<ProcessedDOHead> DOHeads) {
-        this.DOHeads = DOHeads;
+    public void setDOHead(ProcessedDOHead DOHead) {
+        this.DOHead = DOHead;
     }
 
-    public Set<ProcessedFLNTUHead> getFLNTUHeads() {
-        return FLNTUHeads;
+    public ProcessedFLNTUHead getFLNTUHead() {
+        return FLNTUHead;
     }
 
-    public void setFLNTUHeads(Set<ProcessedFLNTUHead> FLNTUHeads) {
-        this.FLNTUHeads = FLNTUHeads;
+    public void setFLNTUHead(ProcessedFLNTUHead FLNTUHead) {
+        this.FLNTUHead = FLNTUHead;
     }
 }

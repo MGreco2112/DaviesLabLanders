@@ -9,9 +9,9 @@ public class LanderResponse {
     private String ASDBLanderID;
     private String LanderPlatform;
     private String ADDBROVDiveID;
-    private Set<CTDHeadResponse> CTDHeads = new HashSet<>();
-    private Set<DOHeadResponse> DOHeads = new HashSet<>();
-    private Set<FLNTUHeadResponse> FLNTUHeads = new HashSet<>();
+    private CTDHeadResponse CTDHead;
+    private DOHeadResponse DOHead;
+    private FLNTUHeadResponse FLNTUHead;
 
     public LanderResponse(String ASDBLanderID, String landerPlatform, String ADDBROVDiveID) {
         this.ASDBLanderID = ASDBLanderID;
@@ -20,21 +20,15 @@ public class LanderResponse {
     }
 
     public void createCTDHeadResponse(ProcessedCTDHead head) {
-        CTDHeadResponse res = new CTDHeadResponse(head.getHeadID());
-
-        CTDHeads.add(res);
+        CTDHead = new CTDHeadResponse(head.getHeadID());
     }
 
     public void createDOHeadResponse(ProcessedDOHead head) {
-        DOHeadResponse res = new DOHeadResponse(head.getHeadID());
-
-        DOHeads.add(res);
+        DOHead = new DOHeadResponse(head.getHeadID());
     }
 
     public void createFLNTUHeadResponse(ProcessedFLNTUHead head) {
-        FLNTUHeadResponse res = new FLNTUHeadResponse(head.getHeadID());
-
-        FLNTUHeads.add(res);
+        FLNTUHead = new FLNTUHeadResponse(head.getHeadID());
     }
 
     public String getASDBLanderID() {
@@ -61,28 +55,28 @@ public class LanderResponse {
         this.ADDBROVDiveID = ADDBROVDiveID;
     }
 
-    public Set<CTDHeadResponse> getCTDHeads() {
-        return CTDHeads;
+    public CTDHeadResponse getCTDHead() {
+        return CTDHead;
     }
 
-    public void setCTDHeads(Set<CTDHeadResponse> CTDHeads) {
-        this.CTDHeads = CTDHeads;
+    public void setCTDHead(CTDHeadResponse CTDHead) {
+        this.CTDHead = CTDHead;
     }
 
-    public Set<DOHeadResponse> getDOHeads() {
-        return DOHeads;
+    public DOHeadResponse getDOHead() {
+        return DOHead;
     }
 
-    public void setDOHeads(Set<DOHeadResponse> DOHeads) {
-        this.DOHeads = DOHeads;
+    public void setDOHead(DOHeadResponse DOHead) {
+        this.DOHead = DOHead;
     }
 
-    public Set<FLNTUHeadResponse> getFLNTUHeads() {
-        return FLNTUHeads;
+    public FLNTUHeadResponse getFLNTUHead() {
+        return FLNTUHead;
     }
 
-    public void setFLNTUHeads(Set<FLNTUHeadResponse> FLNTUHeads) {
-        this.FLNTUHeads = FLNTUHeads;
+    public void setFLNTUHead(FLNTUHeadResponse FLNTUHead) {
+        this.FLNTUHead = FLNTUHead;
     }
 
     private class CTDHeadResponse {

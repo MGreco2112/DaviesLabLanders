@@ -12,21 +12,21 @@ public class UpdateLanderRequest {
     private String ASDBROBDiveID;
     private LocalDateTime deploymentDateAndTime;
     private LocalDateTime recoveryDateAndTime;
-    private Set<ProcessedCTDHead> CTDHeads;
-    private Set<ProcessedDOHead> DOHeads;
-    private Set<ProcessedFLNTUHead> FLNTUHeads;
+    private ProcessedCTDHead CTDHead;
+    private ProcessedDOHead DOHead;
+    private ProcessedFLNTUHead FLNTUHead;
 
     public UpdateLanderRequest() {
     }
 
-    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, Set<ProcessedCTDHead> CTDHeads, Set<ProcessedDOHead> DOHeads, Set<ProcessedFLNTUHead> FLNTUHeads) {
+    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, ProcessedCTDHead CTDHead, ProcessedDOHead DOHead, ProcessedFLNTUHead FLNTUHead) {
         LanderPlatform = landerPlatform;
         this.ASDBROBDiveID = ASDBROBDiveID;
         this.deploymentDateAndTime = deploymentDateAndTime;
         this.recoveryDateAndTime = recoveryDateAndTime;
-        this.CTDHeads = CTDHeads;
-        this.DOHeads = DOHeads;
-        this.FLNTUHeads = FLNTUHeads;
+        this.CTDHead = CTDHead;
+        this.DOHead = DOHead;
+        this.FLNTUHead = FLNTUHead;
     }
 
     public String getLanderPlatform() {
@@ -61,27 +61,27 @@ public class UpdateLanderRequest {
         this.recoveryDateAndTime = recoveryDateAndTime;
     }
 
-    public Set<ProcessedCTDHead> getCTDHeads() {
-        return CTDHeads;
+    public ProcessedCTDHead getCTDHead() {
+        return CTDHead;
     }
 
-    public void setCTDHeads(Set<ProcessedCTDHead> CTDHeads) {
-        this.CTDHeads = CTDHeads;
+    public void setCTDHead(ProcessedCTDHead CTDHead) {
+        this.CTDHead = CTDHead;
     }
 
-    public Set<ProcessedDOHead> getDOHeads() {
-        return DOHeads;
+    public ProcessedDOHead getDOHead() {
+        return DOHead;
     }
 
-    public void setDOHeads(Set<ProcessedDOHead> DOHeads) {
-        this.DOHeads = DOHeads;
+    public void setDOHead(ProcessedDOHead DOHead) {
+        this.DOHead = DOHead;
     }
 
-    public Set<ProcessedFLNTUHead> getFLNTUHeads() {
-        return FLNTUHeads;
+    public ProcessedFLNTUHead getFLNTUHead() {
+        return FLNTUHead;
     }
 
-    public void setFLNTUHeads(Set<ProcessedFLNTUHead> FLNTUHeads) {
-        this.FLNTUHeads = FLNTUHeads;
+    public void setFLNTUHead(ProcessedFLNTUHead FLNTUHead) {
+        this.FLNTUHead = FLNTUHead;
     }
 }

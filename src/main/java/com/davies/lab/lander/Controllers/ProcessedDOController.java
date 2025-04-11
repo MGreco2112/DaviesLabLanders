@@ -607,9 +607,7 @@ public class ProcessedDOController {
     public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Integer id) {
         ProcessedDOHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        for (ProcessedDOData data : selHead.getData()) {
-            repository.delete(data);
-        }
+        repository.deleteAll(selHead.getData());
 
         headRepository.delete(selHead);
 

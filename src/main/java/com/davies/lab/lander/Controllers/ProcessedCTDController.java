@@ -631,9 +631,7 @@ public class ProcessedCTDController {
     public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Integer id) {
         ProcessedCTDHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        for (ProcessedCTDData data : selHead.getData()) {
-            repository.delete(data);
-        }
+        repository.deleteAll(selHead.getData());
 
         headRepository.delete(selHead);
 

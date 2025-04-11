@@ -41,8 +41,8 @@ public class ProcessedCTDHead {
     private Integer BuzzerNumber;
     private Integer DepM;
     private Integer CondDepB;
-    @ManyToOne
-    @JoinColumn(name = "Lander_ID", referencedColumnName = "ASDBLanderID")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
     private Set<ProcessedCTDData> data;
