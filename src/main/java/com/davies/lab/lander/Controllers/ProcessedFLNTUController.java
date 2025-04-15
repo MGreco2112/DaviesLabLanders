@@ -314,8 +314,14 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
-    @PostMapping("/upload_csv/header/test")
-    public ResponseEntity<FLNTUHeadResponse> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead) {
+    //TODO: TEST THIS UPDATE POST ROUTE
+    @PostMapping("/upload_csv/header/{landerID}")
+    public ResponseEntity<String> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead, @PathVariable("landerID") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
         if (processedHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -342,8 +348,7 @@ public class ProcessedFLNTUController {
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            FLNTUHeadResponse testResponse = new FLNTUHeadResponse(
-                    null,
+            UpdateFLNTUHeaderRequest updates = new UpdateFLNTUHeaderRequest(
                     valuesMap.get(keyNames.get(0)),
                     valuesMap.get(keyNames.get(1)),
                     valuesMap.get(keyNames.get(2)),
@@ -370,10 +375,13 @@ public class ProcessedFLNTUController {
                     valuesMap.get(keyNames.get(23)),
                     valuesMap.get(keyNames.get(24)),
                     Integer.parseInt(valuesMap.get(keyNames.get(25))),
-                    null
+                    selLander.get(),
+                    selLander.get().getFLNTUHead().getData()
             );
 
-            return new ResponseEntity<>(testResponse, HttpStatus.OK);
+            updateFLNTUHeader(selLander.get().getDOHead().getHeadID(), updates);
+
+            return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

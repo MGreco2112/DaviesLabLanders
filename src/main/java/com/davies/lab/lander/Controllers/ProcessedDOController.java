@@ -319,8 +319,14 @@ public class ProcessedDOController {
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
-    @PostMapping("/upload_csv/header/test")
-    public ResponseEntity<DOHeadResponse> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead) {
+    //TODO:TEST THIS ROUTE
+    @PostMapping("/upload_csv/header/{landerID}")
+    public ResponseEntity<String> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead, @PathVariable("landerID") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
         if (processedHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -347,8 +353,7 @@ public class ProcessedDOController {
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            DOHeadResponse testResponse = new DOHeadResponse(
-                    null,
+            UpdateDOHeaderRequest updates = new UpdateDOHeaderRequest(
                     valuesMap.get(keyNames.get(0)),
                     valuesMap.get(keyNames.get(1)),
                     valuesMap.get(keyNames.get(2)),
@@ -375,10 +380,13 @@ public class ProcessedDOController {
                     Integer.parseInt(valuesMap.get(keyNames.get(23))),
                     Integer.parseInt(valuesMap.get(keyNames.get(24))),
                     valuesMap.get(keyNames.get(25)),
-                    null
+                    selLander.get(),
+                    selLander.get().getDOHead().getData()
             );
 
-            return new ResponseEntity<>(testResponse, HttpStatus.OK);
+            updateDOHeader(selLander.get().getDOHead().getHeadID(), updates);
+
+            return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

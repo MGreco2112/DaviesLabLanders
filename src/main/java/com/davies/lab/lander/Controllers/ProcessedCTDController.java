@@ -22,9 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.*;
 
 @CrossOrigin
@@ -327,8 +325,14 @@ public class ProcessedCTDController {
        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
-    @PostMapping("/upload_csv/header/test")
-    public ResponseEntity<CTDHeadResponse> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead) {
+    //TODO: TEST THIS UPDATE POST ROUTE
+    @PostMapping("/upload_csv/header/{landerID}")
+    public ResponseEntity<String> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead, @PathVariable("landerID") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
         if (processedHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -355,8 +359,7 @@ public class ProcessedCTDController {
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            CTDHeadResponse testResponse = new CTDHeadResponse (
-                    null,
+            UpdateCTDHeaderRequest updates = new UpdateCTDHeaderRequest (
                     valuesMap.get(keyNames.get(0)),
                     valuesMap.get(keyNames.get(1)),
                     valuesMap.get(keyNames.get(2)),
@@ -387,11 +390,13 @@ public class ProcessedCTDController {
                     Integer.parseInt(valuesMap.get(keyNames.get(27))),
                     Integer.parseInt(valuesMap.get(keyNames.get(28))),
                     Integer.parseInt(valuesMap.get(keyNames.get(29))),
-                    null
+                    selLander.get(),
+                    selLander.get().getCTDHead().getData()
             );
 
-            return new ResponseEntity<>(testResponse, HttpStatus.OK);
+            updateCTDHeader(selLander.get().getCTDHead().getHeadID(), updates);
 
+            return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
