@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DOHeadResponse {
-    private Integer HeadID;
+    private Long HeadID;
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -37,7 +37,7 @@ public class DOHeadResponse {
     private String LanderID;
     private Set<DODataResponse> data = new HashSet<>();
 
-    public DOHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
+    public DOHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -77,11 +77,11 @@ public class DOHeadResponse {
         data.add(temp);
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 
@@ -310,19 +310,19 @@ public class DOHeadResponse {
     }
 
     private class DODataResponse {
-        private Integer ID;
+        private Long ID;
         private LocalDateTime Date;
 
-        public DODataResponse(Integer ID, LocalDateTime date) {
+        public DODataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
             Date = date;
         }
 
-        public Integer getID() {
+        public Long getID() {
             return ID;
         }
 
-        public void setID(Integer ID) {
+        public void setID(Long ID) {
             this.ID = ID;
         }
 

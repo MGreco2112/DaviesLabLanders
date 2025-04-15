@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public class DODataResponseExternal {
-    private Integer ID;
+    private Long ID;
     private LocalDateTime Date;
     private Double TempDegC;
     private Double DO;
@@ -16,7 +16,7 @@ public class DODataResponseExternal {
     private Double BattV;
     private Double GGDOMgL;
     private Double BKDOMgL;
-    private Integer HeadID;
+    private Long HeadID;
 
     public DODataResponseExternal() {
     }
@@ -43,11 +43,11 @@ public class DODataResponseExternal {
         return responseSet;
     }
 
-    public Integer getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(Integer ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 
@@ -107,11 +107,11 @@ public class DODataResponseExternal {
         this.BKDOMgL = BKDOMgL;
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

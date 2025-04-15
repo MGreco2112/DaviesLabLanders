@@ -3,16 +3,16 @@ package com.davies.lab.lander.FormattedModels.ResponseBody;
 import java.time.LocalDateTime;
 
 public class CTDDataResponse {
-    private Integer ID;
+    private Long ID;
     private LocalDateTime Date;
     private Double TempDegC;
     private Double Sal;
     private Double CondMsCm;
     private Double Ec25UsCm;
     private Double BattV;
-    private Integer HeadID;
+    private Long HeadID;
 
-    public CTDDataResponse(Integer ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Integer headID) {
+    public CTDDataResponse(Long ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Long headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -23,11 +23,11 @@ public class CTDDataResponse {
         HeadID = headID;
     }
 
-    public Integer getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(Integer ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 
@@ -79,11 +79,11 @@ public class CTDDataResponse {
         BattV = battV;
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

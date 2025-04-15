@@ -86,7 +86,7 @@ public class ProcessedDOController {
     }
 
     @GetMapping("/headers/sanitized/{id}")
-    public ResponseEntity<DOHeadResponse> findHeadWithoutData(@PathVariable Integer id) {
+    public ResponseEntity<DOHeadResponse> findHeadWithoutData(@PathVariable("id") Long id) {
         Optional<ProcessedDOHead> head = headRepository.findById(id);
         DOHeadResponse res;
 
@@ -129,7 +129,7 @@ public class ProcessedDOController {
     }
 
     @GetMapping("/headers/{id}")
-    public ResponseEntity<DOHeadResponse> findHeadById(@PathVariable Integer id) {
+    public ResponseEntity<DOHeadResponse> findHeadById(@PathVariable("id") Long id) {
         Optional<ProcessedDOHead> head = headRepository.findById(id);
         DOHeadResponse res;
 
@@ -201,7 +201,7 @@ public class ProcessedDOController {
     }
 
     @GetMapping("/data/{id}")
-    public ResponseEntity<DODataResponse> findDataById(@PathVariable Integer id) {
+    public ResponseEntity<DODataResponse> findDataById(@PathVariable("id") Long id) {
         Optional<ProcessedDOData> data = repository.findById(id);
         DODataResponse res;
 
@@ -225,7 +225,7 @@ public class ProcessedDOController {
     }
 
     @GetMapping("/data/headId/{id}")
-    public ResponseEntity<List<DODataResponse>> findDataByHeadId(@PathVariable Integer id) {
+    public ResponseEntity<List<DODataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
         List<ProcessedDOData> data = repository.findDoDataByHeadId(id);
         List<DODataResponse> res = new ArrayList<>();
 
@@ -251,7 +251,7 @@ public class ProcessedDOController {
     }
 
     @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
-    public ResponseEntity<List<DODataResponse>> getDataByRange(@PathVariable("id") Integer id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+    public ResponseEntity<List<DODataResponse>> getDataByRange(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
         List<DODataResponse> res = new ArrayList<>();
 
         List<ProcessedDOData> data = repository.findDataByHeadAndDateRange(id, startDate, endDate);
@@ -275,27 +275,48 @@ public class ProcessedDOController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/upload_csv/test")
-    public ResponseEntity<List<DO_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
-        List<DO_CSV_Request> dataList;
+    @PostMapping("/upload_csv/data/{landerId}")
+    public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+        List<DO_CSV_Request> rawData = null;
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
         if (processedFile.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
-            CsvToBean<DO_CSV_Request> csvToBean = new CsvToBeanBuilder<DO_CSV_Request>(reader)
-                    .withType(DO_CSV_Request.class)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
+        ProcessedDOHead dummyHead = new ProcessedDOHead();
+        dummyHead.setLanderID(selLander.get());
 
-            dataList = csvToBean.parse();
+        ProcessedDOHead savedHead = headRepository.save(dummyHead);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            rawData = processData(reader);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+        }
+
+        if (rawData == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(dataList, HttpStatus.OK);
+        for (DO_CSV_Request dataElement : rawData) {
+            repository.save(new ProcessedDOData(
+                    StringFormatting.formatDataDateString(dataElement.getDate()),
+                    dataElement.getTempDegC(),
+                    dataElement.getDo(),
+                    dataElement.getWeissDoMgL(),
+                    dataElement.getBattV(),
+                    dataElement.getGgDoMgL(),
+                    dataElement.getBkDoMgL(),
+                    savedHead
+            ));
+        }
+
+        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
     @PostMapping("/upload_csv/header/test")
@@ -476,7 +497,7 @@ public class ProcessedDOController {
     }
 
     @PutMapping("/update/header/{id}")
-    public ResponseEntity<String> updateDOHeader(@PathVariable("id") Integer id, @RequestBody UpdateDOHeaderRequest updates) {
+    public ResponseEntity<String> updateDOHeader(@PathVariable("id") Long id, @RequestBody UpdateDOHeaderRequest updates) {
         ProcessedDOHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getSondeName() != null) {
@@ -570,7 +591,7 @@ public class ProcessedDOController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<String> updateDODataByID(@PathVariable("id") Integer id, @RequestBody UpdateDODataRequest updates) {
+    public ResponseEntity<String> updateDODataByID(@PathVariable("id") Long id, @RequestBody UpdateDODataRequest updates) {
         ProcessedDOData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getDate() != null) {
@@ -604,7 +625,7 @@ public class ProcessedDOController {
     }
 
     @DeleteMapping("/delete/header/{id}")
-    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Long id) {
         ProcessedDOHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.deleteAll(selHead.getData());
@@ -621,7 +642,7 @@ public class ProcessedDOController {
     }
 
     @DeleteMapping("/delete/data/{id}")
-    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Long id) {
         ProcessedDOData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.delete(selData);

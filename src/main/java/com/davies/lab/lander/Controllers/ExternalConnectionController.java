@@ -57,7 +57,7 @@ public class ExternalConnectionController {
 
         //get, create, and place CTDData
         try {
-            ProcessedCTDHead ctdHead = ctdHeadRepository.getCTDHeadsByLanderId(selLander.getASDBLanderID()).get(0);
+            ProcessedCTDHead ctdHead = ctdHeadRepository.getCTDHeadsByLanderId(selLander.getASDBLanderID());
 
             CTDHeadResponseExternal newCtdHead = new CTDHeadResponseExternal(ctdHead);
 
@@ -72,7 +72,7 @@ public class ExternalConnectionController {
 
         //get, create, and place DOData
         try {
-            ProcessedDOHead doHead = doHeadRepository.getDOHeadsByLanderID(selLander.getASDBLanderID()).get(0);
+            ProcessedDOHead doHead = doHeadRepository.getDOHeadsByLanderID(selLander.getASDBLanderID());
 
             DOHeadResponseExternal newDoHead = new DOHeadResponseExternal(doHead);
 
@@ -87,7 +87,7 @@ public class ExternalConnectionController {
 
         //get, create and place FLNTUData
         try {
-            ProcessedFLNTUHead flntuHead = flntuHeadRepository.getFLNTUHeadsByLanderID(selLander.getASDBLanderID()).get(0);
+            ProcessedFLNTUHead flntuHead = flntuHeadRepository.getFLNTUHeadsByLanderID(selLander.getASDBLanderID());
 
             FLNTUHeadResponseExternal newFlntuHead = new FLNTUHeadResponseExternal(flntuHead);
 
@@ -106,13 +106,11 @@ public class ExternalConnectionController {
     //GET Lander CTD
     @GetMapping("/lander/id/{id}/ctd")
     public ResponseEntity<CTDHeadResponseExternal> getCTDByLanderID(@PathVariable("id") String landerID) {
-        List<ProcessedCTDHead> heads = ctdHeadRepository.getCTDHeadsByLanderId(landerID);
+        ProcessedCTDHead selHead = ctdHeadRepository.getCTDHeadsByLanderId(landerID);
 
-        if (heads.size() == 0) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        if (selHead == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
-        ProcessedCTDHead selHead = heads.get(0);
 
         CTDHeadResponseExternal newHead = new CTDHeadResponseExternal(selHead);
         Set<CTDDataResponseExternal> newDataSet = new HashSet<>();
@@ -131,13 +129,11 @@ public class ExternalConnectionController {
     //GET Lander DO
     @GetMapping("/lander/id/{id}/do")
     public ResponseEntity<DOHeadResponseExternal> getDOByLanderID(@PathVariable("id") String landerID) {
-        List<ProcessedDOHead> heads = doHeadRepository.getDOHeadsByLanderID(landerID);
+        ProcessedDOHead selHead = doHeadRepository.getDOHeadsByLanderID(landerID);
 
-        if (heads.size() == 0) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        if (selHead == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
-        ProcessedDOHead selHead = heads.get(0);
 
         DOHeadResponseExternal newHead = new DOHeadResponseExternal(selHead);
         Set<DODataResponseExternal> newDataSet = new HashSet<>();
@@ -156,13 +152,11 @@ public class ExternalConnectionController {
     //GET Lander FLNTU
     @GetMapping("/lander/id/{id}/flntu")
     public ResponseEntity<FLNTUHeadResponseExternal> getFLNTUByLanderID(@PathVariable("id") String landerID) {
-        List<ProcessedFLNTUHead> heads = flntuHeadRepository.getFLNTUHeadsByLanderID(landerID);
+        ProcessedFLNTUHead selHead = flntuHeadRepository.getFLNTUHeadsByLanderID(landerID);
 
-        if (heads.size() == 0) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        if (selHead == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
-        ProcessedFLNTUHead selHead = heads.get(0);
 
         FLNTUHeadResponseExternal newHead = new FLNTUHeadResponseExternal(selHead);
         Set<FLNTUDataResponseExternal> newDataSet = new HashSet<>();

@@ -11,7 +11,7 @@ import java.util.Set;
 public class ProcessedFLNTUHead {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer HeadID;
+    private Long HeadID;
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -75,7 +75,7 @@ public class ProcessedFLNTUHead {
         LanderID = landerID;
     }
 
-    public ProcessedFLNTUHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
+    public ProcessedFLNTUHead(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer interval, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -107,11 +107,11 @@ public class ProcessedFLNTUHead {
         this.data = data;
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 

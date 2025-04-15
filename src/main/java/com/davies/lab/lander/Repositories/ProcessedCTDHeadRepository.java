@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProcessedCTDHeadRepository extends JpaRepository<ProcessedCTDHead, Integer> {
+public interface ProcessedCTDHeadRepository extends JpaRepository<ProcessedCTDHead, Long> {
     @Query(value = "SELECT * FROM processedctdhead WHERE lander_id = :id", nativeQuery = true)
-    List<ProcessedCTDHead> getCTDHeadsByLanderId(@Param("id") String id);
+    ProcessedCTDHead getCTDHeadsByLanderId(@Param("id") String id);
 }

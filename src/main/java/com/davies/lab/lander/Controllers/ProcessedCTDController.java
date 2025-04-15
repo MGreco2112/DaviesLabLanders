@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.*;
@@ -90,7 +91,7 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/headers/sanitized/{id}")
-    public ResponseEntity<CTDHeadResponse> findHeadWithoutDataById(@PathVariable Integer id) {
+    public ResponseEntity<CTDHeadResponse> findHeadWithoutDataById(@PathVariable Long id) {
         Optional<ProcessedCTDHead> head = headRepository.findById(id);
         CTDHeadResponse res;
 
@@ -137,7 +138,7 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/headers/{id}")
-    public ResponseEntity<CTDHeadResponse> findHeadById(@PathVariable Integer id) {
+    public ResponseEntity<CTDHeadResponse> findHeadById(@PathVariable Long id) {
         Optional<ProcessedCTDHead> head = headRepository.findById(id);
         CTDHeadResponse res;
 
@@ -212,7 +213,7 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/data/{id}")
-    public ResponseEntity<CTDDataResponse> findDataById(@PathVariable Integer id) {
+    public ResponseEntity<CTDDataResponse> findDataById(@PathVariable("id") Long id) {
         Optional<ProcessedCTDData> data = repository.findById(id);
         CTDDataResponse res;
 
@@ -235,7 +236,7 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/data/headId/{id}")
-    public ResponseEntity<List<CTDDataResponse>> findDataByHeadId(@PathVariable Integer id) {
+    public ResponseEntity<List<CTDDataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
         List<ProcessedCTDData> data = repository.findDataByHeadId(id);
         List<CTDDataResponse> res = new ArrayList<>();
 
@@ -260,7 +261,7 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
-    public ResponseEntity<List<CTDDataResponse>> getDataByRange(@PathVariable("id") Integer headId, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+    public ResponseEntity<List<CTDDataResponse>> getDataByRange(@PathVariable("id") Long headId, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
         List<CTDDataResponse> res = new ArrayList<>();
 
         List<ProcessedCTDData> data = repository.findDataByHeadAndDateRange(headId, startDate, endDate);
@@ -283,28 +284,47 @@ public class ProcessedCTDController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/upload_csv/test")
-    //TODO: Modify route to save each row to DB
-    public ResponseEntity<List<CTD_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
-        List<CTD_CSV_Request> dataList;
+    @PostMapping("/upload_csv/data/{landerId}")
+    public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
+       Optional<Lander> selLander = landerRepository.findById(landerID);
+       List<CTD_CSV_Request> rawData = null;
 
-        if (processedFile.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+       if (selLander.isEmpty()) {
+           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+       }
 
-        try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
-            CsvToBean<CTD_CSV_Request> csvToBean = new CsvToBeanBuilder<CTD_CSV_Request>(reader)
-                    .withType(CTD_CSV_Request.class)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
+       if (processedFile.isEmpty()) {
+           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+       }
 
-            dataList = csvToBean.parse();
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+       ProcessedCTDHead dummyHead = new ProcessedCTDHead();
+       dummyHead.setLanderID(selLander.get());
 
-        return new ResponseEntity<>(dataList, HttpStatus.OK);
+       ProcessedCTDHead savedHead = headRepository.save(dummyHead);
+
+       try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+           rawData = processData(reader);
+       } catch (Exception e) {
+           System.out.println(e.getLocalizedMessage());
+       }
+
+       if (rawData == null) {
+           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+       }
+
+       for (CTD_CSV_Request dataElement : rawData) {
+           repository.save(new ProcessedCTDData(
+                   StringFormatting.formatDataDateString(dataElement.getDate()),
+                   dataElement.getTempDegC(),
+                   dataElement.getSal(),
+                   dataElement.getCondMsCm(),
+                   dataElement.geteC25uScM(),
+                   dataElement.getBattV(),
+                   savedHead
+           ));
+       }
+
+       return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
     @PostMapping("/upload_csv/header/test")
@@ -491,7 +511,7 @@ public class ProcessedCTDController {
     }
 
     @PutMapping("/update/header/{id}")
-    public ResponseEntity<String> updateCTDHeader(@PathVariable("id") Integer id, @RequestBody UpdateCTDHeaderRequest updates) {
+    public ResponseEntity<String> updateCTDHeader(@PathVariable("id") Long id, @RequestBody UpdateCTDHeaderRequest updates) {
         ProcessedCTDHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getSondeName() != null) {
@@ -597,7 +617,7 @@ public class ProcessedCTDController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<String> updateCTDDataByID(@PathVariable("id") Integer id, @RequestBody UpdateCTDDataRequest updates) {
+    public ResponseEntity<String> updateCTDDataByID(@PathVariable("id") Long id, @RequestBody UpdateCTDDataRequest updates) {
         ProcessedCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getDate() != null) {
@@ -628,7 +648,7 @@ public class ProcessedCTDController {
     }
 
     @DeleteMapping("/delete/header/{id}")
-    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Long id) {
         ProcessedCTDHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.deleteAll(selHead.getData());
@@ -645,7 +665,7 @@ public class ProcessedCTDController {
     }
 
     @DeleteMapping("/delete/data/{id}")
-    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Long id) {
         ProcessedCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.delete(selData);

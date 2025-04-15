@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CTDHeadResponseExternal {
-    private Integer HeadID;
+    private Long HeadID;
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -84,11 +84,11 @@ public class CTDHeadResponseExternal {
         data.add(newData);
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 

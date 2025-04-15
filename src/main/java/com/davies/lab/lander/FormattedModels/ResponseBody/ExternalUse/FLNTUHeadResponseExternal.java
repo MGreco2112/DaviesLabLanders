@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 public class FLNTUHeadResponseExternal {
-    private Integer HeadID;
+    private Long HeadID;
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -69,11 +69,11 @@ public class FLNTUHeadResponseExternal {
         LanderID = head.getLanderID().getASDBLanderID();
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 

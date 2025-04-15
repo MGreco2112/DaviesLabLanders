@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class ProcessedCTDData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer ID;
+    private Long ID;
     private LocalDateTime Date;
     private Double TempDegC;
     private Double Sal;
@@ -31,7 +31,7 @@ public class ProcessedCTDData {
         HeadID = headID;
     }
 
-    public ProcessedCTDData(Integer ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, ProcessedCTDHead headID) {
+    public ProcessedCTDData(Long ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, ProcessedCTDHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -42,11 +42,11 @@ public class ProcessedCTDData {
         HeadID = headID;
     }
 
-    public Integer getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(Integer ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 

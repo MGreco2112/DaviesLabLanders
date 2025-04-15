@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FLNTUHeadResponse {
-    private Integer HeadID;
+    private Long HeadID;
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -66,7 +66,7 @@ public class FLNTUHeadResponse {
         LanderID = landerID;
     }
 
-    public FLNTUHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
+    public FLNTUHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -106,11 +106,11 @@ public class FLNTUHeadResponse {
         data.add(newData);
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 
@@ -339,19 +339,19 @@ public class FLNTUHeadResponse {
     }
 
     private class FLNTUDataResponse {
-        private Integer ID;
+        private Long ID;
         private LocalDateTime date;
 
-        public FLNTUDataResponse(Integer ID, LocalDateTime date) {
+        public FLNTUDataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
             this.date = date;
         }
 
-        public Integer getID() {
+        public Long getID() {
             return ID;
         }
 
-        public void setID(Integer ID) {
+        public void setID(Long ID) {
             this.ID = ID;
         }
 

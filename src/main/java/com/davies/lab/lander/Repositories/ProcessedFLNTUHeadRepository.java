@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProcessedFLNTUHeadRepository extends JpaRepository<ProcessedFLNTUHead, Integer> {
+public interface ProcessedFLNTUHeadRepository extends JpaRepository<ProcessedFLNTUHead, Long> {
     //TODO: Add SQL Methods
     @Query(value = "SELECT * FROM processedflntuhead WHERE lander_id = :id", nativeQuery = true)
-    List<ProcessedFLNTUHead> getFLNTUHeadsByLanderID(@Param("id") String id);
+    ProcessedFLNTUHead getFLNTUHeadsByLanderID(@Param("id") String id);
 }

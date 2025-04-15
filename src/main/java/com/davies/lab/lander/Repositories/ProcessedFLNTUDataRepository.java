@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProcessedFLNTUDataRepository extends JpaRepository<ProcessedFLNTUData, Integer> {
+public interface ProcessedFLNTUDataRepository extends JpaRepository<ProcessedFLNTUData, Long> {
     @Query(value = "SELECT * FROM processedflntudata WHERE head_id = :id", nativeQuery = true)
-    List<ProcessedFLNTUData> findDataFromHeadId(@Param("id") Integer id);
+    List<ProcessedFLNTUData> findDataFromHeadId(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM processedflntudata WHERE head_id = :id AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
-    List<ProcessedFLNTUData> findDataByHeadAndDateRange(@Param("id") Integer id, @Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<ProcessedFLNTUData> findDataByHeadAndDateRange(@Param("id") Long id, @Param("startDate") String startDate, @Param("endDate") String endDate);
 }

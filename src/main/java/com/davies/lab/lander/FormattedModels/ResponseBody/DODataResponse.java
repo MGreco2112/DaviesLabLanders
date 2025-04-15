@@ -3,7 +3,7 @@ package com.davies.lab.lander.FormattedModels.ResponseBody;
 import java.time.LocalDateTime;
 
 public class DODataResponse {
-    private Integer ID;
+    private Long ID;
     private LocalDateTime Date;
     private Double TempDegC;
     private Double DO;
@@ -11,9 +11,9 @@ public class DODataResponse {
     private Double BattV;
     private Double GGDOMgL;
     private Double BKDOMgL;
-    private Integer HeadID;
+    private Long HeadID;
 
-    public DODataResponse(Integer ID, LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, Integer headID) {
+    public DODataResponse(Long ID, LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, Long headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -25,11 +25,11 @@ public class DODataResponse {
         HeadID = headID;
     }
 
-    public Integer getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(Integer ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 
@@ -89,11 +89,11 @@ public class DODataResponse {
         this.BKDOMgL = BKDOMgL;
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

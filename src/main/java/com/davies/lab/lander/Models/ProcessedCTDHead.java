@@ -10,7 +10,7 @@ import java.util.Set;
 public class ProcessedCTDHead {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer HeadID;
+    private Long HeadID;
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -84,7 +84,7 @@ public class ProcessedCTDHead {
         LanderID = landerID;
     }
 
-    public ProcessedCTDHead(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, Set<ProcessedCTDData> data) {
+    public ProcessedCTDHead(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, Set<ProcessedCTDData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -120,11 +120,11 @@ public class ProcessedCTDHead {
         this.data = data;
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 

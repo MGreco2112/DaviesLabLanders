@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Set;
 
 public class CTDDataResponseExternal {
-    private Integer ID;
+    private Long ID;
     private LocalDateTime date;
     private Double TempDegC;
     private Double Sal;
     private Double CondMsCm;
     private Double Ec25UsCm;
     private Double BattV;
-    private Integer HeadID;
+    private Long HeadID;
 
     public CTDDataResponseExternal() {
     }
@@ -41,11 +41,11 @@ public class CTDDataResponseExternal {
         return newSet;
     }
 
-    public Integer getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(Integer ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 
@@ -97,11 +97,11 @@ public class CTDDataResponseExternal {
         BattV = battV;
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

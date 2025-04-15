@@ -3,16 +3,16 @@ package com.davies.lab.lander.FormattedModels.ResponseBody;
 import java.time.LocalDateTime;
 
 public class FLNTUDataResponse {
-    private Integer ID;
+    private Long ID;
     private LocalDateTime Date;
     private Double TempDegC;
     private Double ChlFluPPB;
     private Double ChlAUgL;
     private Double TurbMFTU;
     private Double BattV;
-    private Integer HeadID;
+    private Long HeadID;
 
-    public FLNTUDataResponse(Integer ID, LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, Integer headID) {
+    public FLNTUDataResponse(Long ID, LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, Long headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -23,11 +23,11 @@ public class FLNTUDataResponse {
         HeadID = headID;
     }
 
-    public Integer getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(Integer ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 
@@ -79,11 +79,11 @@ public class FLNTUDataResponse {
         BattV = battV;
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

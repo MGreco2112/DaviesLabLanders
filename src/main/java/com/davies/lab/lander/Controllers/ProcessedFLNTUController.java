@@ -86,7 +86,7 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/headers/sanitized/{id}")
-    public ResponseEntity<FLNTUHeadResponse> findHeadWithoutDataById(@PathVariable Integer id) {
+    public ResponseEntity<FLNTUHeadResponse> findHeadWithoutDataById(@PathVariable("id") Long id) {
         Optional<ProcessedFLNTUHead> head = headRepository.findById(id);
         FLNTUHeadResponse res;
 
@@ -129,7 +129,7 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/headers/{id}")
-    public ResponseEntity<FLNTUHeadResponse> findHeadByID(@PathVariable Integer id) {
+    public ResponseEntity<FLNTUHeadResponse> findHeadByID(@PathVariable("id") Long id) {
         Optional<ProcessedFLNTUHead> head = headRepository.findById(id);
         FLNTUHeadResponse res;
 
@@ -200,7 +200,7 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/data/{id}")
-    public ResponseEntity<FLNTUDataResponse> findDataById(@PathVariable Integer id) {
+    public ResponseEntity<FLNTUDataResponse> findDataById(@PathVariable("id") Long id) {
         Optional<ProcessedFLNTUData> data = repository.findById(id);
         FLNTUDataResponse res;
 
@@ -223,7 +223,7 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/data/headId/{id}")
-    public ResponseEntity<List<FLNTUDataResponse>> findDataByHeadId(@PathVariable Integer id) {
+    public ResponseEntity<List<FLNTUDataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
         List<ProcessedFLNTUData> data = repository.findDataFromHeadId(id);
         List<FLNTUDataResponse> res = new ArrayList<>();
 
@@ -248,7 +248,7 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
-    public ResponseEntity<List<FLNTUDataResponse>> getDataByRange(@PathVariable("id") Integer id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+    public ResponseEntity<List<FLNTUDataResponse>> getDataByRange(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
         List<FLNTUDataResponse> res = new ArrayList<>();
 
         List<ProcessedFLNTUData> data = repository.findDataByHeadAndDateRange(id, startDate, endDate);
@@ -271,27 +271,47 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/upload_csv/test")
-    public ResponseEntity<List<FLNTU_CSV_Request>> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile) {
-        List<FLNTU_CSV_Request> dataList;
+    @PostMapping("/upload_csv/data/{landerId}")
+    public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+        List<FLNTU_CSV_Request> rawData = null;
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
         if (processedFile.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        try (Reader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
-            CsvToBean<FLNTU_CSV_Request> csvToBean = new CsvToBeanBuilder<FLNTU_CSV_Request>(reader)
-                    .withType(FLNTU_CSV_Request.class)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
+        ProcessedFLNTUHead dummyHead = new ProcessedFLNTUHead();
+        dummyHead.setLanderID(selLander.get());
 
-            dataList = csvToBean.parse();
+        ProcessedFLNTUHead savedHead = headRepository.save(dummyHead);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            rawData = processData(reader);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+        }
+
+        if (rawData == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(dataList, HttpStatus.OK);
+        for (FLNTU_CSV_Request dataElement : rawData) {
+            repository.save(new ProcessedFLNTUData(
+                    StringFormatting.formatDataDateString(dataElement.getDate()),
+                    dataElement.getTempDegC(),
+                    dataElement.getChlFluPpb(),
+                    dataElement.getChlAUgL(),
+                    dataElement.getTurbMFtu(),
+                    dataElement.getBattV(),
+                    savedHead
+            ));
+        }
+
+        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
     @PostMapping("/upload_csv/header/test")
@@ -468,9 +488,8 @@ public class ProcessedFLNTUController {
         }
     }
 
-    //TODO Create PUT/DELETE Routes for Headers and Data as in CTD & DO
     @PutMapping("/update/header/{id}")
-    public ResponseEntity<String> updateFLNTUHeader(@PathVariable("id") Integer id, @RequestBody UpdateFLNTUHeaderRequest updates) {
+    public ResponseEntity<String> updateFLNTUHeader(@PathVariable("id") Long id, @RequestBody UpdateFLNTUHeaderRequest updates) {
         ProcessedFLNTUHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getSondeName() != null) {
@@ -564,7 +583,7 @@ public class ProcessedFLNTUController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<String> updateFLNTUDataByID(@PathVariable("id") Integer id, @RequestBody UpdateFLNTUDataRequest updates) {
+    public ResponseEntity<String> updateFLNTUDataByID(@PathVariable("id") Long id, @RequestBody UpdateFLNTUDataRequest updates) {
         ProcessedFLNTUData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getDate() != null) {
@@ -595,7 +614,7 @@ public class ProcessedFLNTUController {
     }
 
     @DeleteMapping("/delete/header/{id}")
-    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Long id) {
         ProcessedFLNTUHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.deleteAll(selHead.getData());
@@ -612,7 +631,7 @@ public class ProcessedFLNTUController {
     }
 
     @DeleteMapping("/delete/data/{id}")
-    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Long id) {
         ProcessedFLNTUData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.delete(selData);

@@ -80,49 +80,49 @@ public class LanderResponse {
     }
 
     private class CTDHeadResponse {
-        private Integer HeadID;
+        private Long HeadID;
 
-        public CTDHeadResponse(Integer id) {
+        public CTDHeadResponse(Long id) {
             HeadID = id;
         }
 
-        public Integer getHeadID() {
+        public Long getHeadID() {
             return HeadID;
         }
 
-        public void setHeadID(Integer headID) {
+        public void setHeadID(Long headID) {
             HeadID = headID;
         }
     }
 
     private class DOHeadResponse {
-        private Integer HeadID;
+        private Long HeadID;
 
-        public DOHeadResponse(Integer id) {
+        public DOHeadResponse(Long id) {
             HeadID = id;
         }
 
-        public Integer getHeadID() {
+        public Long getHeadID() {
             return HeadID;
         }
 
-        public void setHeadID(Integer headID) {
+        public void setHeadID(Long headID) {
             HeadID = headID;
         }
     }
 
     private class FLNTUHeadResponse {
-        private Integer HeadID;
+        private Long HeadID;
 
-        public FLNTUHeadResponse(Integer id) {
+        public FLNTUHeadResponse(Long id) {
             HeadID = id;
         }
 
-        public Integer getHeadID() {
+        public Long getHeadID() {
             return HeadID;
         }
 
-        public void setHeadID(Integer headID) {
+        public void setHeadID(Long headID) {
             HeadID = headID;
         }
     }

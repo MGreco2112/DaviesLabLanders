@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProcessedDOHeadRepository extends JpaRepository<ProcessedDOHead, Integer> {
+public interface ProcessedDOHeadRepository extends JpaRepository<ProcessedDOHead, Long> {
     @Query(value = "SELECT * FROM processeddohead WHERE lander_id = :id", nativeQuery = true)
-    List<ProcessedDOHead> getDOHeadsByLanderID(@Param("id") String id);
+    ProcessedDOHead getDOHeadsByLanderID(@Param("id") String id);
 }

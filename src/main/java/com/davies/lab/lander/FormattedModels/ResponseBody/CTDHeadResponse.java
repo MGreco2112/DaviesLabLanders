@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CTDHeadResponse {
-    private Integer HeadID;
+    private Long HeadID;
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -42,7 +42,7 @@ public class CTDHeadResponse {
     private String ASDBLanderID;
     private Set<CTDDataResponse> data = new HashSet<>();
 
-    public CTDHeadResponse(Integer headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
+    public CTDHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -82,11 +82,11 @@ public class CTDHeadResponse {
         data.add(res);
     }
 
-    public Integer getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(Integer headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 
@@ -347,19 +347,19 @@ public class CTDHeadResponse {
     }
 
     private class CTDDataResponse {
-        private Integer ID;
+        private Long ID;
         private LocalDateTime Date;
 
-        public CTDDataResponse(Integer ID, LocalDateTime date) {
+        public CTDDataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
             Date = date;
         }
 
-        public Integer getID() {
+        public Long getID() {
             return ID;
         }
 
-        public void setID(Integer ID) {
+        public void setID(Long ID) {
             this.ID = ID;
         }
 

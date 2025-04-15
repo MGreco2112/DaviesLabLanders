@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class ProcessedFLNTUData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer ID;
+    private Long ID;
     private LocalDateTime Date;
     private Double TempDegC;
     private Double ChlFluPPB;
@@ -31,7 +31,7 @@ public class ProcessedFLNTUData {
         HeadID = headID;
     }
 
-    public ProcessedFLNTUData(Integer ID, LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
+    public ProcessedFLNTUData(Long ID, LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -42,11 +42,11 @@ public class ProcessedFLNTUData {
         HeadID = headID;
     }
 
-    public Integer getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(Integer ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 
