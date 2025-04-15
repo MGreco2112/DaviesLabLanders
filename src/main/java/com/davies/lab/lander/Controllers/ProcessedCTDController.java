@@ -398,7 +398,6 @@ public class ProcessedCTDController {
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println("test");
             System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
