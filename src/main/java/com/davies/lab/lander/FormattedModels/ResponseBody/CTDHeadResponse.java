@@ -39,7 +39,8 @@ public class CTDHeadResponse {
     private Integer BuzzerNumber;
     private Integer DepM;
     private Integer CondDepB;
-    private String ASDBLanderID;
+    private String LanderID;
+    private Integer dataPointCount;
     private Set<CTDDataResponse> data = new HashSet<>();
 
     public CTDHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
@@ -74,7 +75,7 @@ public class CTDHeadResponse {
         BuzzerNumber = buzzerNumber;
         DepM = depM;
         CondDepB = condDepB;
-        ASDBLanderID = landerID;
+        LanderID = landerID;
     }
 
     public void createDataResponse(ProcessedCTDData CTDData) {
@@ -330,12 +331,20 @@ public class CTDHeadResponse {
         CondDepB = condDepB;
     }
 
-    public String getASDBLanderID() {
-        return ASDBLanderID;
+    public String getLanderID() {
+        return LanderID;
     }
 
-    public void setASDBLanderID(String landerID) {
-        ASDBLanderID = landerID;
+    public void setLanderID(String landerID) {
+        LanderID = landerID;
+    }
+
+    public Integer getDataPointCount() {
+        return dataPointCount;
+    }
+
+    public void setDataPointCount(Integer dataPointCount) {
+        this.dataPointCount = dataPointCount;
     }
 
     public Set<CTDDataResponse> getData() {

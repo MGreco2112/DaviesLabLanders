@@ -35,6 +35,7 @@ public class DOHeadResponse {
     private Integer SetSal;
     private String FilmNo;
     private String LanderID;
+    private Integer dataPointCount;
     private Set<DODataResponse> data = new HashSet<>();
 
     public DOHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
@@ -299,6 +300,14 @@ public class DOHeadResponse {
 
     public void setLanderID(String landerID) {
         LanderID = landerID;
+    }
+
+    public Integer getDataPointCount() {
+        return dataPointCount;
+    }
+
+    public void setDataPointCount(Integer dataPointCount) {
+        this.dataPointCount = dataPointCount;
     }
 
     public Set<DODataResponse> getData() {

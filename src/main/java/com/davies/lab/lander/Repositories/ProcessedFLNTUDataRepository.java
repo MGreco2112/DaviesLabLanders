@@ -15,4 +15,10 @@ public interface ProcessedFLNTUDataRepository extends JpaRepository<ProcessedFLN
 
     @Query(value = "SELECT * FROM processedflntudata WHERE head_id = :id AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
     List<ProcessedFLNTUData> findDataByHeadAndDateRange(@Param("id") Long id, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    @Query(value = "SELECT * FROM processedflntudata WHERE head_id = :id LIMIT 1", nativeQuery = true)
+    ProcessedFLNTUData findFirstDataPointInHead(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM processedflntudata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    ProcessedFLNTUData findLastDataPointInHead(@Param("id") Long id);
 }

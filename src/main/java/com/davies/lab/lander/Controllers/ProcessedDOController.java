@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.*;
 
 @CrossOrigin
@@ -124,6 +123,22 @@ public class ProcessedDOController {
                 head.get().getFilmNo(),
                 head.get().getLanderID().getASDBLanderID()
         );
+
+        res.setDataPointCount(head.get().getData().size());
+
+        if (res.getStartTime() == null && res.getDataPointCount() > 0) {
+            ProcessedDOData firstData = repository.findFirstDataPointInHead(head.get().getHeadID());
+            if (firstData != null) {
+                res.setStartTime(firstData.getDate());
+            }
+        }
+
+        if (res.getEndTime() == null && res.getDataPointCount() > 0) {
+            ProcessedDOData lastData = repository.findLastDataPointInHead(head.get().getHeadID());
+            if (lastData != null) {
+                res.setEndTime(lastData.getDate());
+            }
+        }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

@@ -15,4 +15,10 @@ public interface ProcessedDODataRepository extends JpaRepository<ProcessedDOData
 
     @Query(value = "SELECT * FROM processeddodata WHERE head_id = :id AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
     List<ProcessedDOData> findDataByHeadAndDateRange(@Param("id") Long id, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    @Query(value = "SELECT * FROM processeddodata WHERE head_id = :id LIMIT 1", nativeQuery = true)
+    ProcessedDOData findFirstDataPointInHead(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM processeddodata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    ProcessedDOData findLastDataPointInHead(@Param("id") Long id);
 }

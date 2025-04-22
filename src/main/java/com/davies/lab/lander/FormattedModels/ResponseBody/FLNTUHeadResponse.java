@@ -34,6 +34,7 @@ public class FLNTUHeadResponse {
     private String SensorType2;
     private Integer BuzzerNumber;
     private String LanderID;
+    private Integer dataPointCount;
     private Set<FLNTUDataResponse> data = new HashSet<>();
 
     public FLNTUHeadResponse(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
@@ -328,6 +329,14 @@ public class FLNTUHeadResponse {
 
     public void setLanderID(String landerID) {
         LanderID = landerID;
+    }
+
+    public Integer getDataPointCount() {
+        return dataPointCount;
+    }
+
+    public void setDataPointCount(Integer dataPointCount) {
+        this.dataPointCount = dataPointCount;
     }
 
     public Set<FLNTUDataResponse> getData() {

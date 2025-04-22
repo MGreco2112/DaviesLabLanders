@@ -16,4 +16,10 @@ public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDDa
 
     @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
     List<ProcessedCTDData> findDataByHeadAndDateRange(@Param("id") Long id, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id LIMIT 1", nativeQuery = true)
+    ProcessedCTDData findFirstDataPointInHead(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    ProcessedCTDData findLastDataPointInHead(@Param("id") Long id);
 }

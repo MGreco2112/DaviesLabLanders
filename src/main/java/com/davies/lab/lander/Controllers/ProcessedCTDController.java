@@ -132,6 +132,22 @@ public class ProcessedCTDController {
                 head.get().getLanderID().getASDBLanderID()
         );
 
+        res.setDataPointCount(head.get().getData().size());
+
+        if (res.getStartTime() == null && res.getDataPointCount() > 0) {
+            ProcessedCTDData firstData = repository.findFirstDataPointInHead(head.get().getHeadID());
+            if (firstData != null) {
+                res.setStartTime(firstData.getDate());
+            }
+        }
+
+        if (res.getEndTime() == null && res.getDataPointCount() > 0) {
+            ProcessedCTDData lastData = repository.findLastDataPointInHead(head.get().getHeadID());
+            if (lastData != null) {
+                res.setEndTime(lastData.getDate());
+            }
+        }
+
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
