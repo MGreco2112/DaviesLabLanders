@@ -279,6 +279,7 @@ public class ProcessedDOController {
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
         Optional<Lander> selLander = landerRepository.findById(landerID);
         List<DO_CSV_Request> rawData = null;
+        ProcessedDOHead savedHead;
 
         if (selLander.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -288,10 +289,14 @@ public class ProcessedDOController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        ProcessedDOHead dummyHead = new ProcessedDOHead();
-        dummyHead.setLanderID(selLander.get());
+        if (selLander.get().getDOHead() != null) {
+            savedHead = headRepository.findById(selLander.get().getDOHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } else {
+            ProcessedDOHead dummyHead = new ProcessedDOHead();
+            dummyHead.setLanderID(selLander.get());
 
-        ProcessedDOHead savedHead = headRepository.save(dummyHead);
+            savedHead = headRepository.save(dummyHead);
+        }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             rawData = processData(reader);
@@ -330,6 +335,12 @@ public class ProcessedDOController {
 
         if (processedHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getDOHead() == null) {
+            ProcessedDOHead newHead = new ProcessedDOHead();
+            newHead.setLanderID(selLander.get());
+            headRepository.save(newHead);
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {
@@ -399,6 +410,10 @@ public class ProcessedDOController {
 
 
         if (processedFile.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        if (lander.getDOHead() != null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 

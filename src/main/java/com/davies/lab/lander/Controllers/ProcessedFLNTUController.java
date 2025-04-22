@@ -275,6 +275,7 @@ public class ProcessedFLNTUController {
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
         Optional<Lander> selLander = landerRepository.findById(landerID);
         List<FLNTU_CSV_Request> rawData = null;
+        ProcessedFLNTUHead savedHead;
 
         if (selLander.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -284,10 +285,14 @@ public class ProcessedFLNTUController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        ProcessedFLNTUHead dummyHead = new ProcessedFLNTUHead();
-        dummyHead.setLanderID(selLander.get());
+        if (selLander.get().getFLNTUHead() != null) {
+            savedHead = headRepository.findById(selLander.get().getFLNTUHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } else {
+            ProcessedFLNTUHead dummyHead = new ProcessedFLNTUHead();
+            dummyHead.setLanderID(selLander.get());
 
-        ProcessedFLNTUHead savedHead = headRepository.save(dummyHead);
+            savedHead = headRepository.save(dummyHead);
+        }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             rawData = processData(reader);
@@ -325,6 +330,12 @@ public class ProcessedFLNTUController {
 
         if (processedHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getFLNTUHead() == null) {
+            ProcessedFLNTUHead newHead = new ProcessedFLNTUHead();
+            newHead.setLanderID(selLander.get());
+            headRepository.save(newHead);
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {
@@ -394,6 +405,10 @@ public class ProcessedFLNTUController {
 
 
         if (processedFile.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        if (lander.getFLNTUHead() != null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
