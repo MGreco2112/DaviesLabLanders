@@ -350,7 +350,9 @@ public class ProcessedFLNTUController {
         if (selLander.get().getFLNTUHead() == null) {
             ProcessedFLNTUHead newHead = new ProcessedFLNTUHead();
             newHead.setLanderID(selLander.get());
-            headRepository.save(newHead);
+            ProcessedFLNTUHead savedHead = headRepository.save(newHead);
+            selLander.get().setFLNTUHead(savedHead);
+            landerRepository.save(selLander.get());
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {

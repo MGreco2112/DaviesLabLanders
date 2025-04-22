@@ -362,7 +362,9 @@ public class ProcessedCTDController {
         if (selLander.get().getCTDHead() == null) {
             ProcessedCTDHead newHead = new ProcessedCTDHead();
             newHead.setLanderID(selLander.get());
-            headRepository.save(newHead);
+            ProcessedCTDHead savedHead = headRepository.save(newHead);
+            selLander.get().setCTDHead(savedHead);
+            landerRepository.save(selLander.get());
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {

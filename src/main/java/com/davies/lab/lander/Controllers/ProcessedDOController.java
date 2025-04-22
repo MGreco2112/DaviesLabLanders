@@ -354,7 +354,9 @@ public class ProcessedDOController {
         if (selLander.get().getDOHead() == null) {
             ProcessedDOHead newHead = new ProcessedDOHead();
             newHead.setLanderID(selLander.get());
-            headRepository.save(newHead);
+            ProcessedDOHead savedHead = headRepository.save(newHead);
+            selLander.get().setDOHead(savedHead);
+            landerRepository.save(selLander.get());
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {
