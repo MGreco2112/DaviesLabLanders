@@ -305,11 +305,11 @@ public class ProcessedCTDController {
        ProcessedCTDHead savedHead;
 
        if (selLander.isEmpty()) {
-           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+           return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
        }
 
        if (processedFile.isEmpty()) {
-           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+           return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
        }
 
        if (selLander.get().getCTDHead() != null) {
@@ -325,10 +325,11 @@ public class ProcessedCTDController {
            rawData = processData(reader);
        } catch (Exception e) {
            System.out.println(e.getLocalizedMessage());
+           return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
 
        if (rawData == null) {
-           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+           return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
        }
 
        for (CTD_CSV_Request dataElement : rawData) {
@@ -346,17 +347,16 @@ public class ProcessedCTDController {
        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
-    //TODO: TEST THIS UPDATE POST ROUTE
     @PostMapping("/upload_csv/header/{landerID}")
     public ResponseEntity<String> uploadProcessedHeader(@RequestParam("processedHead") MultipartFile processedHead, @PathVariable("landerID") String landerID) {
         Optional<Lander> selLander = landerRepository.findById(landerID);
 
         if (selLander.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedHead.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (selLander.get().getCTDHead() == null) {
@@ -426,7 +426,7 @@ public class ProcessedCTDController {
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -436,11 +436,11 @@ public class ProcessedCTDController {
 
 
         if (processedFile.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (lander.getCTDHead() != null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
@@ -503,7 +503,7 @@ public class ProcessedCTDController {
             List<CTD_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
             }
 
             for (CTD_CSV_Request inputDataPoint : outputData) {
@@ -523,7 +523,7 @@ public class ProcessedCTDController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
