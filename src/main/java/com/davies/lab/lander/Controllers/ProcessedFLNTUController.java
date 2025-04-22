@@ -405,7 +405,7 @@ public class ProcessedFLNTUController {
                     selLander.get().getFLNTUHead().getData()
             );
 
-            updateFLNTUHeader(selLander.get().getDOHead().getHeadID(), updates);
+            updateFLNTUHeader(selLander.get().getFLNTUHead().getHeadID(), updates);
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
