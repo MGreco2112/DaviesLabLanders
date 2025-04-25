@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDData, Long> {
@@ -22,4 +23,7 @@ public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDDa
 
     @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ProcessedCTDData findLastDataPointInHead(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM processedctddata WHERE head_id = :id", nativeQuery = true)
+    Optional<Integer> findCountByHeadID(@Param("id") Long id);
 }

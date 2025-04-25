@@ -298,6 +298,13 @@ public class ProcessedCTDController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/count/{headID}")
+    public ResponseEntity<Integer> getDataCountFromHeadID(@PathVariable("headID") Long headID) {
+        Optional<Integer> dataCount = repository.findCountByHeadID(headID);
+
+        return dataCount.map(integer -> new ResponseEntity<>(integer, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.BAD_REQUEST));
+    }
+
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
        Optional<Lander> selLander = landerRepository.findById(landerID);
@@ -348,7 +355,12 @@ public class ProcessedCTDController {
            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
 
-       return new ResponseEntity<>("Posted!", HttpStatus.OK);
+       String responseBody = "{\"headID\": " + savedHead.getHeadID() +
+               ", \"totalUploads\": " + rawData.size() +
+               ", \"uploadedData\": 0" +
+               "}";
+
+       return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @PostMapping("/upload_csv/header/{landerID}")
