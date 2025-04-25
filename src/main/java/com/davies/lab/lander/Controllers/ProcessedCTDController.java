@@ -332,16 +332,20 @@ public class ProcessedCTDController {
            return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
        }
 
-       for (CTD_CSV_Request dataElement : rawData) {
-           repository.save(new ProcessedCTDData(
-                   StringFormatting.formatDataDateString(dataElement.getDate()),
-                   dataElement.getTempDegC(),
-                   dataElement.getSal(),
-                   dataElement.getCondMsCm(),
-                   dataElement.geteC25uScM(),
-                   dataElement.getBattV(),
-                   savedHead
-           ));
+       try {
+           for (CTD_CSV_Request dataElement : rawData) {
+               repository.save(new ProcessedCTDData(
+                       StringFormatting.formatDataDateString(dataElement.getDate()),
+                       dataElement.getTempDegC(),
+                       dataElement.getSal(),
+                       dataElement.getCondMsCm(),
+                       dataElement.geteC25uScM(),
+                       dataElement.getBattV(),
+                       savedHead
+               ));
+           }
+       } catch (Exception e) {
+           return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
 
        return new ResponseEntity<>("Posted!", HttpStatus.OK);
@@ -503,10 +507,6 @@ public class ProcessedCTDController {
             ProcessedCTDHead newHead = headRepository.save(ctdHead);
 
             List<CTD_CSV_Request> outputData = processData(reader);
-
-            if (outputData == null) {
-                return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
-            }
 
             for (CTD_CSV_Request inputDataPoint : outputData) {
                 ProcessedCTDData newData = new ProcessedCTDData(

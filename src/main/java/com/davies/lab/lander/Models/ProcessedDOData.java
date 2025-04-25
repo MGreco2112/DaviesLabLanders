@@ -8,12 +8,19 @@ public class ProcessedDOData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
+    @Column(nullable = false)
     private LocalDateTime Date;
+    @Column(nullable = false)
     private Double TempDegC;
+    @Column(nullable = false)
     private Double DO;
+    @Column(nullable = false)
     private Double WeissDoMgL;
+    @Column(nullable = false)
     private Double BattV;
+    @Column(nullable = false)
     private Double GGDOMgL;
+    @Column(nullable = false)
     private Double BKDOMgL;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")

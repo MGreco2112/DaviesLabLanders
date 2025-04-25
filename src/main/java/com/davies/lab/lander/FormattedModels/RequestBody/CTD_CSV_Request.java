@@ -3,16 +3,22 @@ package com.davies.lab.lander.FormattedModels.RequestBody;
 import com.opencsv.bean.CsvBindByName;
 
 public class CTD_CSV_Request {
+
     @CsvBindByName(column = "Date")
     private String date;
+
     @CsvBindByName(column = "Temp.[deg C]")
     private Double tempDegC;
+
     @CsvBindByName(column = "Sal.[ ]")
     private Double sal;
+
     @CsvBindByName(column = "Cond.[mS/cm]")
     private Double condMsCm;
+
     @CsvBindByName(column = "EC 25[uS/cm]")
     private Double eC25uScM;
+
     @CsvBindByName(column = "Batt.[V]")
     private Double battV;
 

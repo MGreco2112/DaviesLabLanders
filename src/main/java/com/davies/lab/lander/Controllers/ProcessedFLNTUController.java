@@ -320,16 +320,20 @@ public class ProcessedFLNTUController {
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
 
-        for (FLNTU_CSV_Request dataElement : rawData) {
-            repository.save(new ProcessedFLNTUData(
-                    StringFormatting.formatDataDateString(dataElement.getDate()),
-                    dataElement.getTempDegC(),
-                    dataElement.getChlFluPpb(),
-                    dataElement.getChlAUgL(),
-                    dataElement.getTurbMFtu(),
-                    dataElement.getBattV(),
-                    savedHead
-            ));
+        try {
+            for (FLNTU_CSV_Request dataElement : rawData) {
+                repository.save(new ProcessedFLNTUData(
+                        StringFormatting.formatDataDateString(dataElement.getDate()),
+                        dataElement.getTempDegC(),
+                        dataElement.getChlFluPpb(),
+                        dataElement.getChlAUgL(),
+                        dataElement.getTurbMFtu(),
+                        dataElement.getBattV(),
+                        savedHead
+                ));
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);

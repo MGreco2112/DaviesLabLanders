@@ -323,18 +323,23 @@ public class ProcessedDOController {
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
 
-        for (DO_CSV_Request dataElement : rawData) {
-            repository.save(new ProcessedDOData(
-                    StringFormatting.formatDataDateString(dataElement.getDate()),
-                    dataElement.getTempDegC(),
-                    dataElement.getDo(),
-                    dataElement.getWeissDoMgL(),
-                    dataElement.getBattV(),
-                    dataElement.getGgDoMgL(),
-                    dataElement.getBkDoMgL(),
-                    savedHead
-            ));
+        try {
+            for (DO_CSV_Request dataElement : rawData) {
+                repository.save(new ProcessedDOData(
+                        StringFormatting.formatDataDateString(dataElement.getDate()),
+                        dataElement.getTempDegC(),
+                        dataElement.getDo(),
+                        dataElement.getWeissDoMgL(),
+                        dataElement.getBattV(),
+                        dataElement.getGgDoMgL(),
+                        dataElement.getBkDoMgL(),
+                        savedHead
+                ));
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
+
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -492,8 +497,6 @@ public class ProcessedDOController {
                 return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
             }
 
-
-
             for (DO_CSV_Request inputDataPoint : outputData) {
                 ProcessedDOData newData = new ProcessedDOData(
                         StringFormatting.formatDateString(inputDataPoint.getDate()),
@@ -506,7 +509,6 @@ public class ProcessedDOController {
                         newHead
                 );
 
-                System.out.println(newData.getDate());
                 repository.save(newData);
             }
 

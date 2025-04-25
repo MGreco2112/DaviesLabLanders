@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models;
 
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,11 +9,17 @@ public class ProcessedCTDData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
+    @Column(nullable = false)
     private LocalDateTime Date;
+    @Column(nullable = false)
     private Double TempDegC;
+    @Column(nullable = false)
     private Double Sal;
+    @Column(nullable = false)
     private Double CondMsCm;
+    @Column(nullable = false)
     private Double Ec25UsCm;
+    @Column(nullable = false)
     private Double BattV;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
