@@ -81,4 +81,9 @@ public class CTD_CSV_Request {
     public void setBattV(Double battV) {
         this.battV = battV;
     }
+
+    @Override
+    public String toString() {
+        return "{ \"date\": \"" + date + "\", \"tempDegC\": " + tempDegC + ", \"sal\": " + sal + ", \"condMsCm\": " + condMsCm + ", \"eC25uScM\": " + eC25uScM + ", \"battV\": " + battV + "}";
+    }
 }

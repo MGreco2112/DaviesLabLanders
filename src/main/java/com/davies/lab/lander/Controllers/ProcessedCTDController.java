@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.CTD_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.CTDDataListRequest;
+import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataCallbackResponse;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;
@@ -308,7 +310,7 @@ public class ProcessedCTDController {
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
        Optional<Lander> selLander = landerRepository.findById(landerID);
-       List<CTD_CSV_Request> rawData = null;
+       List<CTD_CSV_Request> rawData;
        ProcessedCTDHead savedHead;
 
        if (selLander.isEmpty()) {
@@ -355,12 +357,69 @@ public class ProcessedCTDController {
            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
 
-       String responseBody = "{\"headID\": " + savedHead.getHeadID() +
-               ", \"totalUploads\": " + rawData.size() +
-               ", \"uploadedData\": 0" +
-               "}";
+       return new ResponseEntity<>("Posted!", HttpStatus.OK);
+    }
 
-       return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    @PostMapping("/upload_csv/test/callback/{landerID}")
+    public ResponseEntity<String> uploadStageOneData(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerID") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+        List<CTD_CSV_Request> rawData;
+        ProcessedCTDHead savedHead;
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
+        }
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getCTDHead() != null) {
+            savedHead = headRepository.findById(selLander.get().getCTDHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } else {
+            ProcessedCTDHead dummyHead = new ProcessedCTDHead();
+            dummyHead.setLanderID(selLander.get());
+
+            savedHead = headRepository.save(dummyHead);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            rawData = processData(reader);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        if (rawData == null) {
+            return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
+        }
+
+        CTDDataCallbackResponse newResponse = new CTDDataCallbackResponse(rawData.size(), savedHead.getHeadID(), rawData);
+
+        return new ResponseEntity<>(newResponse.toString(), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/upload_csv/test/callback/save/{headerID}")
+    public ResponseEntity<String> saveProcessedDataToHead(@PathVariable("headerID") Long headerID, @RequestBody CTDDataListRequest request) {
+        ProcessedCTDHead selHead = headRepository.findById(headerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (request.getData() == null) {
+            return new ResponseEntity<>("Missing Data", HttpStatus.BAD_REQUEST);
+        }
+
+        for (CTD_CSV_Request dataElement : request.getData()) {
+            repository.save(new ProcessedCTDData(
+                    StringFormatting.formatDataDateString(dataElement.getDate()),
+                    dataElement.getTempDegC(),
+                    dataElement.getSal(),
+                    dataElement.getCondMsCm(),
+                    dataElement.geteC25uScM(),
+                    dataElement.getBattV(),
+                    selHead
+            ));
+        }
+
+        return new ResponseEntity<>("Created!", HttpStatus.CREATED);
     }
 
     @PostMapping("/upload_csv/header/{landerID}")
