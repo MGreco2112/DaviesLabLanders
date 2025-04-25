@@ -1,6 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
-import com.davies.lab.lander.FormattedModels.RequestBody.CTD_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.CTD_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;

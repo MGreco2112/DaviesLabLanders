@@ -1,6 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
-import com.davies.lab.lander.FormattedModels.RequestBody.FLNTU_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.FLNTU_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateFLNTUDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateFLNTUHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUDataResponse;
@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.*;
 
 @CrossOrigin
