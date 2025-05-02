@@ -2,7 +2,6 @@ package com.davies.lab.lander.HelperClasses;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 public class StringFormatting {
 
@@ -21,7 +20,6 @@ public class StringFormatting {
     }
 
     public static LocalDateTime formatDataDateString(String inputDate) {
-        System.out.println(inputDate);
 
         String[] dateTimeSplit = inputDate.split(" ");
         String[] dateSplit = dateTimeSplit[0].split("/");

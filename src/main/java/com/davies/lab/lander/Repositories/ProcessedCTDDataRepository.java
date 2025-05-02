@@ -25,5 +25,5 @@ public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDDa
     ProcessedCTDData findLastDataPointInHead(@Param("id") Long id);
 
     @Query(value = "SELECT COUNT(*) FROM processedctddata WHERE head_id = :id", nativeQuery = true)
-    Optional<Integer> findCountByHeadID(@Param("id") Long id);
+    Integer findCountByHeadID(@Param("id") Long id);
 }

@@ -5,6 +5,7 @@ import com.davies.lab.lander.FormattedModels.RequestBody.UpdateDODataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateDOHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DODataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DOHeadResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedDOData;
@@ -21,8 +22,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @CrossOrigin
@@ -288,6 +292,41 @@ public class ProcessedDOController {
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/count/{landerID}")
+    public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
+        Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (selLander.getDOHead() != null) {
+            ProcessedDOHead selHead = headRepository.findById(selLander.getDOHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            Integer dataCount = repository.findCountByHeadID(selHead.getHeadID());
+
+            if (selHead.getStartTime() != null && selHead.getEndTime() != null && selHead.getBurstCnt() != null && selHead.getBurstTime() != null) {
+                LocalDateTime startTime = selHead.getStartTime();
+                LocalDateTime endTime = selHead.getEndTime();
+                int burstCount = selHead.getBurstCnt();
+                int burstTime = selHead.getBurstTime();
+
+                double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+                switch (burstTime) {
+                    case 15 -> hoursBetween *= 4;
+                    case 30 -> hoursBetween *= 2;
+                    default -> {
+                    }
+                }
+
+                hoursBetween *= burstCount;
+
+                return new ResponseEntity<>(new DataProgressResponse( (dataCount / hoursBetween) ), HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>(new DataProgressResponse(dataCount), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
     }
 
     @PostMapping("/upload_csv/data/{landerId}")
