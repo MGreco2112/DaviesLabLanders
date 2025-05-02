@@ -307,7 +307,6 @@ public class ProcessedCTDController {
 
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
-       long startTime = System.nanoTime();
 
        Optional<Lander> selLander = landerRepository.findById(landerID);
        List<CTD_CSV_Request> rawData;
@@ -357,10 +356,6 @@ public class ProcessedCTDController {
            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
 
-       long endTime = System.nanoTime();
-       long executionTime = endTime - startTime;
-
-       System.out.println("Execution Time Seconds: " + (executionTime / 1_000_000) / 1_000);
        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
