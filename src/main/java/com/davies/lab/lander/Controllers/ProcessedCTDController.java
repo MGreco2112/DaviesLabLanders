@@ -1,11 +1,13 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.CTD_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.TotalDataResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedCTDData;
@@ -334,6 +336,27 @@ public class ProcessedCTDController {
         }
 
         return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
+    }
+
+    @PostMapping("/data/count/headless")
+    public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        int burstCount = request.getBurstCnt();
+        int burstTime = request.getBurstTime();
+
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+        switch (burstTime) {
+            case 15 -> hoursBetween *= 4;
+            case 30 -> hoursBetween *= 2;
+            default -> {
+            }
+        }
+
+        hoursBetween *= burstCount;
+
+        return new ResponseEntity<>(new TotalDataResponse((int) hoursBetween ), HttpStatus.OK);
     }
 
     @PostMapping("/upload_csv/data/{landerId}")
