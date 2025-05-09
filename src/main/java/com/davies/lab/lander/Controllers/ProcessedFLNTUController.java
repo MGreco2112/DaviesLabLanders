@@ -309,12 +309,7 @@ public class ProcessedFLNTUController {
 
                 double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
 
-                switch (burstTime) {
-                    case 15 -> hoursBetween *= 4;
-                    case 30 -> hoursBetween *= 2;
-                    default -> {
-                    }
-                }
+                hoursBetween *= (60.0 / burstTime);
 
                 hoursBetween *= burstCount;
 
@@ -336,12 +331,7 @@ public class ProcessedFLNTUController {
 
         double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
 
-        switch (burstTime) {
-            case 15 -> hoursBetween *= 4;
-            case 30 -> hoursBetween *= 2;
-            default -> {
-            }
-        }
+        hoursBetween *= (60.0 / burstTime);
 
         hoursBetween *= burstCount;
 
