@@ -7,7 +7,6 @@ build/
 application.properties
 *.csv
 keystore.p12
-Dockerfile
 
 ### STS ###
 .apt_generated

@@ -10,8 +10,11 @@ COPY build/libs/lander-0.0.1-SNAPSHOT.jar app.jar
 # copy Application.Properties file into container
 COPY src/main/resources/application.properties ./
 
+# copy keystore
+COPY src/main/resources/keystore.p12 keystore.p12
+
 # expose the port your Spring application runs on
-EXPOSE 8080
+EXPOSE 8444
 
 # command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
