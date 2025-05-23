@@ -14,6 +14,7 @@ COPY src/main/resources/application.properties ./
 COPY src/main/resources/keystore.p12 keystore.p12
 
 # expose the port your Spring application runs on
+EXPOSE 8080
 EXPOSE 8444
 
 # command to run the application
