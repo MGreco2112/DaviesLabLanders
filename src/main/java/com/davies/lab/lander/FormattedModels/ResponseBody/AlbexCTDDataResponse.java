@@ -1,12 +1,8 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-public class ProcessedAlbexCTDData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AlbexCTDDataResponse {
     private Long ID;
     private LocalDateTime Date;
     private Double Salinity;
@@ -17,24 +13,9 @@ public class ProcessedAlbexCTDData {
     private Double Chla_ug_ml;
     private Double Pressure_db;
     private Integer Flag;
-    @ManyToOne
-    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
-    private ProcessedAlbexCTDHeader HeadID;
+    private Long HeadID;
 
-    public ProcessedAlbexCTDData(LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, ProcessedAlbexCTDHeader headID) {
-        Date = date;
-        Salinity = salinity;
-        Temperature = temperature;
-        Oxygen_ml_l = oxygen_ml_l;
-        OxygenSat_percent = oxygenSat_percent;
-        Turbidity_ntu = turbidity_ntu;
-        Chla_ug_ml = chla_ug_ml;
-        Pressure_db = pressure_db;
-        Flag = flag;
-        HeadID = headID;
-    }
-
-    public ProcessedAlbexCTDData(Long ID, LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, ProcessedAlbexCTDHeader headID) {
+    public AlbexCTDDataResponse(Long ID, LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, Long headID) {
         this.ID = ID;
         Date = date;
         Salinity = salinity;
@@ -128,11 +109,11 @@ public class ProcessedAlbexCTDData {
         Flag = flag;
     }
 
-    public ProcessedAlbexCTDHeader getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(ProcessedAlbexCTDHeader headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

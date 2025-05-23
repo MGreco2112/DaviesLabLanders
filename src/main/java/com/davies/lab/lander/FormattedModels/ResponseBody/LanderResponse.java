@@ -11,6 +11,7 @@ public class LanderResponse {
     private CTDHeadResponse CTDHead;
     private DOHeadResponse DOHead;
     private FLNTUHeadResponse FLNTUHead;
+    private AlbexCTDHeadResponse AlbexCTDHead;
 
     public LanderResponse(String ASDBLanderID, String landerPlatform, String ADDBROVDiveID) {
         this.ASDBLanderID = ASDBLanderID;
@@ -28,6 +29,10 @@ public class LanderResponse {
 
     public void createFLNTUHeadResponse(ProcessedFLNTUHead head) {
         FLNTUHead = new FLNTUHeadResponse(head.getHeadID(), head.getBurstTime(), head.getBurstCnt(), head.getStartTime(), head.getEndTime());
+    }
+
+    public void createAlbexCTDHeadResponse(ProcessedAlbexCTDHeader head) {
+        AlbexCTDHead = new AlbexCTDHeadResponse(head.getHeadID());
     }
 
     public String getASDBLanderID() {
@@ -76,6 +81,14 @@ public class LanderResponse {
 
     public void setFLNTUHead(FLNTUHeadResponse FLNTUHead) {
         this.FLNTUHead = FLNTUHead;
+    }
+
+    public AlbexCTDHeadResponse getAlbexCTDHead() {
+        return AlbexCTDHead;
+    }
+
+    public void setAlbexCTDHead(AlbexCTDHeadResponse albexCTDHead) {
+        AlbexCTDHead = albexCTDHead;
     }
 
     private class CTDHeadResponse {
@@ -255,6 +268,25 @@ public class LanderResponse {
 
         public void setEndTime(LocalDateTime endTime) {
             EndTime = endTime;
+        }
+    }
+
+    private class AlbexCTDHeadResponse {
+        private Long HeadID;
+
+        public AlbexCTDHeadResponse() {
+        }
+
+        public AlbexCTDHeadResponse(Long headID) {
+            HeadID = headID;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
         }
     }
 

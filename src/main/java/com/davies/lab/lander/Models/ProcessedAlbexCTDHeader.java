@@ -11,7 +11,7 @@ public class ProcessedAlbexCTDHeader {
     private Long headID;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
-    private Lander landerID;
+    private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
     private Set<ProcessedAlbexCTDData> data;
 
@@ -20,12 +20,12 @@ public class ProcessedAlbexCTDHeader {
     }
 
     public ProcessedAlbexCTDHeader(Lander landerID) {
-        this.landerID = landerID;
+        this.LanderID = landerID;
     }
 
     public ProcessedAlbexCTDHeader(Long headID, Lander landerID, Set<ProcessedAlbexCTDData> data) {
         this.headID = headID;
-        this.landerID = landerID;
+        this.LanderID = landerID;
         this.data = data;
     }
 
@@ -38,11 +38,11 @@ public class ProcessedAlbexCTDHeader {
     }
 
     public Lander getLanderID() {
-        return landerID;
+        return LanderID;
     }
 
-    public void setLanderID(Lander landerID) {
-        this.landerID = landerID;
+    public void setLanderID(Lander LanderID) {
+        this.LanderID = LanderID;
     }
 
     public Set<ProcessedAlbexCTDData> getData() {

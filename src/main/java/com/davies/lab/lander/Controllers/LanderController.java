@@ -4,10 +4,7 @@ import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
-import com.davies.lab.lander.Models.Lander;
-import com.davies.lab.lander.Models.ProcessedCTDHead;
-import com.davies.lab.lander.Models.ProcessedDOHead;
-import com.davies.lab.lander.Models.ProcessedFLNTUHead;
+import com.davies.lab.lander.Models.*;
 import com.davies.lab.lander.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +32,10 @@ public class LanderController {
     private ProcessedFLNTUHeadRepository flntuHeadRepository;
     @Autowired
     private ProcessedFLNTUDataRepository flntuDataRepository;
+    @Autowired
+    private ProcessedAlbexCTDHeaderRepository albexCTDHeadRepository;
+    @Autowired
+    private ProcessedAlbexCTDDataRepository albexCTDDataRepository;
 
     @GetMapping("/all")
     public List<LanderResponse> findAllLanders() {
@@ -52,6 +53,9 @@ public class LanderController {
              }
              if (lander.getFLNTUHead() != null) {
                  res.createFLNTUHeadResponse(lander.getFLNTUHead());
+             }
+             if (lander.getAlbexHead() != null) {
+                 res.createAlbexCTDHeadResponse(lander.getAlbexHead());
              }
 
              resList.add(res);
@@ -78,6 +82,9 @@ public class LanderController {
         }
         if (lander.get().getFLNTUHead() != null) {
             res.createFLNTUHeadResponse(lander.get().getFLNTUHead());
+        }
+        if (lander.get().getAlbexHead() != null) {
+            res.createAlbexCTDHeadResponse(lander.get().getAlbexHead());
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -160,6 +167,9 @@ public class LanderController {
         if (updates.getFLNTUHead() != null) {
             selLander.setFLNTUHead(updates.getFLNTUHead());
         }
+        if (updates.getAlbexHead() != null) {
+            selLander.setAlbexHead(updates.getAlbexHead());
+        }
 
         repository.save(selLander);
 
@@ -193,6 +203,14 @@ public class LanderController {
             repository.save(selLander);
             flntuDataRepository.deleteAll(flntuHead.get().getData());
             flntuHeadRepository.delete(flntuHead.get());
+        }
+
+        if (selLander.getAlbexHead() != null) {
+            Optional<ProcessedAlbexCTDHeader> albexCTDHead = albexCTDHeadRepository.findById(selLander.getAlbexHead().getHeadID());
+            selLander.setAlbexHead(null);
+            repository.save(selLander);
+            albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
+            albexCTDHeadRepository.delete(albexCTDHead.get());
         }
 
         repository.delete(selLander);

@@ -1,13 +1,10 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import javax.persistence.*;
+import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
+
 import java.time.LocalDateTime;
 
-@Entity
-public class ProcessedAlbexCTDData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+public class UpdateAlbexCTDDataRequest {
     private LocalDateTime Date;
     private Double Salinity;
     private Double Temperature;
@@ -17,11 +14,12 @@ public class ProcessedAlbexCTDData {
     private Double Chla_ug_ml;
     private Double Pressure_db;
     private Integer Flag;
-    @ManyToOne
-    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedAlbexCTDHeader HeadID;
 
-    public ProcessedAlbexCTDData(LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, ProcessedAlbexCTDHeader headID) {
+    public UpdateAlbexCTDDataRequest() {
+    }
+
+    public UpdateAlbexCTDDataRequest(LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, ProcessedAlbexCTDHeader headID) {
         Date = date;
         Salinity = salinity;
         Temperature = temperature;
@@ -32,28 +30,6 @@ public class ProcessedAlbexCTDData {
         Pressure_db = pressure_db;
         Flag = flag;
         HeadID = headID;
-    }
-
-    public ProcessedAlbexCTDData(Long ID, LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, ProcessedAlbexCTDHeader headID) {
-        this.ID = ID;
-        Date = date;
-        Salinity = salinity;
-        Temperature = temperature;
-        Oxygen_ml_l = oxygen_ml_l;
-        OxygenSat_percent = oxygenSat_percent;
-        Turbidity_ntu = turbidity_ntu;
-        Chla_ug_ml = chla_ug_ml;
-        Pressure_db = pressure_db;
-        Flag = flag;
-        HeadID = headID;
-    }
-
-    public Long getID() {
-        return ID;
-    }
-
-    public void setID(Long ID) {
-        this.ID = ID;
     }
 
     public LocalDateTime getDate() {

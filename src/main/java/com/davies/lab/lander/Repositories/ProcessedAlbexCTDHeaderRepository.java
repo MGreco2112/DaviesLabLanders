@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProcessedAlbexCTDHeaderRepository extends JpaRepository<Long, ProcessedAlbexCTDHeader> {
+public interface ProcessedAlbexCTDHeaderRepository extends JpaRepository<ProcessedAlbexCTDHeader, Long> {
 
 }

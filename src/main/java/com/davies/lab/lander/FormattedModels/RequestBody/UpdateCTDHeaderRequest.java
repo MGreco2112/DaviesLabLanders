@@ -5,7 +5,6 @@ import com.davies.lab.lander.Models.ProcessedCTDData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 public class UpdateCTDHeaderRequest {
