@@ -33,7 +33,8 @@ public class LanderController {
     private ProcessedDODataRepository doDataRepository;
     @Autowired
     private ProcessedFLNTUHeadRepository flntuHeadRepository;
-    @Autowired ProcessedFLNTUDataRepository flntuDataRepository;
+    @Autowired
+    private ProcessedFLNTUDataRepository flntuDataRepository;
 
     @GetMapping("/all")
     public List<LanderResponse> findAllLanders() {

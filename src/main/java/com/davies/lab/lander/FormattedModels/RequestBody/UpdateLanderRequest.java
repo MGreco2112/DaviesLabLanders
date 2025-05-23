@@ -1,5 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
+import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
 import com.davies.lab.lander.Models.ProcessedDOHead;
 import com.davies.lab.lander.Models.ProcessedFLNTUHead;
@@ -15,11 +16,12 @@ public class UpdateLanderRequest {
     private ProcessedCTDHead CTDHead;
     private ProcessedDOHead DOHead;
     private ProcessedFLNTUHead FLNTUHead;
+    private ProcessedAlbexCTDHeader AlbexHead;
 
     public UpdateLanderRequest() {
     }
 
-    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, ProcessedCTDHead CTDHead, ProcessedDOHead DOHead, ProcessedFLNTUHead FLNTUHead) {
+    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, ProcessedCTDHead CTDHead, ProcessedDOHead DOHead, ProcessedFLNTUHead FLNTUHead, ProcessedAlbexCTDHeader albexHead) {
         LanderPlatform = landerPlatform;
         this.ASDBROBDiveID = ASDBROBDiveID;
         this.deploymentDateAndTime = deploymentDateAndTime;
@@ -27,6 +29,7 @@ public class UpdateLanderRequest {
         this.CTDHead = CTDHead;
         this.DOHead = DOHead;
         this.FLNTUHead = FLNTUHead;
+        AlbexHead = albexHead;
     }
 
     public String getLanderPlatform() {
@@ -83,5 +86,13 @@ public class UpdateLanderRequest {
 
     public void setFLNTUHead(ProcessedFLNTUHead FLNTUHead) {
         this.FLNTUHead = FLNTUHead;
+    }
+
+    public ProcessedAlbexCTDHeader getAlbexHead() {
+        return AlbexHead;
+    }
+
+    public void setAlbexHead(ProcessedAlbexCTDHeader albexHead) {
+        AlbexHead = albexHead;
     }
 }
