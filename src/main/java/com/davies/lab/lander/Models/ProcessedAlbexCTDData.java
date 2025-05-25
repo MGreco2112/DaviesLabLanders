@@ -21,6 +21,9 @@ public class ProcessedAlbexCTDData {
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedAlbexCTDHeader HeadID;
 
+    public ProcessedAlbexCTDData() {
+    }
+
     public ProcessedAlbexCTDData(LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, ProcessedAlbexCTDHeader headID) {
         Date = date;
         Salinity = salinity;

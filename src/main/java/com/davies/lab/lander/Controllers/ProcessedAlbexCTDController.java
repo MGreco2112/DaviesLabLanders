@@ -1,8 +1,11 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.AlbexCTD_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDHeadResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.TotalDataResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
@@ -21,6 +24,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -117,6 +122,7 @@ public class ProcessedAlbexCTDController {
         return res;
     }
 
+    @GetMapping("/data/{id}")
     public ResponseEntity<AlbexCTDDataResponse> findDataById(@PathVariable("id") Long id) {
         Optional<ProcessedAlbexCTDData> dataPoint = repository.findById(id);
         AlbexCTDDataResponse res;
@@ -170,7 +176,59 @@ public class ProcessedAlbexCTDController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<AlbexCTDDataResponse>> getDataByRange(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<AlbexCTDDataResponse> res = new ArrayList<>();
 
+        List<ProcessedAlbexCTDData> data = repository.findDataByHeadAndDateRange(id, startDate, endDate);
+
+        for (ProcessedAlbexCTDData dataPoint : data) {
+            res.add(new AlbexCTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getSalinity(),
+                    dataPoint.getTemperature(),
+                    dataPoint.getOxygen_ml_l(),
+                    dataPoint.getOxygenSat_percent(),
+                    dataPoint.getTurbidity_ntu(),
+                    dataPoint.getChla_ug_ml(),
+                    dataPoint.getPressure_db(),
+                    dataPoint.getFlag(),
+                    dataPoint.getHeadID().getHeadID()
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/count/{landerID}")
+    public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
+        Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (selLander.getAlbexHead() != null) {
+            ProcessedAlbexCTDHeader selHead = headerRepository.findById(selLander.getAlbexHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            Integer dataCount = repository.findCountByHeadID(selHead.getHeadID());
+
+            return new ResponseEntity<>(new DataProgressResponse(dataCount), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
+    }
+
+    @PostMapping("/data/count/headless")
+    public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        int burstCount = request.getBurstCnt();
+        int burstTime = request.getBurstTime();
+
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= burstCount;
+
+        return new ResponseEntity<>(new TotalDataResponse((int) hoursBetween), HttpStatus.OK);
+    }
 
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String LanderID) {

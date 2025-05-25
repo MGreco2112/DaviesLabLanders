@@ -17,7 +17,7 @@ public interface ProcessedAlbexCTDDataRepository extends JpaRepository<Processed
     @Query(value = "SELECT * FROM processedalbexctddata WHERE head_id = :id LIMIT 1", nativeQuery = true)
     ProcessedAlbexCTDData findFirstDataPointInHead(@Param("id") Long id);
 
-    @Query(value = "SELECT * FROM processedalbexctddata WHERE head_id = :id ORDER BY id DESC LIMIT 1")
+    @Query(value = "SELECT * FROM processedalbexctddata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ProcessedAlbexCTDData findLastDataPointInHeader(@Param("id") Long id);
 
     @Query(value = "SELECT COUNT(*) FROM processedalbexctddata WHERE head_id = :id", nativeQuery = true)
