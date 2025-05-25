@@ -1,6 +1,7 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.AlbexCTD_CSV_Request;
+import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDHeadResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
@@ -55,6 +56,121 @@ public class ProcessedAlbexCTDController {
 
         return res;
     }
+
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<AlbexCTDHeadResponse> findHeadWithoutDataById(@PathVariable("id") Long id) {
+        Optional<ProcessedAlbexCTDHeader> head = headerRepository.findById(id);
+        AlbexCTDHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new AlbexCTDHeadResponse(head.get().getHeadID(), head.get().getLanderID().getASDBLanderID());
+
+        res.setDataPointCount(head.get().getData().size());
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/headers/{id}")
+    public ResponseEntity<AlbexCTDHeadResponse> findHeadById(@PathVariable("id") Long id) {
+        Optional<ProcessedAlbexCTDHeader> head = headerRepository.findById(id);
+        AlbexCTDHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new AlbexCTDHeadResponse(head.get().getHeadID(), head.get().getLanderID().getASDBLanderID());
+
+        for (ProcessedAlbexCTDData data : head.get().getData()) {
+            res.createDataResponse(data);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data")
+    public List<AlbexCTDDataResponse> findAllEntries() {
+        List<ProcessedAlbexCTDData> data = repository.findAll();
+        List<AlbexCTDDataResponse> res = new ArrayList<>();
+
+        for (ProcessedAlbexCTDData dataPoint : data) {
+            AlbexCTDDataResponse temp = new AlbexCTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getSalinity(),
+                    dataPoint.getTemperature(),
+                    dataPoint.getOxygen_ml_l(),
+                    dataPoint.getOxygenSat_percent(),
+                    dataPoint.getTurbidity_ntu(),
+                    dataPoint.getChla_ug_ml(),
+                    dataPoint.getPressure_db(),
+                    dataPoint.getFlag(),
+                    dataPoint.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return res;
+    }
+
+    public ResponseEntity<AlbexCTDDataResponse> findDataById(@PathVariable("id") Long id) {
+        Optional<ProcessedAlbexCTDData> dataPoint = repository.findById(id);
+        AlbexCTDDataResponse res;
+
+        if (dataPoint.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new AlbexCTDDataResponse(
+                dataPoint.get().getID(),
+                dataPoint.get().getDate(),
+                dataPoint.get().getSalinity(),
+                dataPoint.get().getTemperature(),
+                dataPoint.get().getOxygen_ml_l(),
+                dataPoint.get().getOxygenSat_percent(),
+                dataPoint.get().getTurbidity_ntu(),
+                dataPoint.get().getChla_ug_ml(),
+                dataPoint.get().getPressure_db(),
+                dataPoint.get().getFlag(),
+                dataPoint.get().getHeadID().getHeadID()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/headId/{id}")
+    public ResponseEntity<List<AlbexCTDDataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
+        List<ProcessedAlbexCTDData> data = repository.findDataByHeadId(id);
+        List<AlbexCTDDataResponse> res = new ArrayList<>();
+
+        if (data.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        for (ProcessedAlbexCTDData dataPoint : data) {
+            res.add(new AlbexCTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getSalinity(),
+                    dataPoint.getTemperature(),
+                    dataPoint.getOxygen_ml_l(),
+                    dataPoint.getOxygenSat_percent(),
+                    dataPoint.getTurbidity_ntu(),
+                    dataPoint.getChla_ug_ml(),
+                    dataPoint.getPressure_db(),
+                    dataPoint.getFlag(),
+                    dataPoint.getHeadID().getHeadID()
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+
 
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String LanderID) {
