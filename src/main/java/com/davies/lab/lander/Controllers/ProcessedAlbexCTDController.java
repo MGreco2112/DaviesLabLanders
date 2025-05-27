@@ -2,6 +2,7 @@ package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.AlbexCTD_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateAlbexCTDDataRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
@@ -303,5 +304,71 @@ public class ProcessedAlbexCTDController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<String> updateAlbexCTDDataByID(@PathVariable("id") Long id, @RequestBody UpdateAlbexCTDDataRequest updates) {
+        ProcessedAlbexCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getDate() != null) {
+            selData.setDate(updates.getDate());
+        }
+        if (updates.getSalinity() != null) {
+            selData.setSalinity(updates.getSalinity());
+        }
+        if (updates.getTemperature() != null) {
+            selData.setTemperature(updates.getTemperature());
+        }
+        if (updates.getOxygen_ml_l() != null) {
+            selData.setOxygen_ml_l(updates.getOxygen_ml_l());
+        }
+        if (updates.getOxygenSat_percent() != null) {
+            selData.setOxygenSat_percent(updates.getOxygenSat_percent());
+        }
+        if (updates.getTurbidity_ntu() != null) {
+            selData.setTurbidity_ntu(updates.getTurbidity_ntu());
+        }
+        if (updates.getChla_ug_ml() != null) {
+            selData.setChla_ug_ml(updates.getChla_ug_ml());
+        }
+        if (updates.getPressure_db() != null) {
+            selData.setPressure_db(updates.getPressure_db());
+        }
+        if (updates.getFlag() != null) {
+            selData.setFlag(updates.getFlag());
+        }
+        if (updates.getHeadID() != null) {
+            selData.setHeadID(updates.getHeadID());
+        }
+
+        repository.save(selData);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/header/{id}")
+    public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Long id) {
+        ProcessedAlbexCTDHeader selHead = headerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        repository.deleteAll(selHead.getData());
+
+        selHead.setData(null);
+
+        selHead.setLanderID(null);
+
+        headerRepository.save(selHead);
+
+        headerRepository.delete(selHead);
+
+        return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/data/{id}")
+    public ResponseEntity<String> deleteDataByID(@PathVariable("id") Long id) {
+        ProcessedAlbexCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        repository.delete(selData);
+
+        return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
     }
 }
