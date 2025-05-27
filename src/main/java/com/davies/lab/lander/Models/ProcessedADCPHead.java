@@ -1,0 +1,55 @@
+package com.davies.lab.lander.Models;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+public class ProcessedADCPHead {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long HeadID;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "Lander_id", referencedColumnName = "ASDBLanderID")
+    private Lander LanderID;
+    @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
+    private Set<ProcessedADCPData> data;
+
+    public ProcessedADCPHead() {
+        data = new HashSet<>();
+    }
+
+    public ProcessedADCPHead(Lander landerID) {
+        LanderID = landerID;
+    }
+
+    public ProcessedADCPHead(Long headID, Lander landerID, Set<ProcessedADCPData> data) {
+        HeadID = headID;
+        LanderID = landerID;
+        this.data = data;
+    }
+
+    public Long getHeadID() {
+        return HeadID;
+    }
+
+    public void setHeadID(Long headID) {
+        HeadID = headID;
+    }
+
+    public Lander getLanderID() {
+        return LanderID;
+    }
+
+    public void setLanderID(Lander landerID) {
+        LanderID = landerID;
+    }
+
+    public Set<ProcessedADCPData> getData() {
+        return data;
+    }
+
+    public void setData(Set<ProcessedADCPData> data) {
+        this.data = data;
+    }
+}

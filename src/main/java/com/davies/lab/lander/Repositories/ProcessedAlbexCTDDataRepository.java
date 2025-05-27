@@ -4,9 +4,11 @@ import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ProcessedAlbexCTDDataRepository extends JpaRepository<ProcessedAlbexCTDData, Long> {
     @Query(value = "SELECT * FROM processed_albexctddata WHERE head_id = :id", nativeQuery = true)
     List<ProcessedAlbexCTDData> findDataByHeadId(@Param("id") Long id);

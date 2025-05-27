@@ -19,6 +19,8 @@ public class Lander {
     private ProcessedFLNTUHead FLNTUHead;
     @OneToOne(mappedBy = "LanderID")
     private ProcessedAlbexCTDHeader AlbexHead;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedADCPHead ADCPHead;
 
     public Lander() {
     }
@@ -107,5 +109,13 @@ public class Lander {
 
     public void setAlbexHead(ProcessedAlbexCTDHeader albexHead) {
         AlbexHead = albexHead;
+    }
+
+    public ProcessedADCPHead getADCPHead() {
+        return ADCPHead;
+    }
+
+    public void setADCPHead(ProcessedADCPHead ADCPHead) {
+        this.ADCPHead = ADCPHead;
     }
 }
