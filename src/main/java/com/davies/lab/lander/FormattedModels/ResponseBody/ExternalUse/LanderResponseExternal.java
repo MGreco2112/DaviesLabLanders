@@ -7,44 +7,45 @@ import java.util.Set;
 
 public class LanderResponseExternal extends BasicLanderResponseExternal{
 
-    private Set<CTDHeadResponseExternal> CTDHeads = new HashSet<>();
-    private Set<DOHeadResponseExternal> DOHeads = new HashSet<>();
-    private Set<FLNTUHeadResponseExternal> FLNTUHeads = new HashSet<>();
+    private CTDHeadResponseExternal ctdHead;
+    private DOHeadResponseExternal doHead;
+    private FLNTUHeadResponseExternal flntuHead;
+    private ALBEXCTDHeadResponseExternal albexHead;
 
 
     public LanderResponseExternal (Lander lander) {
         super(lander);
     }
 
-    public void addCTDHead(CTDHeadResponseExternal newHead) {
-        CTDHeads.add(newHead);
+    public CTDHeadResponseExternal getCtdHead() {
+        return ctdHead;
     }
 
-    public void addDOHead(DOHeadResponseExternal newHead) { DOHeads.add(newHead); }
-
-    public void addFLNTUHead(FLNTUHeadResponseExternal newHead) { FLNTUHeads.add(newHead); }
-
-    public Set<CTDHeadResponseExternal> getCTDHeads() {
-        return CTDHeads;
+    public void setCtdHead(CTDHeadResponseExternal ctdHead) {
+        this.ctdHead = ctdHead;
     }
 
-    public void setCTDHeads(Set<CTDHeadResponseExternal> CTDHeads) {
-        this.CTDHeads = CTDHeads;
+    public DOHeadResponseExternal getDoHead() {
+        return doHead;
     }
 
-    public Set<DOHeadResponseExternal> getDOHeads() {
-        return DOHeads;
+    public void setDoHead(DOHeadResponseExternal doHead) {
+        this.doHead = doHead;
     }
 
-    public void setDOHeads(Set<DOHeadResponseExternal> DOHeads) {
-        this.DOHeads = DOHeads;
+    public FLNTUHeadResponseExternal getFlntuHead() {
+        return flntuHead;
     }
 
-    public Set<FLNTUHeadResponseExternal> getFLNTUHeads() {
-        return FLNTUHeads;
+    public void setFlntuHead(FLNTUHeadResponseExternal flntuHead) {
+        this.flntuHead = flntuHead;
     }
 
-    public void setFLNTUHeads(Set<FLNTUHeadResponseExternal> FLNTUHeads) {
-        this.FLNTUHeads = FLNTUHeads;
+    public ALBEXCTDHeadResponseExternal getAlbexHead() {
+        return albexHead;
+    }
+
+    public void setAlbexHead(ALBEXCTDHeadResponseExternal albexHead) {
+        this.albexHead = albexHead;
     }
 }

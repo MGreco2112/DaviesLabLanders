@@ -31,6 +31,10 @@ public class ExternalConnectionController {
     private ProcessedFLNTUHeadRepository flntuHeadRepository;
     @Autowired
     private ProcessedFLNTUDataRepository flntuDataRepository;
+    @Autowired
+    private ProcessedAlbexCTDHeaderRepository albexHeaderRepository;
+    @Autowired
+    private ProcessedAlbexCTDDataRepository albexDataRepository;
 
     //GET Lander without sensors
     @GetMapping("/basic_lander/id/{id}")
@@ -64,7 +68,7 @@ public class ExternalConnectionController {
 
             newCtdHead.setData(ctdDataSet);
 
-            selLander.addCTDHead(newCtdHead);
+            selLander.setCtdHead(newCtdHead);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
@@ -79,7 +83,7 @@ public class ExternalConnectionController {
 
             newDoHead.setData(doDataSet);
 
-            selLander.addDOHead(newDoHead);
+            selLander.setDoHead(newDoHead);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
@@ -94,7 +98,22 @@ public class ExternalConnectionController {
 
             newFlntuHead.setData(flntuDataSet);
 
-            selLander.addFLNTUHead(newFlntuHead);
+            selLander.setFlntuHead(newFlntuHead);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+
+        //get, create and place ALBEXData
+        try {
+            ProcessedAlbexCTDHeader albexHead = albexHeaderRepository.getAlbexHeadsByLanderId(selLander.getASDBLanderID());
+
+            ALBEXCTDHeadResponseExternal newAlbexHead = new ALBEXCTDHeadResponseExternal(albexHead);
+
+            Set<ALBEXCTDDataResponseExternal> albexDataSet = ALBEXCTDDataResponseExternal.createBulkResponses(albexDataRepository.findDataByHeadId(albexHead.getHeadID()));
+
+            newAlbexHead.setData(albexDataSet);
+
+            selLander.setAlbexHead(newAlbexHead);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
@@ -171,4 +190,23 @@ public class ExternalConnectionController {
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
 
+    @GetMapping("/lander/id/{id}/albex_ctd")
+    public ResponseEntity<ALBEXCTDHeadResponseExternal> getAlbexByLanderId(@PathVariable("id") String id) {
+        ProcessedAlbexCTDHeader selHead = albexHeaderRepository.getAlbexHeadsByLanderId(id);
+
+        if (selHead == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        ALBEXCTDHeadResponseExternal newHead = new ALBEXCTDHeadResponseExternal(selHead);
+        Set<ALBEXCTDDataResponseExternal> newDataSet = new HashSet<>();
+
+        for (ProcessedAlbexCTDData data : selHead.getData()) {
+            newDataSet.add(new ALBEXCTDDataResponseExternal(data));
+        }
+
+        newHead.setData(newDataSet);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
 }
