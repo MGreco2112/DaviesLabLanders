@@ -36,6 +36,10 @@ public class LanderController {
     private ProcessedAlbexCTDHeaderRepository albexCTDHeadRepository;
     @Autowired
     private ProcessedAlbexCTDDataRepository albexCTDDataRepository;
+    @Autowired
+    private ProcessedADCPDataRepository adcpDataRepository;
+    @Autowired
+    private ProcessedADCPHeadRepository adcpHeadRepository;
 
     @GetMapping("/all")
     public List<LanderResponse> findAllLanders() {
@@ -56,6 +60,9 @@ public class LanderController {
              }
              if (lander.getAlbexHead() != null) {
                  res.createAlbexCTDHeadResponse(lander.getAlbexHead());
+             }
+             if (lander.getADCPHead() != null) {
+                 res.createADCPHeadResponse(lander.getADCPHead());
              }
 
              resList.add(res);
@@ -85,6 +92,9 @@ public class LanderController {
         }
         if (lander.get().getAlbexHead() != null) {
             res.createAlbexCTDHeadResponse(lander.get().getAlbexHead());
+        }
+        if (lander.get().getADCPHead() != null) {
+            res.createADCPHeadResponse(lander.get().getADCPHead());
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -170,6 +180,9 @@ public class LanderController {
         if (updates.getAlbexHead() != null) {
             selLander.setAlbexHead(updates.getAlbexHead());
         }
+        if (updates.getADCPHead() != null) {
+            selLander.setADCPHead(updates.getADCPHead());
+        }
 
         repository.save(selLander);
 
@@ -211,6 +224,14 @@ public class LanderController {
             repository.save(selLander);
             albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
             albexCTDHeadRepository.delete(albexCTDHead.get());
+        }
+
+        if (selLander.getADCPHead() != null) {
+            Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.findById(selLander.getADCPHead().getHeadID());
+            selLander.setADCPHead(null);
+            repository.save(selLander);
+            adcpDataRepository.deleteAll(adcpHead.get().getData());
+            adcpHeadRepository.delete(adcpHead.get());
         }
 
         repository.delete(selLander);

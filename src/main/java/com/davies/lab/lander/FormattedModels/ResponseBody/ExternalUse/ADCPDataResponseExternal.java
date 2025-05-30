@@ -1,12 +1,14 @@
-package com.davies.lab.lander.Models;
+package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import javax.persistence.*;
+import com.davies.lab.lander.Models.ProcessedADCPData;
+
+import javax.persistence.SecondaryTable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Entity
-public class ProcessedADCPData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ADCPDataResponseExternal {
     private Long ID;
     private LocalDateTime Date;
     private Double Battery;
@@ -56,119 +58,72 @@ public class ProcessedADCPData {
     private Double Dir17_9_0m;
     private Double Dir18_9_5m;
     private Double Dir19_10_0m;
-    private Double Dir20_10_5m;
-    @ManyToOne
-    @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
-    private ProcessedADCPHead HeadID;
+    private Long HeadID;
 
-    public ProcessedADCPData() {
+    public ADCPDataResponseExternal() {
     }
 
-    public ProcessedADCPData(LocalDateTime date, Double battery, Double heading, Double pitch, Double roll, Double pressure, Double temperature, Double analogIn1, Double analogIn2, Double speed1_1_0m, Double speed2_1_5m, Double speed3_2_0m, Double speed4_2_5m, Double speed5_3_0m, Double speed6_3_5m, Double speed7_4_0m, Double speed8_4_5m, Double speed9_5_0m, Double speed10_5_5m, Double speed11_6_0m, Double speed12_6_5m, Double speed13_7_0m, Double speed14_7_5m, Double speed15_8_0m, Double speed16_8_5m, Double speed17_9_0m, Double speed18_9_5m, Double speed19_10_0m, Double speed20_10_5m, Double dir1_1_0m, Double dir2_1_5m, Double dir3_2_0m, Double dir4_2_5m, Double dir5_3_0m, Double dir6_3_5m, Double dir7_4_0m, Double dir8_4_5m, Double dir9_5_0m, Double dir10_5_5m, Double dir11_6_0m, Double dir12_6_5m, Double dir13_7_0m, Double dir14_7_5m, Double dir15_8_0m, Double dir16_8_5m, Double dir17_9_0m, Double dir18_9_5m, Double dir19_10_0m, Double dir20_10_5m, ProcessedADCPHead headID) {
-        Date = date;
-        Battery = battery;
-        Heading = heading;
-        Pitch = pitch;
-        Roll = roll;
-        Pressure = pressure;
-        Temperature = temperature;
-        AnalogIn1 = analogIn1;
-        AnalogIn2 = analogIn2;
-        Speed1_1_0m = speed1_1_0m;
-        Speed2_1_5m = speed2_1_5m;
-        Speed3_2_0m = speed3_2_0m;
-        Speed4_2_5m = speed4_2_5m;
-        Speed5_3_0m = speed5_3_0m;
-        Speed6_3_5m = speed6_3_5m;
-        Speed7_4_0m = speed7_4_0m;
-        Speed8_4_5m = speed8_4_5m;
-        Speed9_5_0m = speed9_5_0m;
-        Speed10_5_5m = speed10_5_5m;
-        Speed11_6_0m = speed11_6_0m;
-        Speed12_6_5m = speed12_6_5m;
-        Speed13_7_0m = speed13_7_0m;
-        Speed14_7_5m = speed14_7_5m;
-        Speed15_8_0m = speed15_8_0m;
-        Speed16_8_5m = speed16_8_5m;
-        Speed17_9_0m = speed17_9_0m;
-        Speed18_9_5m = speed18_9_5m;
-        Speed19_10_0m = speed19_10_0m;
-        Speed20_10_5m = speed20_10_5m;
-        Dir1_1_0m = dir1_1_0m;
-        Dir2_1_5m = dir2_1_5m;
-        Dir3_2_0m = dir3_2_0m;
-        Dir4_2_5m = dir4_2_5m;
-        Dir5_3_0m = dir5_3_0m;
-        Dir6_3_5m = dir6_3_5m;
-        Dir7_4_0m = dir7_4_0m;
-        Dir8_4_5m = dir8_4_5m;
-        Dir9_5_0m = dir9_5_0m;
-        Dir10_5_5m = dir10_5_5m;
-        Dir11_6_0m = dir11_6_0m;
-        Dir12_6_5m = dir12_6_5m;
-        Dir13_7_0m = dir13_7_0m;
-        Dir14_7_5m = dir14_7_5m;
-        Dir15_8_0m = dir15_8_0m;
-        Dir16_8_5m = dir16_8_5m;
-        Dir17_9_0m = dir17_9_0m;
-        Dir18_9_5m = dir18_9_5m;
-        Dir19_10_0m = dir19_10_0m;
-        Dir20_10_5m = dir20_10_5m;
-        HeadID = headID;
+    public ADCPDataResponseExternal(ProcessedADCPData data) {
+        ID = data.getID();
+        Date = data.getDate();
+        Battery = data.getBattery();
+        Heading = data.getHeading();
+        Pitch = data.getPitch();
+        Roll = data.getRoll();
+        Pressure = data.getPressure();
+        Temperature = data.getTemperature();
+        AnalogIn1 = data.getAnalogIn1();
+        AnalogIn2 = data.getAnalogIn2();
+        Speed1_1_0m = data.getSpeed1_1_0m();
+        Speed2_1_5m = data.getSpeed2_1_5m();
+        Speed3_2_0m = data.getSpeed3_2_0m();
+        Speed4_2_5m = data.getSpeed4_2_5m();
+        Speed5_3_0m = data.getSpeed5_3_0m();
+        Speed6_3_5m = data.getSpeed6_3_5m();
+        Speed7_4_0m = data.getSpeed7_4_0m();
+        Speed8_4_5m = data.getSpeed8_4_5m();
+        Speed9_5_0m = data.getSpeed9_5_0m();
+        Speed10_5_5m = data.getSpeed10_5_5m();
+        Speed11_6_0m = data.getSpeed11_6_0m();
+        Speed12_6_5m = data.getSpeed12_6_5m();
+        Speed13_7_0m = data.getSpeed13_7_0m();
+        Speed14_7_5m = data.getSpeed14_7_5m();
+        Speed15_8_0m = data.getSpeed15_8_0m();
+        Speed16_8_5m = data.getSpeed16_8_5m();
+        Speed17_9_0m = data.getSpeed17_9_0m();
+        Speed18_9_5m = data.getSpeed18_9_5m();
+        Speed19_10_0m = data.getSpeed19_10_0m();
+        Speed20_10_5m = data.getSpeed20_10_5m();
+        Dir1_1_0m = data.getDir1_1_0m();
+        Dir2_1_5m = data.getDir2_1_5m();
+        Dir3_2_0m = data.getDir3_2_0m();
+        Dir4_2_5m = data.getDir4_2_5m();
+        Dir5_3_0m = data.getDir5_3_0m();
+        Dir6_3_5m = data.getDir6_3_5m();
+        Dir7_4_0m = data.getDir7_4_0m();
+        Dir8_4_5m = data.getDir8_4_5m();
+        Dir9_5_0m = data.getDir9_5_0m();
+        Dir10_5_5m = data.getDir10_5_5m();
+        Dir11_6_0m = data.getDir11_6_0m();
+        Dir12_6_5m = data.getDir12_6_5m();
+        Dir13_7_0m = data.getDir13_7_0m();
+        Dir14_7_5m = data.getDir14_7_5m();
+        Dir15_8_0m = data.getDir15_8_0m();
+        Dir16_8_5m = data.getDir16_8_5m();
+        Dir17_9_0m = data.getDir17_9_0m();
+        Dir18_9_5m = data.getDir18_9_5m();
+        Dir19_10_0m = data.getDir19_10_0m();
+        HeadID = data.getHeadID().getHeadID();
     }
 
-    public ProcessedADCPData(Long ID, LocalDateTime date, Double battery, Double heading, Double pitch, Double roll, Double pressure, Double temperature, Double analogIn1, Double analogIn2, Double speed1_1_0m, Double speed2_1_5m, Double speed3_2_0m, Double speed4_2_5m, Double speed5_3_0m, Double speed6_3_5m, Double speed7_4_0m, Double speed8_4_5m, Double speed9_5_0m, Double speed10_5_5m, Double speed11_6_0m, Double speed12_6_5m, Double speed13_7_0m, Double speed14_7_5m, Double speed15_8_0m, Double speed16_8_5m, Double speed17_9_0m, Double speed18_9_5m, Double speed19_10_0m, Double speed20_10_5m, Double dir1_1_0m, Double dir2_1_5m, Double dir3_2_0m, Double dir4_2_5m, Double dir5_3_0m, Double dir6_3_5m, Double dir7_4_0m, Double dir8_4_5m, Double dir9_5_0m, Double dir10_5_5m, Double dir11_6_0m, Double dir12_6_5m, Double dir13_7_0m, Double dir14_7_5m, Double dir15_8_0m, Double dir16_8_5m, Double dir17_9_0m, Double dir18_9_5m, Double dir19_10_0m, Double dir20_10_5m, ProcessedADCPHead headID) {
-        this.ID = ID;
-        Date = date;
-        Battery = battery;
-        Heading = heading;
-        Pitch = pitch;
-        Roll = roll;
-        Pressure = pressure;
-        Temperature = temperature;
-        AnalogIn1 = analogIn1;
-        AnalogIn2 = analogIn2;
-        Speed1_1_0m = speed1_1_0m;
-        Speed2_1_5m = speed2_1_5m;
-        Speed3_2_0m = speed3_2_0m;
-        Speed4_2_5m = speed4_2_5m;
-        Speed5_3_0m = speed5_3_0m;
-        Speed6_3_5m = speed6_3_5m;
-        Speed7_4_0m = speed7_4_0m;
-        Speed8_4_5m = speed8_4_5m;
-        Speed9_5_0m = speed9_5_0m;
-        Speed10_5_5m = speed10_5_5m;
-        Speed11_6_0m = speed11_6_0m;
-        Speed12_6_5m = speed12_6_5m;
-        Speed13_7_0m = speed13_7_0m;
-        Speed14_7_5m = speed14_7_5m;
-        Speed15_8_0m = speed15_8_0m;
-        Speed16_8_5m = speed16_8_5m;
-        Speed17_9_0m = speed17_9_0m;
-        Speed18_9_5m = speed18_9_5m;
-        Speed19_10_0m = speed19_10_0m;
-        Speed20_10_5m = speed20_10_5m;
-        Dir1_1_0m = dir1_1_0m;
-        Dir2_1_5m = dir2_1_5m;
-        Dir3_2_0m = dir3_2_0m;
-        Dir4_2_5m = dir4_2_5m;
-        Dir5_3_0m = dir5_3_0m;
-        Dir6_3_5m = dir6_3_5m;
-        Dir7_4_0m = dir7_4_0m;
-        Dir8_4_5m = dir8_4_5m;
-        Dir9_5_0m = dir9_5_0m;
-        Dir10_5_5m = dir10_5_5m;
-        Dir11_6_0m = dir11_6_0m;
-        Dir12_6_5m = dir12_6_5m;
-        Dir13_7_0m = dir13_7_0m;
-        Dir14_7_5m = dir14_7_5m;
-        Dir15_8_0m = dir15_8_0m;
-        Dir16_8_5m = dir16_8_5m;
-        Dir17_9_0m = dir17_9_0m;
-        Dir18_9_5m = dir18_9_5m;
-        Dir19_10_0m = dir19_10_0m;
-        Dir20_10_5m = dir20_10_5m;
-        HeadID = headID;
+    public static Set<ADCPDataResponseExternal> createBulkResponses(List<ProcessedADCPData> headData) {
+        Set<ADCPDataResponseExternal> newSet = new HashSet<>();
+
+        for (ProcessedADCPData data : headData) {
+            newSet.add(new ADCPDataResponseExternal(data));
+        }
+
+        return newSet;
     }
 
     public Long getID() {
@@ -563,19 +518,11 @@ public class ProcessedADCPData {
         Dir19_10_0m = dir19_10_0m;
     }
 
-    public Double getDir20_10_5m() {
-        return Dir20_10_5m;
-    }
-
-    public void setDir20_10_5m(Double dir20_10_5m) {
-        Dir20_10_5m = dir20_10_5m;
-    }
-
-    public ProcessedADCPHead getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(ProcessedADCPHead headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

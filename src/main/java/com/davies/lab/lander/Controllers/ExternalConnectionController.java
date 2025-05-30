@@ -35,6 +35,10 @@ public class ExternalConnectionController {
     private ProcessedAlbexCTDHeaderRepository albexHeaderRepository;
     @Autowired
     private ProcessedAlbexCTDDataRepository albexDataRepository;
+    @Autowired
+    private ProcessedADCPHeadRepository adcpHeadRepository;
+    @Autowired
+    private ProcessedADCPDataRepository adcpDataRepository;
 
     //GET Lander without sensors
     @GetMapping("/basic_lander/id/{id}")
@@ -114,6 +118,20 @@ public class ExternalConnectionController {
             newAlbexHead.setData(albexDataSet);
 
             selLander.setAlbexHead(newAlbexHead);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+
+        try {
+            ProcessedADCPHead adcpHead = adcpHeadRepository.getADCPHeadByLanderId(selLander.getASDBLanderID());
+
+            ADCPHeadResponseExternal newADCPHead = new ADCPHeadResponseExternal(adcpHead);
+
+            Set<ADCPDataResponseExternal> adcpDataSet = ADCPDataResponseExternal.createBulkResponses(adcpDataRepository.findDataByHeadId(adcpHead.getHeadID()));
+
+            newADCPHead.setData(adcpDataSet);
+
+            selLander.setAdcpHead(newADCPHead);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
@@ -203,6 +221,26 @@ public class ExternalConnectionController {
 
         for (ProcessedAlbexCTDData data : selHead.getData()) {
             newDataSet.add(new ALBEXCTDDataResponseExternal(data));
+        }
+
+        newHead.setData(newDataSet);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
+    @GetMapping("/lander/id/{id}/adcp")
+    public ResponseEntity<ADCPHeadResponseExternal> getAdcpByLanderId(@PathVariable("id") String id) {
+        ProcessedADCPHead selHead = adcpHeadRepository.getADCPHeadByLanderId(id);
+
+        if (selHead == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        ADCPHeadResponseExternal newHead = new ADCPHeadResponseExternal(selHead);
+        Set<ADCPDataResponseExternal> newDataSet = new HashSet<>();
+
+        for (ProcessedADCPData data : selHead.getData()) {
+            newDataSet.add(new ADCPDataResponseExternal(data));
         }
 
         newHead.setData(newDataSet);

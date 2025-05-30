@@ -12,6 +12,7 @@ public class LanderResponse {
     private DOHeadResponse DOHead;
     private FLNTUHeadResponse FLNTUHead;
     private AlbexCTDHeadResponse AlbexCTDHead;
+    private ADCPHeadResponse ADCPHead;
 
     public LanderResponse(String ASDBLanderID, String landerPlatform, String ADDBROVDiveID) {
         this.ASDBLanderID = ASDBLanderID;
@@ -33,6 +34,10 @@ public class LanderResponse {
 
     public void createAlbexCTDHeadResponse(ProcessedAlbexCTDHeader head) {
         AlbexCTDHead = new AlbexCTDHeadResponse(head.getHeadID());
+    }
+
+    public void createADCPHeadResponse(ProcessedADCPHead head) {
+        ADCPHead = new ADCPHeadResponse(head.getHeadID());
     }
 
     public String getASDBLanderID() {
@@ -278,6 +283,25 @@ public class LanderResponse {
         }
 
         public AlbexCTDHeadResponse(Long headID) {
+            HeadID = headID;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
+        }
+    }
+
+    private class ADCPHeadResponse {
+        private Long HeadID;
+
+        public ADCPHeadResponse() {
+        }
+
+        public ADCPHeadResponse(Long headID) {
             HeadID = headID;
         }
 

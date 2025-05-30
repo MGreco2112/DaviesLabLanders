@@ -226,6 +226,8 @@ public class ProcessedAlbexCTDController {
 
         double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
 
+        hoursBetween *= (60.0 / burstTime);
+
         hoursBetween *= burstCount;
 
         return new ResponseEntity<>(new TotalDataResponse((int) hoursBetween), HttpStatus.OK);

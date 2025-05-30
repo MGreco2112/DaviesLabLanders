@@ -11,6 +11,7 @@ public class LanderResponseExternal extends BasicLanderResponseExternal{
     private DOHeadResponseExternal doHead;
     private FLNTUHeadResponseExternal flntuHead;
     private ALBEXCTDHeadResponseExternal albexHead;
+    private ADCPHeadResponseExternal adcpHead;
 
 
     public LanderResponseExternal (Lander lander) {
@@ -47,5 +48,13 @@ public class LanderResponseExternal extends BasicLanderResponseExternal{
 
     public void setAlbexHead(ALBEXCTDHeadResponseExternal albexHead) {
         this.albexHead = albexHead;
+    }
+
+    public ADCPHeadResponseExternal getAdcpHead() {
+        return adcpHead;
+    }
+
+    public void setAdcpHead(ADCPHeadResponseExternal adcpHead) {
+        this.adcpHead = adcpHead;
     }
 }

@@ -1,9 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
-import com.davies.lab.lander.Models.ProcessedCTDHead;
-import com.davies.lab.lander.Models.ProcessedDOHead;
-import com.davies.lab.lander.Models.ProcessedFLNTUHead;
+import com.davies.lab.lander.Models.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -17,11 +14,12 @@ public class UpdateLanderRequest {
     private ProcessedDOHead DOHead;
     private ProcessedFLNTUHead FLNTUHead;
     private ProcessedAlbexCTDHeader AlbexHead;
+    private ProcessedADCPHead ADCPHead;
 
     public UpdateLanderRequest() {
     }
 
-    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, ProcessedCTDHead CTDHead, ProcessedDOHead DOHead, ProcessedFLNTUHead FLNTUHead, ProcessedAlbexCTDHeader albexHead) {
+    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, ProcessedCTDHead CTDHead, ProcessedDOHead DOHead, ProcessedFLNTUHead FLNTUHead, ProcessedAlbexCTDHeader albexHead, ProcessedADCPHead ADCPHead) {
         LanderPlatform = landerPlatform;
         this.ASDBROBDiveID = ASDBROBDiveID;
         this.deploymentDateAndTime = deploymentDateAndTime;
@@ -30,6 +28,7 @@ public class UpdateLanderRequest {
         this.DOHead = DOHead;
         this.FLNTUHead = FLNTUHead;
         AlbexHead = albexHead;
+        ADCPHead = ADCPHead;
     }
 
     public String getLanderPlatform() {
@@ -94,5 +93,13 @@ public class UpdateLanderRequest {
 
     public void setAlbexHead(ProcessedAlbexCTDHeader albexHead) {
         AlbexHead = albexHead;
+    }
+
+    public ProcessedADCPHead getADCPHead() {
+        return ADCPHead;
+    }
+
+    public void setADCPHead(ProcessedADCPHead ADCPHead) {
+        this.ADCPHead = ADCPHead;
     }
 }
