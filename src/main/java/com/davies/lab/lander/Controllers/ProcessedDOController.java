@@ -419,7 +419,6 @@ public class ProcessedDOController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {
             String temp = "";
             List<String> output = new ArrayList<>();
-            List<String> keyNames = new ArrayList<>();
             Map<String, String> valuesMap = new HashMap<>();
 
             while (!Objects.equals(temp, "[Item]")) {
@@ -432,38 +431,37 @@ public class ProcessedDOController {
 
             for (String datapoint : output) {
                 String[] hold = datapoint.split("=");
-                keyNames.add(hold[0]);
 
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
             UpdateDOHeaderRequest updates = new UpdateDOHeaderRequest(
-                    valuesMap.get(keyNames.get(0)),
-                    valuesMap.get(keyNames.get(1)),
-                    valuesMap.get(keyNames.get(2)),
-                    Integer.parseInt(valuesMap.get(keyNames.get(3))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(4))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(5))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(6))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(7))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(8))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(9))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(10))),
-                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(11))),
-                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
-                    Double.parseDouble(valuesMap.get(keyNames.get(13))),
-                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(14))),
-                    Double.parseDouble(valuesMap.get(keyNames.get(15)).split(",")[0]),
-                    Double.parseDouble(valuesMap.get(keyNames.get(16)).split(",")[0]),
-                    Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
-                    Integer.parseInt(valuesMap.get(keyNames.get(18))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(19))),
-                    valuesMap.get(keyNames.get(20)),
-                    valuesMap.get(keyNames.get(21)),
-                    Integer.parseInt(valuesMap.get(keyNames.get(22))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(23))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(24))),
-                    valuesMap.get(keyNames.get(25)),
+                    valuesMap.get("SondeName"),
+                    valuesMap.get("SondeNo"),
+                    valuesMap.get("SensorType"),
+                    Integer.parseInt(valuesMap.get("Channel")),
+                    Integer.parseInt(valuesMap.get("DelayTime")),
+                    Integer.parseInt(valuesMap.get("PreHeat")),
+                    Integer.parseInt(valuesMap.get("MeasMode")),
+                    Integer.parseInt(valuesMap.get("BurstTime")),
+                    Integer.parseInt(valuesMap.get("BurstCnt")),
+                    Integer.parseInt(valuesMap.get("Interval")),
+                    Integer.parseInt(valuesMap.get("SampleCnt")),
+                    StringFormatting.formatDateString(valuesMap.get("StartTime")),
+                    StringFormatting.formatDateString(valuesMap.get("EndTime")),
+                    Double.parseDouble(valuesMap.get("DepAdjRho")),
+                    StringFormatting.formatCoefDateString(valuesMap.get("CoefDate")),
+                    Double.parseDouble(valuesMap.get("Ch1").split(",")[0]),
+                    Double.parseDouble(valuesMap.get("Ch2").split(",")[0]),
+                    Double.parseDouble(valuesMap.get("Ch3").split(",")[0]),
+                    Integer.parseInt(valuesMap.get("BuzzerEN")),
+                    Integer.parseInt(valuesMap.get("BuzzerInterval")),
+                    valuesMap.get("COMMENT"),
+                    valuesMap.get("SensorType2"),
+                    Integer.parseInt(valuesMap.get("BuzzerNumber")),
+                    Integer.parseInt(valuesMap.get("DepM")),
+                    Integer.parseInt(valuesMap.get("SetSal")),
+                    valuesMap.get("FilmNo"),
                     selLander.get(),
                     selLander.get().getDOHead().getData()
             );
@@ -493,7 +491,6 @@ public class ProcessedDOController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             String temp = "";
             List<String> output = new ArrayList<>();
-            List<String> keyNames = new ArrayList<>();
             Map<String, String> valuesMap = new HashMap<>();
 
             while (!Objects.equals(temp, "[Item]")) {
@@ -506,38 +503,37 @@ public class ProcessedDOController {
 
             for (String datapoint : output) {
                 String[] hold = datapoint.split("=");
-                keyNames.add(hold[0]);
 
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
             ProcessedDOHead doHead = new ProcessedDOHead(
-                    valuesMap.get(keyNames.get(0)),
-                    valuesMap.get(keyNames.get(1)),
-                    valuesMap.get(keyNames.get(2)),
-                    Integer.parseInt(valuesMap.get(keyNames.get(3))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(4))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(5))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(6))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(7))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(8))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(9))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(10))),
-                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(11))),
-                    StringFormatting.formatDateString(valuesMap.get(keyNames.get(12))),
-                    Double.parseDouble(valuesMap.get(keyNames.get(13))),
-                    StringFormatting.formatCoefDateString(valuesMap.get(keyNames.get(14))),
-                    Double.parseDouble(valuesMap.get(keyNames.get(15)).split(",")[0]),
-                    Double.parseDouble(valuesMap.get(keyNames.get(16)).split(",")[0]),
-                    Double.parseDouble(valuesMap.get(keyNames.get(17)).split(",")[0]),
-                    Integer.parseInt(valuesMap.get(keyNames.get(18))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(19))),
-                    valuesMap.get(keyNames.get(20)),
-                    valuesMap.get(keyNames.get(21)),
-                    Integer.parseInt(valuesMap.get(keyNames.get(22))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(23))),
-                    Integer.parseInt(valuesMap.get(keyNames.get(24))),
-                    valuesMap.get(keyNames.get(25)),
+                    valuesMap.get("SondeName"),
+                    valuesMap.get("SondeNo"),
+                    valuesMap.get("SensorType"),
+                    Integer.parseInt(valuesMap.get("Channel")),
+                    Integer.parseInt(valuesMap.get("DelayTime")),
+                    Integer.parseInt(valuesMap.get("PreHeat")),
+                    Integer.parseInt(valuesMap.get("MeasMode")),
+                    Integer.parseInt(valuesMap.get("BurstTime")),
+                    Integer.parseInt(valuesMap.get("BurstCnt")),
+                    Integer.parseInt(valuesMap.get("Interval")),
+                    Integer.parseInt(valuesMap.get("SampleCnt")),
+                    StringFormatting.formatDateString(valuesMap.get("StartTime")),
+                    StringFormatting.formatDateString(valuesMap.get("EndTime")),
+                    Double.parseDouble(valuesMap.get("DepAdjRho")),
+                    StringFormatting.formatCoefDateString(valuesMap.get("CoefDate")),
+                    Double.parseDouble(valuesMap.get("Ch1").split(",")[0]),
+                    Double.parseDouble(valuesMap.get("Ch2").split(",")[0]),
+                    Double.parseDouble(valuesMap.get("Ch3").split(",")[0]),
+                    Integer.parseInt(valuesMap.get("BuzzerEN")),
+                    Integer.parseInt(valuesMap.get("BuzzerInterval")),
+                    valuesMap.get("COMMENT"),
+                    valuesMap.get("SensorType2"),
+                    Integer.parseInt(valuesMap.get("BuzzerNumber")),
+                    Integer.parseInt(valuesMap.get("DepM")),
+                    Integer.parseInt(valuesMap.get("SetSal")),
+                    valuesMap.get("FilmNo"),
                     lander
             );
 

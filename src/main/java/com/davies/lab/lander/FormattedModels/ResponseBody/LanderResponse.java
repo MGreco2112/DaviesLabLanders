@@ -96,6 +96,14 @@ public class LanderResponse {
         AlbexCTDHead = albexCTDHead;
     }
 
+    public ADCPHeadResponse getADCPHead() {
+        return ADCPHead;
+    }
+
+    public void setADCPHead(ADCPHeadResponse ADCPHead) {
+        this.ADCPHead = ADCPHead;
+    }
+
     private class CTDHeadResponse {
         private Long HeadID;
         private Integer burstTime;
