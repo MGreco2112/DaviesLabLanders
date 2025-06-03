@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProcessedAlbexCTDHeaderRepository extends JpaRepository<ProcessedAlbexCTDHeader, Long> {
     @Query(value = "SELECT * FROM processed_albexctdheader WHERE lander_id = :id", nativeQuery = true)
-    ProcessedAlbexCTDHeader getAlbexHeadsByLanderId(@Param("id") String id);
+    Optional<ProcessedAlbexCTDHeader> getAlbexHeadsByLanderId(@Param("id") String id);
 }

@@ -63,77 +63,70 @@ public class ExternalConnectionController {
         LanderResponseExternal selLander = new LanderResponseExternal(lander);
 
         //get, create, and place CTDData
-        try {
-            ProcessedCTDHead ctdHead = ctdHeadRepository.getCTDHeadsByLanderId(selLander.getASDBLanderID());
+        Optional<ProcessedCTDHead> ctdHead = ctdHeadRepository.getCTDHeadsByLanderId(selLander.getASDBLanderID());
 
-            CTDHeadResponseExternal newCtdHead = new CTDHeadResponseExternal(ctdHead);
+        if (ctdHead.isPresent()) {
+            CTDHeadResponseExternal newCtdHead = new CTDHeadResponseExternal(ctdHead.get());
 
-            Set<CTDDataResponseExternal> ctdDataSet = CTDDataResponseExternal.createBulkResponses(ctdDataRepository.findDataByHeadId(ctdHead.getHeadID()));
+            Set<CTDDataResponseExternal> ctdDataSet = CTDDataResponseExternal.createBulkResponses(ctdDataRepository.findDataByHeadId(ctdHead.get().getHeadID()));
 
             newCtdHead.setData(ctdDataSet);
 
             selLander.setCtdHead(newCtdHead);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
         }
 
+
         //get, create, and place DOData
-        try {
-            ProcessedDOHead doHead = doHeadRepository.getDOHeadsByLanderID(selLander.getASDBLanderID());
+        Optional<ProcessedDOHead> doHead = doHeadRepository.getDOHeadsByLanderID(selLander.getASDBLanderID());
 
-            DOHeadResponseExternal newDoHead = new DOHeadResponseExternal(doHead);
+        if (doHead.isPresent()) {
+            DOHeadResponseExternal newDoHead = new DOHeadResponseExternal(doHead.get());
 
-            Set<DODataResponseExternal> doDataSet = DODataResponseExternal.createDataResponses(doDataRepository.findDoDataByHeadId(doHead.getHeadID()));
+            Set<DODataResponseExternal> doDataSet = DODataResponseExternal.createDataResponses(doDataRepository.findDoDataByHeadId(doHead.get().getHeadID()));
 
             newDoHead.setData(doDataSet);
 
             selLander.setDoHead(newDoHead);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
         }
 
         //get, create and place FLNTUData
-        try {
-            ProcessedFLNTUHead flntuHead = flntuHeadRepository.getFLNTUHeadsByLanderID(selLander.getASDBLanderID());
+        Optional<ProcessedFLNTUHead> flntuHead = flntuHeadRepository.getFLNTUHeadsByLanderID(selLander.getASDBLanderID());
 
-            FLNTUHeadResponseExternal newFlntuHead = new FLNTUHeadResponseExternal(flntuHead);
+        if (flntuHead.isPresent()) {
+            FLNTUHeadResponseExternal newFlntuHead = new FLNTUHeadResponseExternal(flntuHead.get());
 
-            Set<FLNTUDataResponseExternal> flntuDataSet = FLNTUDataResponseExternal.createDataResponse(flntuDataRepository.findDataFromHeadId(flntuHead.getHeadID()));
+            Set<FLNTUDataResponseExternal> flntuDataSet = FLNTUDataResponseExternal.createDataResponse(flntuDataRepository.findDataFromHeadId(flntuHead.get().getHeadID()));
 
             newFlntuHead.setData(flntuDataSet);
 
             selLander.setFlntuHead(newFlntuHead);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
         }
 
+
         //get, create and place ALBEXData
-        try {
-            ProcessedAlbexCTDHeader albexHead = albexHeaderRepository.getAlbexHeadsByLanderId(selLander.getASDBLanderID());
+        Optional<ProcessedAlbexCTDHeader> albexHead = albexHeaderRepository.getAlbexHeadsByLanderId(selLander.getASDBLanderID());
 
-            ALBEXCTDHeadResponseExternal newAlbexHead = new ALBEXCTDHeadResponseExternal(albexHead);
+        if (albexHead.isPresent()) {
+            ALBEXCTDHeadResponseExternal newAlbexHead = new ALBEXCTDHeadResponseExternal(albexHead.get());
 
-            Set<ALBEXCTDDataResponseExternal> albexDataSet = ALBEXCTDDataResponseExternal.createBulkResponses(albexDataRepository.findDataByHeadId(albexHead.getHeadID()));
+            Set<ALBEXCTDDataResponseExternal> albexDataSet = ALBEXCTDDataResponseExternal.createBulkResponses(albexDataRepository.findDataByHeadId(albexHead.get().getHeadID()));
 
             newAlbexHead.setData(albexDataSet);
 
             selLander.setAlbexHead(newAlbexHead);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
         }
 
-        try {
-            ProcessedADCPHead adcpHead = adcpHeadRepository.getADCPHeadByLanderId(selLander.getASDBLanderID());
 
-            ADCPHeadResponseExternal newADCPHead = new ADCPHeadResponseExternal(adcpHead);
+        Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.getADCPHeadByLanderId(selLander.getASDBLanderID());
 
-            Set<ADCPDataResponseExternal> adcpDataSet = ADCPDataResponseExternal.createBulkResponses(adcpDataRepository.findDataByHeadId(adcpHead.getHeadID()));
+        if (adcpHead.isPresent()) {
+            ADCPHeadResponseExternal newADCPHead = new ADCPHeadResponseExternal(adcpHead.get());
+
+            Set<ADCPDataResponseExternal> adcpDataSet = ADCPDataResponseExternal.createBulkResponses(adcpDataRepository.findDataByHeadId(adcpHead.get().getHeadID()));
 
             newADCPHead.setData(adcpDataSet);
 
             selLander.setAdcpHead(newADCPHead);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
         }
 
         return new ResponseEntity<>(selLander, HttpStatus.OK);
@@ -142,16 +135,16 @@ public class ExternalConnectionController {
     //GET Lander CTD
     @GetMapping("/lander/id/{id}/ctd")
     public ResponseEntity<CTDHeadResponseExternal> getCTDByLanderID(@PathVariable("id") String landerID) {
-        ProcessedCTDHead selHead = ctdHeadRepository.getCTDHeadsByLanderId(landerID);
+        Optional<ProcessedCTDHead> selHead = ctdHeadRepository.getCTDHeadsByLanderId(landerID);
 
-        if (selHead == null) {
+        if (selHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        CTDHeadResponseExternal newHead = new CTDHeadResponseExternal(selHead);
+        CTDHeadResponseExternal newHead = new CTDHeadResponseExternal(selHead.get());
         Set<CTDDataResponseExternal> newDataSet = new HashSet<>();
 
-        for (ProcessedCTDData selData : selHead.getData()) {
+        for (ProcessedCTDData selData : selHead.get().getData()) {
             newDataSet.add(
                     new CTDDataResponseExternal(selData)
             );
@@ -165,16 +158,16 @@ public class ExternalConnectionController {
     //GET Lander DO
     @GetMapping("/lander/id/{id}/do")
     public ResponseEntity<DOHeadResponseExternal> getDOByLanderID(@PathVariable("id") String landerID) {
-        ProcessedDOHead selHead = doHeadRepository.getDOHeadsByLanderID(landerID);
+        Optional<ProcessedDOHead> selHead = doHeadRepository.getDOHeadsByLanderID(landerID);
 
-        if (selHead == null) {
+        if (selHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        DOHeadResponseExternal newHead = new DOHeadResponseExternal(selHead);
+        DOHeadResponseExternal newHead = new DOHeadResponseExternal(selHead.get());
         Set<DODataResponseExternal> newDataSet = new HashSet<>();
 
-        for (ProcessedDOData selData : selHead.getData()) {
+        for (ProcessedDOData selData : selHead.get().getData()) {
             newDataSet.add(
                     new DODataResponseExternal(selData)
             );
@@ -188,16 +181,16 @@ public class ExternalConnectionController {
     //GET Lander FLNTU
     @GetMapping("/lander/id/{id}/flntu")
     public ResponseEntity<FLNTUHeadResponseExternal> getFLNTUByLanderID(@PathVariable("id") String landerID) {
-        ProcessedFLNTUHead selHead = flntuHeadRepository.getFLNTUHeadsByLanderID(landerID);
+        Optional<ProcessedFLNTUHead> selHead = flntuHeadRepository.getFLNTUHeadsByLanderID(landerID);
 
-        if (selHead == null) {
+        if (selHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        FLNTUHeadResponseExternal newHead = new FLNTUHeadResponseExternal(selHead);
+        FLNTUHeadResponseExternal newHead = new FLNTUHeadResponseExternal(selHead.get());
         Set<FLNTUDataResponseExternal> newDataSet = new HashSet<>();
 
-        for (ProcessedFLNTUData selData : selHead.getData()) {
+        for (ProcessedFLNTUData selData : selHead.get().getData()) {
             newDataSet.add(
                     new FLNTUDataResponseExternal(selData)
             );
@@ -210,16 +203,16 @@ public class ExternalConnectionController {
 
     @GetMapping("/lander/id/{id}/albex_ctd")
     public ResponseEntity<ALBEXCTDHeadResponseExternal> getAlbexByLanderId(@PathVariable("id") String id) {
-        ProcessedAlbexCTDHeader selHead = albexHeaderRepository.getAlbexHeadsByLanderId(id);
+        Optional<ProcessedAlbexCTDHeader> selHead = albexHeaderRepository.getAlbexHeadsByLanderId(id);
 
-        if (selHead == null) {
+        if (selHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        ALBEXCTDHeadResponseExternal newHead = new ALBEXCTDHeadResponseExternal(selHead);
+        ALBEXCTDHeadResponseExternal newHead = new ALBEXCTDHeadResponseExternal(selHead.get());
         Set<ALBEXCTDDataResponseExternal> newDataSet = new HashSet<>();
 
-        for (ProcessedAlbexCTDData data : selHead.getData()) {
+        for (ProcessedAlbexCTDData data : selHead.get().getData()) {
             newDataSet.add(new ALBEXCTDDataResponseExternal(data));
         }
 
@@ -230,16 +223,16 @@ public class ExternalConnectionController {
 
     @GetMapping("/lander/id/{id}/adcp")
     public ResponseEntity<ADCPHeadResponseExternal> getAdcpByLanderId(@PathVariable("id") String id) {
-        ProcessedADCPHead selHead = adcpHeadRepository.getADCPHeadByLanderId(id);
+        Optional<ProcessedADCPHead> selHead = adcpHeadRepository.getADCPHeadByLanderId(id);
 
-        if (selHead == null) {
+        if (selHead.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        ADCPHeadResponseExternal newHead = new ADCPHeadResponseExternal(selHead);
+        ADCPHeadResponseExternal newHead = new ADCPHeadResponseExternal(selHead.get());
         Set<ADCPDataResponseExternal> newDataSet = new HashSet<>();
 
-        for (ProcessedADCPData data : selHead.getData()) {
+        for (ProcessedADCPData data : selHead.get().getData()) {
             newDataSet.add(new ADCPDataResponseExternal(data));
         }
 

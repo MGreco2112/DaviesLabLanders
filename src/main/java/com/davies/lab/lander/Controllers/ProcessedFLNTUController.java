@@ -487,7 +487,6 @@ public class ProcessedFLNTUController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             String temp = "";
             List<String> output = new ArrayList<>();
-            List<String> keyNames = new ArrayList<>();
             Map<String, String> valuesMap = new HashMap<>();
 
             while (!Objects.equals(temp, "[Item]")) {
@@ -499,7 +498,6 @@ public class ProcessedFLNTUController {
 
             for (String datapoint : output) {
                 String[] hold = datapoint.split("=");
-                keyNames.add(hold[0]);
 
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
@@ -553,9 +551,8 @@ public class ProcessedFLNTUController {
                         newHead
                 );
 
-                ProcessedFLNTUData printData = repository.save(newData);
+                repository.save(newData);
 
-                System.out.println(printData.getDate());
             }
 
             return new ResponseEntity<>("Success", HttpStatus.OK);

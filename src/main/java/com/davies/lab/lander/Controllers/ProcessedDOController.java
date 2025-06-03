@@ -389,6 +389,7 @@ public class ProcessedDOController {
                 ));
             }
         } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 

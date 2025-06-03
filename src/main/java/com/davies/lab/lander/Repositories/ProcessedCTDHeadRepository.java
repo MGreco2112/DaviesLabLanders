@@ -7,9 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProcessedCTDHeadRepository extends JpaRepository<ProcessedCTDHead, Long> {
     @Query(value = "SELECT * FROM processedctdhead WHERE lander_id = :id", nativeQuery = true)
-    ProcessedCTDHead getCTDHeadsByLanderId(@Param("id") String id);
+    Optional<ProcessedCTDHead> getCTDHeadsByLanderId(@Param("id") String id);
 }
