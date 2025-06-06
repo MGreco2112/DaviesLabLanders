@@ -10,6 +10,8 @@ public class ADCPHeadResponse {
     private Long HeadID;
     private String LanderID;
     private Integer dataPointCount;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Set<ADCPDataResponse> data = new HashSet<>();
 
     public ADCPHeadResponse(Long headID, String landerID) {
@@ -44,6 +46,22 @@ public class ADCPHeadResponse {
 
     public void setDataPointCount(Integer dataPointCount) {
         this.dataPointCount = dataPointCount;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public Set<ADCPDataResponse> getData() {

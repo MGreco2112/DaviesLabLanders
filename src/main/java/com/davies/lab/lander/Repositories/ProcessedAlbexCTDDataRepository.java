@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -16,11 +17,11 @@ public interface ProcessedAlbexCTDDataRepository extends JpaRepository<Processed
     @Query(value = "SELECT * FROM processed_albexctddata WHERE head_id = :id AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
     List<ProcessedAlbexCTDData> findDataByHeadAndDateRange(@Param("id") Long id, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    @Query(value = "SELECT * FROM processed_albexctddata WHERE head_id = :id LIMIT 1", nativeQuery = true)
-    ProcessedAlbexCTDData findFirstDataPointInHead(@Param("id") Long id);
+    @Query(value = "SELECT Date FROM processed_albexctddata WHERE head_id = :id LIMIT 1", nativeQuery = true)
+    LocalDateTime findDeploymentDateByHeadID(@Param("id") Long id);
 
-    @Query(value = "SELECT * FROM processed_albexctddata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    ProcessedAlbexCTDData findLastDataPointInHeader(@Param("id") Long id);
+    @Query(value = "SELECT Date FROM processed_albexctddata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    LocalDateTime findRecoveryDateByHeadID(@Param("id") Long id);
 
     @Query(value = "SELECT COUNT(*) FROM processed_albexctddata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);

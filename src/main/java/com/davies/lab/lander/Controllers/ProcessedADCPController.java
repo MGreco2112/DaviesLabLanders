@@ -75,6 +75,9 @@ public class ProcessedADCPController {
 
         res.setDataPointCount(head.get().getData().size());
 
+        res.setStartTime(repository.findDeploymentDateByHeadID(id));
+        res.setEndTime(repository.findRecoveryDateByHeadID(id));
+
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

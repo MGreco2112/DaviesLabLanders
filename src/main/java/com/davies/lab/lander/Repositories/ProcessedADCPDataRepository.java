@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,10 @@ public interface ProcessedADCPDataRepository extends JpaRepository<ProcessedADCP
 
     @Query(value = "SELECT COUNT(*) FROM processedadcpdata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT Date FROM processedadcpdata WHERE head_id = :id LIMIT 1", nativeQuery = true)
+    LocalDateTime findDeploymentDateByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT Date FROM processedadcpdata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    LocalDateTime findRecoveryDateByHeadID(@Param("id") Long id);
 }
