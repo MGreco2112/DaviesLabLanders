@@ -32,12 +32,16 @@ public class LanderResponse {
         FLNTUHead = new FLNTUHeadResponse(head.getHeadID(), head.getBurstTime(), head.getBurstCnt(), head.getStartTime(), head.getEndTime());
     }
 
-    public void createAlbexCTDHeadResponse(ProcessedAlbexCTDHeader head) {
+    public void createAlbexCTDHeadResponse(ProcessedAlbexCTDHeader head, LocalDateTime startTime, LocalDateTime endTime) {
         AlbexCTDHead = new AlbexCTDHeadResponse(head.getHeadID());
+        getAlbexCTDHead().setStartTime(startTime);
+        getAlbexCTDHead().setEndTime(endTime);
     }
 
-    public void createADCPHeadResponse(ProcessedADCPHead head) {
+    public void createADCPHeadResponse(ProcessedADCPHead head, LocalDateTime startTime, LocalDateTime endTime) {
         ADCPHead = new ADCPHeadResponse(head.getHeadID());
+        getADCPHead().setStartTime(startTime);
+        getADCPHead().setEndTime(endTime);
     }
 
     public String getASDBLanderID() {
@@ -286,6 +290,8 @@ public class LanderResponse {
 
     private class AlbexCTDHeadResponse {
         private Long HeadID;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
 
         public AlbexCTDHeadResponse() {
         }
@@ -301,10 +307,28 @@ public class LanderResponse {
         public void setHeadID(Long headID) {
             HeadID = headID;
         }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalDateTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalDateTime endTime) {
+            this.endTime = endTime;
+        }
     }
 
     private class ADCPHeadResponse {
         private Long HeadID;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
 
         public ADCPHeadResponse() {
         }
@@ -319,6 +343,22 @@ public class LanderResponse {
 
         public void setHeadID(Long headID) {
             HeadID = headID;
+        }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalDateTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalDateTime endTime) {
+            this.endTime = endTime;
         }
     }
 

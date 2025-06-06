@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @CrossOrigin
@@ -59,10 +60,14 @@ public class LanderController {
                  res.createFLNTUHeadResponse(lander.getFLNTUHead());
              }
              if (lander.getAlbexHead() != null) {
-                 res.createAlbexCTDHeadResponse(lander.getAlbexHead());
+                 LocalDateTime startTime = albexCTDDataRepository.findDeploymentDateByHeadID(lander.getAlbexHead().getHeadID());
+                 LocalDateTime endTime = albexCTDDataRepository.findRecoveryDateByHeadID(lander.getAlbexHead().getHeadID());
+                 res.createAlbexCTDHeadResponse(lander.getAlbexHead(), startTime, endTime);
              }
              if (lander.getADCPHead() != null) {
-                 res.createADCPHeadResponse(lander.getADCPHead());
+                 LocalDateTime startTime = adcpDataRepository.findDeploymentDateByHeadID(lander.getADCPHead().getHeadID());
+                 LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.getADCPHead().getHeadID());
+                 res.createADCPHeadResponse(lander.getADCPHead(), startTime, endTime);
              }
 
              resList.add(res);
@@ -91,10 +96,14 @@ public class LanderController {
             res.createFLNTUHeadResponse(lander.get().getFLNTUHead());
         }
         if (lander.get().getAlbexHead() != null) {
-            res.createAlbexCTDHeadResponse(lander.get().getAlbexHead());
+            LocalDateTime startTime = albexCTDDataRepository.findDeploymentDateByHeadID(lander.get().getAlbexHead().getHeadID());
+            LocalDateTime endTime = albexCTDDataRepository.findRecoveryDateByHeadID(lander.get().getAlbexHead().getHeadID());
+            res.createAlbexCTDHeadResponse(lander.get().getAlbexHead(), startTime, endTime);
         }
         if (lander.get().getADCPHead() != null) {
-            res.createADCPHeadResponse(lander.get().getADCPHead());
+            LocalDateTime startTime = adcpDataRepository.findDeploymentDateByHeadID(lander.get().getADCPHead().getHeadID());
+            LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.get().getADCPHead().getHeadID());
+            res.createADCPHeadResponse(lander.get().getADCPHead(), startTime, endTime);
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
