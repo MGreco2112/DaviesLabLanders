@@ -231,6 +231,48 @@ public class ProcessedCTDController {
         return res;
     }
 
+    @GetMapping("/data/header/{id}/aligned/true")
+    public ResponseEntity<List<CTDDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedCTDData> data = repository.findDataByHeadAndAlingedStatus(id, true);
+        List<CTDDataResponse> res = new ArrayList<>();
+
+        for (ProcessedCTDData dataPoint : data) {
+            res.add(new CTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getTempDegC(),
+                    dataPoint.getSal(),
+                    dataPoint.getCondMsCm(),
+                    dataPoint.getEc25UsCm(),
+                    dataPoint.getBattV(),
+                    dataPoint.getHeadID().getHeadID()
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/header/{id}/aligned/false")
+    public ResponseEntity<List<CTDDataResponse>> findUnalignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedCTDData> data = repository.findDataByHeadAndAlingedStatus(id, false);
+        List<CTDDataResponse> res = new ArrayList<>();
+
+        for (ProcessedCTDData dataPoint : data) {
+            res.add(new CTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getTempDegC(),
+                    dataPoint.getSal(),
+                    dataPoint.getCondMsCm(),
+                    dataPoint.getEc25UsCm(),
+                    dataPoint.getBattV(),
+                    dataPoint.getHeadID().getHeadID()
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/{id}")
     public ResponseEntity<CTDDataResponse> findDataById(@PathVariable("id") Long id) {
         Optional<ProcessedCTDData> data = repository.findById(id);
@@ -728,6 +770,9 @@ public class ProcessedCTDController {
         }
         if (updates.getBattV() != null) {
             selData.setBattV(updates.getBattV());
+        }
+        if (updates.getAlgned() != null) {
+            selData.setAligned(updates.getAlgned());
         }
         if (updates.getHeadID() != null) {
             updates.setHeadID(updates.getHeadID());

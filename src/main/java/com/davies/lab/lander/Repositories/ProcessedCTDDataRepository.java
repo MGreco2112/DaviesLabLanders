@@ -24,6 +24,9 @@ public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDDa
     @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ProcessedCTDData findLastDataPointInHead(@Param("id") Long id);
 
+    @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id AND is_aligned = :value", nativeQuery = true)
+    List<ProcessedCTDData> findDataByHeadAndAlingedStatus(@Param("id") Long id, @Param("value") boolean value);
+
     @Query(value = "SELECT COUNT(*) FROM processedctddata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
 }

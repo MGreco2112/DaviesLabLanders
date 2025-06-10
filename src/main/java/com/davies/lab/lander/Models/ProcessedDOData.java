@@ -22,6 +22,7 @@ public class ProcessedDOData {
     private Double GGDOMgL;
     @Column(nullable = false)
     private Double BKDOMgL;
+    private Boolean isAligned;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedDOHead HeadID;
@@ -37,11 +38,11 @@ public class ProcessedDOData {
         BattV = battV;
         this.GGDOMgL = GGDOMgL;
         this.BKDOMgL = BKDOMgL;
+        this.isAligned = false;
         HeadID = headID;
     }
 
-    public ProcessedDOData(Long ID, LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, ProcessedDOHead headID) {
-        this.ID = ID;
+    public ProcessedDOData(LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, Boolean isAligned, ProcessedDOHead headID) {
         Date = date;
         TempDegC = tempDegC;
         this.DO = DO;
@@ -49,6 +50,7 @@ public class ProcessedDOData {
         BattV = battV;
         this.GGDOMgL = GGDOMgL;
         this.BKDOMgL = BKDOMgL;
+        this.isAligned = isAligned;
         HeadID = headID;
     }
 
@@ -114,6 +116,14 @@ public class ProcessedDOData {
 
     public void setBKDOMgL(Double BKDOMgL) {
         this.BKDOMgL = BKDOMgL;
+    }
+
+    public Boolean getAligned() {
+        return isAligned;
+    }
+
+    public void setAligned(Boolean aligned) {
+        isAligned = aligned;
     }
 
     public ProcessedDOHead getHeadID() {

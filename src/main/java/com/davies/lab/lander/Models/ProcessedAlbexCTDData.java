@@ -17,6 +17,7 @@ public class ProcessedAlbexCTDData {
     private Double Chla_ug_ml;
     private Double Pressure_db;
     private Integer Flag;
+    private Boolean isAligned;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedAlbexCTDHeader HeadID;
@@ -34,10 +35,11 @@ public class ProcessedAlbexCTDData {
         Chla_ug_ml = chla_ug_ml;
         Pressure_db = pressure_db;
         Flag = flag;
+        isAligned = false;
         HeadID = headID;
     }
 
-    public ProcessedAlbexCTDData(Long ID, LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, ProcessedAlbexCTDHeader headID) {
+    public ProcessedAlbexCTDData(Long ID, LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, Boolean isAligned, ProcessedAlbexCTDHeader headID) {
         this.ID = ID;
         Date = date;
         Salinity = salinity;
@@ -48,6 +50,7 @@ public class ProcessedAlbexCTDData {
         Chla_ug_ml = chla_ug_ml;
         Pressure_db = pressure_db;
         Flag = flag;
+        this.isAligned = isAligned;
         HeadID = headID;
     }
 
@@ -129,6 +132,14 @@ public class ProcessedAlbexCTDData {
 
     public void setFlag(Integer flag) {
         Flag = flag;
+    }
+
+    public Boolean getAligned() {
+        return isAligned;
+    }
+
+    public void setAligned(Boolean aligned) {
+        isAligned = aligned;
     }
 
     public ProcessedAlbexCTDHeader getHeadID() {

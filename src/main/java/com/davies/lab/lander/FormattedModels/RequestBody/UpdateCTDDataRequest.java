@@ -11,18 +11,20 @@ public class UpdateCTDDataRequest {
     private Double CondMsCm;
     private Double Ec25UsCm;
     private Double BattV;
+    private Boolean isAlgned;
     private ProcessedCTDHead HeadID;
 
     public UpdateCTDDataRequest() {
     }
 
-    public UpdateCTDDataRequest(LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, ProcessedCTDHead headID) {
+    public UpdateCTDDataRequest(LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Boolean isAlgned, ProcessedCTDHead headID) {
         Date = date;
         TempDegC = tempDegC;
         Sal = sal;
         CondMsCm = condMsCm;
         Ec25UsCm = ec25UsCm;
         BattV = battV;
+        this.isAlgned = isAlgned;
         HeadID = headID;
     }
 
@@ -72,6 +74,14 @@ public class UpdateCTDDataRequest {
 
     public void setBattV(Double battV) {
         BattV = battV;
+    }
+
+    public Boolean getAlgned() {
+        return isAlgned;
+    }
+
+    public void setAlgned(Boolean algned) {
+        isAlgned = algned;
     }
 
     public ProcessedCTDHead getHeadID() {

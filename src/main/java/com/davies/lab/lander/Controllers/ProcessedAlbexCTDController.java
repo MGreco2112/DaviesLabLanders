@@ -126,6 +126,58 @@ public class ProcessedAlbexCTDController {
         return res;
     }
 
+    @GetMapping("/data/header/{id}/aligned/true")
+    public ResponseEntity<List<AlbexCTDDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedAlbexCTDData> data = repository.findDataByHeadAndAlignedStatus(id,true);
+        List<AlbexCTDDataResponse> res = new ArrayList<>();
+
+        for (ProcessedAlbexCTDData dataPoint : data) {
+            AlbexCTDDataResponse temp = new AlbexCTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getSalinity(),
+                    dataPoint.getTemperature(),
+                    dataPoint.getOxygen_ml_l(),
+                    dataPoint.getOxygenSat_percent(),
+                    dataPoint.getTurbidity_ntu(),
+                    dataPoint.getChla_ug_ml(),
+                    dataPoint.getPressure_db(),
+                    dataPoint.getFlag(),
+                    dataPoint.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/header/{id}/aligned/false")
+    public ResponseEntity<List<AlbexCTDDataResponse>> findUnalignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedAlbexCTDData> data = repository.findDataByHeadAndAlignedStatus(id,false);
+        List<AlbexCTDDataResponse> res = new ArrayList<>();
+
+        for (ProcessedAlbexCTDData dataPoint : data) {
+            AlbexCTDDataResponse temp = new AlbexCTDDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getSalinity(),
+                    dataPoint.getTemperature(),
+                    dataPoint.getOxygen_ml_l(),
+                    dataPoint.getOxygenSat_percent(),
+                    dataPoint.getTurbidity_ntu(),
+                    dataPoint.getChla_ug_ml(),
+                    dataPoint.getPressure_db(),
+                    dataPoint.getFlag(),
+                    dataPoint.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/{id}")
     public ResponseEntity<AlbexCTDDataResponse> findDataById(@PathVariable("id") Long id) {
         Optional<ProcessedAlbexCTDData> dataPoint = repository.findById(id);

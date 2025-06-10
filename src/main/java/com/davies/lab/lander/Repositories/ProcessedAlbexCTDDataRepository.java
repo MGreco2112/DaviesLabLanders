@@ -25,4 +25,7 @@ public interface ProcessedAlbexCTDDataRepository extends JpaRepository<Processed
 
     @Query(value = "SELECT COUNT(*) FROM processed_albexctddata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM processed_albexctddata WHERE head_id = :id AND is_aligned = :value", nativeQuery = true)
+    List<ProcessedAlbexCTDData> findDataByHeadAndAlignedStatus(@Param("id") Long id, @Param("value") boolean value);
 }

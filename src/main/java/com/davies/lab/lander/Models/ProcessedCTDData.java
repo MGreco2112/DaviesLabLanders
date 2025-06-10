@@ -21,6 +21,7 @@ public class ProcessedCTDData {
     private Double Ec25UsCm;
     @Column(nullable = false)
     private Double BattV;
+    private Boolean isAligned;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedCTDHead HeadID;
@@ -35,10 +36,11 @@ public class ProcessedCTDData {
         CondMsCm = condMsCm;
         Ec25UsCm = ec25UsCm;
         BattV = battV;
+        this.isAligned = false;
         HeadID = headID;
     }
 
-    public ProcessedCTDData(Long ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, ProcessedCTDHead headID) {
+    public ProcessedCTDData(Long ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Boolean isAligned, ProcessedCTDHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -46,6 +48,7 @@ public class ProcessedCTDData {
         CondMsCm = condMsCm;
         Ec25UsCm = ec25UsCm;
         BattV = battV;
+        this.isAligned = isAligned;
         HeadID = headID;
     }
 
@@ -103,6 +106,14 @@ public class ProcessedCTDData {
 
     public void setBattV(Double battV) {
         BattV = battV;
+    }
+
+    public Boolean getAligned() {
+        return isAligned;
+    }
+
+    public void setAligned(Boolean aligned) {
+        isAligned = aligned;
     }
 
     public ProcessedCTDHead getHeadID() {

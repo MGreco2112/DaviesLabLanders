@@ -25,4 +25,7 @@ public interface ProcessedADCPDataRepository extends JpaRepository<ProcessedADCP
 
     @Query(value = "SELECT Date FROM processedadcpdata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
     LocalDateTime findRecoveryDateByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM processedadcpdata WHERE head_id = :id AND is_aligned = :value", nativeQuery = true)
+    List<ProcessedADCPData> findDataByHeadAndAlignedStatus(@Param("id") Long id, @Param("value") boolean value);
 }

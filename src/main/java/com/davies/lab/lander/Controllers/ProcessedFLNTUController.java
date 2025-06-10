@@ -242,6 +242,52 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/header/{id}/aligned/true")
+    public ResponseEntity<List<FLNTUDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedFLNTUData> data = repository.findDataByHeadAndAlignedStatus(id, true);
+        List<FLNTUDataResponse> res = new ArrayList<>();
+
+        for (ProcessedFLNTUData selData : data) {
+            FLNTUDataResponse temp = new FLNTUDataResponse(
+                    selData.getID(),
+                    selData.getDate(),
+                    selData.getTempDegC(),
+                    selData.getChlFluPPB(),
+                    selData.getChlAUgL(),
+                    selData.getTurbMFTU(),
+                    selData.getBattV(),
+                    selData.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/header/{id}/aligned/false")
+    public ResponseEntity<List<FLNTUDataResponse>> findUnalignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedFLNTUData> data = repository.findDataByHeadAndAlignedStatus(id, false);
+        List<FLNTUDataResponse> res = new ArrayList<>();
+
+        for (ProcessedFLNTUData selData : data) {
+            FLNTUDataResponse temp = new FLNTUDataResponse(
+                    selData.getID(),
+                    selData.getDate(),
+                    selData.getTempDegC(),
+                    selData.getChlFluPPB(),
+                    selData.getChlAUgL(),
+                    selData.getTurbMFTU(),
+                    selData.getBattV(),
+                    selData.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/headId/{id}")
     public ResponseEntity<List<FLNTUDataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
         List<ProcessedFLNTUData> data = repository.findDataFromHeadId(id);

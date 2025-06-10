@@ -22,6 +22,9 @@ public interface ProcessedFLNTUDataRepository extends JpaRepository<ProcessedFLN
     @Query(value = "SELECT * FROM processedflntudata WHERE head_id = :id ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ProcessedFLNTUData findLastDataPointInHead(@Param("id") Long id);
 
+    @Query(value = "SELECT * FROM processedflntudata WHERE head_id = :id AND is_aligned = :value", nativeQuery = true)
+    List<ProcessedFLNTUData> findDataByHeadAndAlignedStatus(@Param("id") Long id, @Param("value") boolean value);
+
     @Query(value = "SELECT COUNT(*) FROM processedflntudata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
 }

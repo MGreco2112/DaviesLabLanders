@@ -221,6 +221,54 @@ public class ProcessedDOController {
         return res;
     }
 
+    @GetMapping("/data/header/{id}/aligned/true")
+    public ResponseEntity<List<DODataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedDOData> data = repository.findDataByHeadAndAlignedStatus(id, true);
+        List<DODataResponse> res = new ArrayList<>();
+
+        for (ProcessedDOData selData : data) {
+            DODataResponse temp = new DODataResponse(
+                    selData.getID(),
+                    selData.getDate(),
+                    selData.getTempDegC(),
+                    selData.getDO(),
+                    selData.getWeissDoMgL(),
+                    selData.getBattV(),
+                    selData.getGGDOMgL(),
+                    selData.getBKDOMgL(),
+                    selData.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/header/{id}/aligned/false")
+    public ResponseEntity<List<DODataResponse>> findUnalignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedDOData> data = repository.findDataByHeadAndAlignedStatus(id, false);
+        List<DODataResponse> res = new ArrayList<>();
+
+        for (ProcessedDOData selData : data) {
+            DODataResponse temp = new DODataResponse(
+                    selData.getID(),
+                    selData.getDate(),
+                    selData.getTempDegC(),
+                    selData.getDO(),
+                    selData.getWeissDoMgL(),
+                    selData.getBattV(),
+                    selData.getGGDOMgL(),
+                    selData.getBKDOMgL(),
+                    selData.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/{id}")
     public ResponseEntity<DODataResponse> findDataById(@PathVariable("id") Long id) {
         Optional<ProcessedDOData> data = repository.findById(id);

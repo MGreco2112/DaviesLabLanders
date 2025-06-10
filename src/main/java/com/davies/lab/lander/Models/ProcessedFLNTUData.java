@@ -20,6 +20,7 @@ public class ProcessedFLNTUData {
     private Double TurbMFTU;
     @Column(nullable = false)
     private Double BattV;
+    private Boolean isAligned;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedFLNTUHead HeadID;
@@ -34,17 +35,18 @@ public class ProcessedFLNTUData {
         ChlAUgL = chlAUgL;
         TurbMFTU = turbMFTU;
         BattV = battV;
+        this.isAligned = false;
         HeadID = headID;
     }
 
-    public ProcessedFLNTUData(Long ID, LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
-        this.ID = ID;
+    public ProcessedFLNTUData(LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, Boolean isAligned, ProcessedFLNTUHead headID) {
         Date = date;
         TempDegC = tempDegC;
         ChlFluPPB = chlFluPPB;
         ChlAUgL = chlAUgL;
         TurbMFTU = turbMFTU;
         BattV = battV;
+        this.isAligned = isAligned;
         HeadID = headID;
     }
 
@@ -102,6 +104,14 @@ public class ProcessedFLNTUData {
 
     public void setBattV(Double battV) {
         BattV = battV;
+    }
+
+    public Boolean getAligned() {
+        return isAligned;
+    }
+
+    public void setAligned(Boolean aligned) {
+        isAligned = aligned;
     }
 
     public ProcessedFLNTUHead getHeadID() {

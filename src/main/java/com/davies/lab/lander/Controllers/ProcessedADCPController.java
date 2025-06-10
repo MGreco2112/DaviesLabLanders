@@ -225,6 +225,138 @@ public class ProcessedADCPController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/header/{id}/aligned/true")
+    public ResponseEntity<List<ADCPDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedADCPData> data = repository.findDataByHeadAndAlignedStatus(id, true);
+        List<ADCPDataResponse> res = new ArrayList<>();
+
+        for (ProcessedADCPData dataPoint : data) {
+            ADCPDataResponse temp = new ADCPDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getBattery(),
+                    dataPoint.getHeading(),
+                    dataPoint.getPitch(),
+                    dataPoint.getRoll(),
+                    dataPoint.getPressure(),
+                    dataPoint.getTemperature(),
+                    dataPoint.getAnalogIn1(),
+                    dataPoint.getAnalogIn2(),
+                    dataPoint.getSpeed1_1_0m(),
+                    dataPoint.getSpeed2_1_5m(),
+                    dataPoint.getSpeed3_2_0m(),
+                    dataPoint.getSpeed4_2_5m(),
+                    dataPoint.getSpeed5_3_0m(),
+                    dataPoint.getSpeed6_3_5m(),
+                    dataPoint.getSpeed7_4_0m(),
+                    dataPoint.getSpeed8_4_5m(),
+                    dataPoint.getSpeed9_5_0m(),
+                    dataPoint.getSpeed10_5_5m(),
+                    dataPoint.getSpeed11_6_0m(),
+                    dataPoint.getSpeed12_6_5m(),
+                    dataPoint.getSpeed13_7_0m(),
+                    dataPoint.getSpeed14_7_5m(),
+                    dataPoint.getSpeed15_8_0m(),
+                    dataPoint.getSpeed16_8_5m(),
+                    dataPoint.getSpeed17_9_0m(),
+                    dataPoint.getSpeed18_9_5m(),
+                    dataPoint.getSpeed19_10_0m(),
+                    dataPoint.getSpeed20_10_5m(),
+                    dataPoint.getDir1_1_0m(),
+                    dataPoint.getDir2_1_5m(),
+                    dataPoint.getDir3_2_0m(),
+                    dataPoint.getDir4_2_5m(),
+                    dataPoint.getDir5_3_0m(),
+                    dataPoint.getDir6_3_5m(),
+                    dataPoint.getDir7_4_0m(),
+                    dataPoint.getDir8_4_5m(),
+                    dataPoint.getDir9_5_0m(),
+                    dataPoint.getDir10_5_5m(),
+                    dataPoint.getDir11_6_0m(),
+                    dataPoint.getDir12_6_5m(),
+                    dataPoint.getDir13_7_0m(),
+                    dataPoint.getDir14_7_5m(),
+                    dataPoint.getDir15_8_0m(),
+                    dataPoint.getDir16_8_5m(),
+                    dataPoint.getDir17_9_0m(),
+                    dataPoint.getDir18_9_5m(),
+                    dataPoint.getDir19_10_0m(),
+                    dataPoint.getDir20_10_5m(),
+                    dataPoint.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/header/{id}/aligned/false")
+    public ResponseEntity<List<ADCPDataResponse>> findUnalignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedADCPData> data = repository.findDataByHeadAndAlignedStatus(id, false);
+        List<ADCPDataResponse> res = new ArrayList<>();
+
+        for (ProcessedADCPData dataPoint : data) {
+            ADCPDataResponse temp = new ADCPDataResponse(
+                    dataPoint.getID(),
+                    dataPoint.getDate(),
+                    dataPoint.getBattery(),
+                    dataPoint.getHeading(),
+                    dataPoint.getPitch(),
+                    dataPoint.getRoll(),
+                    dataPoint.getPressure(),
+                    dataPoint.getTemperature(),
+                    dataPoint.getAnalogIn1(),
+                    dataPoint.getAnalogIn2(),
+                    dataPoint.getSpeed1_1_0m(),
+                    dataPoint.getSpeed2_1_5m(),
+                    dataPoint.getSpeed3_2_0m(),
+                    dataPoint.getSpeed4_2_5m(),
+                    dataPoint.getSpeed5_3_0m(),
+                    dataPoint.getSpeed6_3_5m(),
+                    dataPoint.getSpeed7_4_0m(),
+                    dataPoint.getSpeed8_4_5m(),
+                    dataPoint.getSpeed9_5_0m(),
+                    dataPoint.getSpeed10_5_5m(),
+                    dataPoint.getSpeed11_6_0m(),
+                    dataPoint.getSpeed12_6_5m(),
+                    dataPoint.getSpeed13_7_0m(),
+                    dataPoint.getSpeed14_7_5m(),
+                    dataPoint.getSpeed15_8_0m(),
+                    dataPoint.getSpeed16_8_5m(),
+                    dataPoint.getSpeed17_9_0m(),
+                    dataPoint.getSpeed18_9_5m(),
+                    dataPoint.getSpeed19_10_0m(),
+                    dataPoint.getSpeed20_10_5m(),
+                    dataPoint.getDir1_1_0m(),
+                    dataPoint.getDir2_1_5m(),
+                    dataPoint.getDir3_2_0m(),
+                    dataPoint.getDir4_2_5m(),
+                    dataPoint.getDir5_3_0m(),
+                    dataPoint.getDir6_3_5m(),
+                    dataPoint.getDir7_4_0m(),
+                    dataPoint.getDir8_4_5m(),
+                    dataPoint.getDir9_5_0m(),
+                    dataPoint.getDir10_5_5m(),
+                    dataPoint.getDir11_6_0m(),
+                    dataPoint.getDir12_6_5m(),
+                    dataPoint.getDir13_7_0m(),
+                    dataPoint.getDir14_7_5m(),
+                    dataPoint.getDir15_8_0m(),
+                    dataPoint.getDir16_8_5m(),
+                    dataPoint.getDir17_9_0m(),
+                    dataPoint.getDir18_9_5m(),
+                    dataPoint.getDir19_10_0m(),
+                    dataPoint.getDir20_10_5m(),
+                    dataPoint.getHeadID().getHeadID()
+            );
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/headId/{id}")
     public ResponseEntity<List<ADCPDataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
         List<ProcessedADCPData> data = repository.findDataByHeadId(id);
