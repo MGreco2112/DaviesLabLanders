@@ -742,6 +742,9 @@ public class ProcessedFLNTUController {
         if (updates.getBattV() != null) {
             selData.setBattV(updates.getBattV());
         }
+        if (updates.getAligned() != null) {
+            selData.setAligned(updates.getAligned());
+        }
         if (updates.getHeadID() != null) {
             selData.setHeadID(updates.getHeadID());
         }

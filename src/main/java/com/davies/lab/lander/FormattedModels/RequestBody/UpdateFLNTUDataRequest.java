@@ -11,18 +11,20 @@ public class UpdateFLNTUDataRequest {
     private Double ChlAUgL;
     private Double TurbMFTU;
     private Double BattV;
+    private Boolean isAligned;
     private ProcessedFLNTUHead HeadID;
 
     public UpdateFLNTUDataRequest() {
     }
 
-    public UpdateFLNTUDataRequest(LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, ProcessedFLNTUHead headID) {
+    public UpdateFLNTUDataRequest(LocalDateTime date, Double tempDegC, Double chlFluPPB, Double chlAUgL, Double turbMFTU, Double battV, Boolean isAligned, ProcessedFLNTUHead headID) {
         Date = date;
         TempDegC = tempDegC;
         ChlFluPPB = chlFluPPB;
         ChlAUgL = chlAUgL;
         TurbMFTU = turbMFTU;
         BattV = battV;
+        this.isAligned = isAligned;
         HeadID = headID;
     }
 
@@ -72,6 +74,14 @@ public class UpdateFLNTUDataRequest {
 
     public void setBattV(Double battV) {
         BattV = battV;
+    }
+
+    public Boolean getAligned() {
+        return isAligned;
+    }
+
+    public void setAligned(Boolean aligned) {
+        isAligned = aligned;
     }
 
     public ProcessedFLNTUHead getHeadID() {

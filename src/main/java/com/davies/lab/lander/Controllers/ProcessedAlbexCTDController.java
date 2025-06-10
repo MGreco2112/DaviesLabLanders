@@ -395,6 +395,9 @@ public class ProcessedAlbexCTDController {
         if (updates.getFlag() != null) {
             selData.setFlag(updates.getFlag());
         }
+        if (updates.getAligned() != null) {
+            selData.setAligned(updates.getAligned());
+        }
         if (updates.getHeadID() != null) {
             selData.setHeadID(updates.getHeadID());
         }

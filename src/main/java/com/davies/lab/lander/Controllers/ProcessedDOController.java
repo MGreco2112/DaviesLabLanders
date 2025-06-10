@@ -753,6 +753,9 @@ public class ProcessedDOController {
         if (updates.getBKDOMgL() != null) {
             selData.setBKDOMgL(updates.getBKDOMgL());
         }
+        if (updates.getAligned() != null) {
+            selData.setAligned(updates.getAligned());
+        }
         if (updates.getHeadID() != null) {
             selData.setHeadID(updates.getHeadID());
         }

@@ -12,12 +12,13 @@ public class UpdateDODataRequest {
     private Double BattV;
     private Double GGDOMgL;
     private Double BKDOMgL;
+    private Boolean isAligned;
     private ProcessedDOHead HeadID;
 
     public UpdateDODataRequest() {
     }
 
-    public UpdateDODataRequest(LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, ProcessedDOHead headID) {
+    public UpdateDODataRequest(LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, Boolean isAligned, ProcessedDOHead headID) {
         Date = date;
         TempDegC = tempDegC;
         this.DO = DO;
@@ -25,6 +26,7 @@ public class UpdateDODataRequest {
         BattV = battV;
         this.GGDOMgL = GGDOMgL;
         this.BKDOMgL = BKDOMgL;
+        this.isAligned = isAligned;
         HeadID = headID;
     }
 
@@ -82,6 +84,14 @@ public class UpdateDODataRequest {
 
     public void setBKDOMgL(Double BKDOMgL) {
         this.BKDOMgL = BKDOMgL;
+    }
+
+    public Boolean getAligned() {
+        return isAligned;
+    }
+
+    public void setAligned(Boolean aligned) {
+        isAligned = aligned;
     }
 
     public ProcessedDOHead getHeadID() {
