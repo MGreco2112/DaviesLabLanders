@@ -2,6 +2,7 @@ package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.ADCP_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateADCPDataRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.ADCPDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.ADCPHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
@@ -637,6 +638,50 @@ public class ProcessedADCPController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<String> updateADCPDataByID(@PathVariable("id") Long id, @RequestBody UpdateADCPDataRequest updates) {
+        ProcessedADCPData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getDate() != null) {
+            selData.setDate(updates.getDate());
+        }
+        if (updates.getBattery() != null) {
+            selData.setBattery(updates.getBattery());
+        }
+        if (updates.getHeading() != null) {
+            selData.setHeading(updates.getHeading());
+        }
+        if (updates.getPitch() != null) {
+            selData.setPitch(updates.getPitch());
+        }
+        if (updates.getRoll() != null) {
+            selData.setRoll(updates.getRoll());
+        }
+        if (updates.getPressure() != null) {
+            selData.setPressure(updates.getPressure());
+        }
+        if (updates.getTemperature() != null) {
+            selData.setTemperature(updates.getTemperature());
+        }
+        if (updates.getAnalogIn1() != null) {
+            selData.setAnalogIn1(updates.getAnalogIn1());
+        }
+        if (updates.getAnalogIn2() != null) {
+            selData.setAnalogIn2(updates.getAnalogIn2());
+        }
+        //TODO determine what Speed and Direction fields will be updated
+        if (updates.getAligned() != null) {
+            selData.setAligned(updates.getAligned());
+        }
+        if (updates.getHeadID() != null) {
+            selData.setHeadID(updates.getHeadID());
+        }
+
+        repository.save(selData);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/header/{id}")
