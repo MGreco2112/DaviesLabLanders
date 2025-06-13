@@ -1,8 +1,11 @@
 package com.davies.lab.lander.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 public class ProcessedCTDData {
@@ -22,9 +25,13 @@ public class ProcessedCTDData {
     @Column(nullable = false)
     private Double BattV;
     private Boolean isAligned;
+    @OneToOne(mappedBy = "rawData")
+    @JsonIgnore
+    private AlignedCTDData alignedData;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedCTDHead HeadID;
+
 
     public ProcessedCTDData() {
     }
@@ -40,7 +47,7 @@ public class ProcessedCTDData {
         HeadID = headID;
     }
 
-    public ProcessedCTDData(Long ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Boolean isAligned, ProcessedCTDHead headID) {
+    public ProcessedCTDData(Long ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Boolean isAligned, AlignedCTDData alignedData, ProcessedCTDHead headID) {
         this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
@@ -49,6 +56,7 @@ public class ProcessedCTDData {
         Ec25UsCm = ec25UsCm;
         BattV = battV;
         this.isAligned = isAligned;
+        this.alignedData = alignedData;
         HeadID = headID;
     }
 
@@ -116,6 +124,14 @@ public class ProcessedCTDData {
         isAligned = aligned;
     }
 
+    public AlignedCTDData getAlignedData() {
+        return alignedData;
+    }
+
+    public void setAlignedData(AlignedCTDData alignedData) {
+        this.alignedData = alignedData;
+    }
+
     public ProcessedCTDHead getHeadID() {
         return HeadID;
     }
@@ -123,4 +139,6 @@ public class ProcessedCTDData {
     public void setHeadID(ProcessedCTDHead headID) {
         HeadID = headID;
     }
+
+
 }

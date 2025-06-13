@@ -1,17 +1,17 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.AlignedCTDRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.CTD_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateCTDHeaderRequest;
-import com.davies.lab.lander.FormattedModels.ResponseBody.CTDDataResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.TotalDataResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.*;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
+import com.davies.lab.lander.Models.AlignedCTDData;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedCTDData;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
+import com.davies.lab.lander.Repositories.AlignedCTDDataRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
 import com.davies.lab.lander.Repositories.ProcessedCTDDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedCTDHeadRepository;
@@ -40,6 +40,8 @@ public class ProcessedCTDController {
     private ProcessedCTDDataRepository repository;
     @Autowired
     private ProcessedCTDHeadRepository headRepository;
+    @Autowired
+    private AlignedCTDDataRepository alignedRepository;
 
     //Head Routes
     @GetMapping("/headers")
@@ -232,21 +234,12 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/data/header/{id}/aligned/true")
-    public ResponseEntity<List<CTDDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+    public ResponseEntity<List<AlignedCTDDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
         List<ProcessedCTDData> data = repository.findDataByHeadAndAlingedStatus(id, true);
-        List<CTDDataResponse> res = new ArrayList<>();
+        List<AlignedCTDDataResponse> res = new ArrayList<>();
 
         for (ProcessedCTDData dataPoint : data) {
-            res.add(new CTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getTempDegC(),
-                    dataPoint.getSal(),
-                    dataPoint.getCondMsCm(),
-                    dataPoint.getEc25UsCm(),
-                    dataPoint.getBattV(),
-                    dataPoint.getHeadID().getHeadID()
-            ));
+            res.add(new AlignedCTDDataResponse(dataPoint));
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -750,7 +743,7 @@ public class ProcessedCTDController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<String> updateCTDDataByID(@PathVariable("id") Long id, @RequestBody UpdateCTDDataRequest updates) {
+    public ResponseEntity<CTDDataResponse> updateCTDDataByID(@PathVariable("id") Long id, @RequestBody UpdateCTDDataRequest updates) {
         ProcessedCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getDate() != null) {
@@ -771,8 +764,26 @@ public class ProcessedCTDController {
         if (updates.getBattV() != null) {
             selData.setBattV(updates.getBattV());
         }
-        if (updates.getAlgned() != null) {
-            selData.setAligned(updates.getAlgned());
+        if (updates.getAligned() != null) {
+            selData.setAligned(updates.getAligned());
+        }
+        if (updates.getAlignedData() != null) {
+            Optional<AlignedCTDData> updatesData = alignedRepository.findAlignedDataByRawDataID(selData.getID());
+            if (updatesData.isEmpty()) {
+                AlignedCTDData newAlignedData = alignedRepository.save(updates.getAlignedData());
+                newAlignedData.setRawData(selData);
+                selData.setAlignedData(newAlignedData);
+            } else {
+                updatesData.get().setSalinity_PSU(updates.getAlignedData().getSalinity_PSU());
+                updatesData.get().setTemperature_C(updates.getAlignedData().getTemperature_C());
+                updatesData.get().setOxygen_ML_L(updates.getAlignedData().getOxygen_ML_L());
+                updatesData.get().setOxygen_Sat_Percent(updates.getAlignedData().getOxygen_Sat_Percent());
+                updatesData.get().setTurbidity_NTU(updates.getAlignedData().getTurbidity_NTU());
+                updatesData.get().setChla_ug_mL(updates.getAlignedData().getChla_ug_mL());
+                updatesData.get().setPressure(updates.getAlignedData().getPressure());
+                updatesData.get().setCTD_Flag(updates.getAlignedData().getCTD_Flag());
+                alignedRepository.save(updatesData.get());
+            }
         }
         if (updates.getHeadID() != null) {
             updates.setHeadID(updates.getHeadID());
@@ -780,7 +791,19 @@ public class ProcessedCTDController {
 
         repository.save(selData);
 
-        return new ResponseEntity<>("Updated", HttpStatus.OK);
+        return new ResponseEntity<>(new CTDDataResponse(selData), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/data/bulk_aligned")
+    public ResponseEntity<String> updateBulkAlignedData(@RequestBody List<AlignedCTDRequest> alignedData) {
+        for (AlignedCTDRequest req : alignedData) {
+            UpdateCTDDataRequest newRequest = new UpdateCTDDataRequest();
+            newRequest.setAligned(true);
+            newRequest.setAlignedData(new AlignedCTDData(req));
+            updateCTDDataByID(req.getRawID(), newRequest);
+        }
+
+        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/header/{id}")

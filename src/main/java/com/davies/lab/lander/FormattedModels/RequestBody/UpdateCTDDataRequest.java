@@ -1,5 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
+import com.davies.lab.lander.Models.AlignedCTDData;
 import com.davies.lab.lander.Models.ProcessedCTDHead;
 
 import java.time.LocalDateTime;
@@ -11,20 +12,22 @@ public class UpdateCTDDataRequest {
     private Double CondMsCm;
     private Double Ec25UsCm;
     private Double BattV;
-    private Boolean isAlgned;
+    private Boolean isAligned;
+    private AlignedCTDData alignedData;
     private ProcessedCTDHead HeadID;
 
     public UpdateCTDDataRequest() {
     }
 
-    public UpdateCTDDataRequest(LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Boolean isAlgned, ProcessedCTDHead headID) {
+    public UpdateCTDDataRequest(LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Boolean isAligned, AlignedCTDData alignedData, ProcessedCTDHead headID) {
         Date = date;
         TempDegC = tempDegC;
         Sal = sal;
         CondMsCm = condMsCm;
         Ec25UsCm = ec25UsCm;
         BattV = battV;
-        this.isAlgned = isAlgned;
+        this.isAligned = isAligned;
+        this.alignedData = alignedData;
         HeadID = headID;
     }
 
@@ -76,12 +79,20 @@ public class UpdateCTDDataRequest {
         BattV = battV;
     }
 
-    public Boolean getAlgned() {
-        return isAlgned;
+    public Boolean getAligned() {
+        return isAligned;
     }
 
-    public void setAlgned(Boolean algned) {
-        isAlgned = algned;
+    public void setAligned(Boolean algned) {
+        isAligned = algned;
+    }
+
+    public AlignedCTDData getAlignedData() {
+        return alignedData;
+    }
+
+    public void setAlignedData(AlignedCTDData alignedData) {
+        this.alignedData = alignedData;
     }
 
     public ProcessedCTDHead getHeadID() {
