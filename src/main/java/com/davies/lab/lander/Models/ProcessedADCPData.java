@@ -1,5 +1,7 @@
 package com.davies.lab.lander.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -58,6 +60,9 @@ public class ProcessedADCPData {
     private Double Dir19_10_0m;
     private Double Dir20_10_5m;
     private Boolean isAligned;
+    @OneToOne(mappedBy = "rawData")
+    @JsonIgnore
+    private AlignedADCPData alignedData;
     @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedADCPHead HeadID;
@@ -580,6 +585,14 @@ public class ProcessedADCPData {
 
     public void setAligned(Boolean aligned) {
         isAligned = aligned;
+    }
+
+    public AlignedADCPData getAlignedData() {
+        return alignedData;
+    }
+
+    public void setAlignedData(AlignedADCPData alignedData) {
+        this.alignedData = alignedData;
     }
 
     public ProcessedADCPHead getHeadID() {

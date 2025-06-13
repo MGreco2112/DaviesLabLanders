@@ -743,7 +743,7 @@ public class ProcessedCTDController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<CTDDataResponse> updateCTDDataByID(@PathVariable("id") Long id, @RequestBody UpdateCTDDataRequest updates) {
+    public ResponseEntity<String> updateCTDDataByID(@PathVariable("id") Long id, @RequestBody UpdateCTDDataRequest updates) {
         ProcessedCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getDate() != null) {
@@ -791,7 +791,7 @@ public class ProcessedCTDController {
 
         repository.save(selData);
 
-        return new ResponseEntity<>(new CTDDataResponse(selData), HttpStatus.OK);
+        return new ResponseEntity<>("Updated!", HttpStatus.OK);
     }
 
     @PutMapping("/update/data/bulk_aligned")

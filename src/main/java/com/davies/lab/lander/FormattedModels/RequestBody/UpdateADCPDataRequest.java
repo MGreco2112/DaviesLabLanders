@@ -1,5 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
+import com.davies.lab.lander.Models.AlignedADCPData;
 import com.davies.lab.lander.Models.ProcessedADCPHead;
 
 import java.time.LocalDate;
@@ -56,12 +57,13 @@ public class UpdateADCPDataRequest {
     private Double Dir19_10_0m;
     private Double Dir20_10_5m;
     private Boolean isAligned;
+    private AlignedADCPData alignedData;
     private ProcessedADCPHead HeadID;
 
     public UpdateADCPDataRequest() {
     }
 
-    public UpdateADCPDataRequest(LocalDateTime date, Double battery, Double heading, Double pitch, Double roll, Double pressure, Double temperature, Double analogIn1, Double analogIn2, Double speed1_1_0m, Double speed2_1_5m, Double speed3_2_0m, Double speed4_2_5m, Double speed5_3_0m, Double speed6_3_5m, Double speed7_4_0m, Double speed8_4_5m, Double speed9_5_0m, Double speed10_5_5m, Double speed11_6_0m, Double speed12_6_5m, Double speed13_7_0m, Double speed14_7_5m, Double speed15_8_0m, Double speed16_8_5m, Double speed17_9_0m, Double speed18_9_5m, Double speed19_10_0m, Double speed20_10_5m, Double dir1_1_0m, Double dir2_1_5m, Double dir3_2_0m, Double dir4_2_5m, Double dir5_3_0m, Double dir6_3_5m, Double dir7_4_0m, Double dir8_4_5m, Double dir9_5_0m, Double dir10_5_5m, Double dir11_6_0m, Double dir12_6_5m, Double dir13_7_0m, Double dir14_7_5m, Double dir15_8_0m, Double dir16_8_5m, Double dir17_9_0m, Double dir18_9_5m, Double dir19_10_0m, Double dir20_10_5m, Boolean isAligned, ProcessedADCPHead headID) {
+    public UpdateADCPDataRequest(LocalDateTime date, Double battery, Double heading, Double pitch, Double roll, Double pressure, Double temperature, Double analogIn1, Double analogIn2, Double speed1_1_0m, Double speed2_1_5m, Double speed3_2_0m, Double speed4_2_5m, Double speed5_3_0m, Double speed6_3_5m, Double speed7_4_0m, Double speed8_4_5m, Double speed9_5_0m, Double speed10_5_5m, Double speed11_6_0m, Double speed12_6_5m, Double speed13_7_0m, Double speed14_7_5m, Double speed15_8_0m, Double speed16_8_5m, Double speed17_9_0m, Double speed18_9_5m, Double speed19_10_0m, Double speed20_10_5m, Double dir1_1_0m, Double dir2_1_5m, Double dir3_2_0m, Double dir4_2_5m, Double dir5_3_0m, Double dir6_3_5m, Double dir7_4_0m, Double dir8_4_5m, Double dir9_5_0m, Double dir10_5_5m, Double dir11_6_0m, Double dir12_6_5m, Double dir13_7_0m, Double dir14_7_5m, Double dir15_8_0m, Double dir16_8_5m, Double dir17_9_0m, Double dir18_9_5m, Double dir19_10_0m, Double dir20_10_5m, Boolean isAligned, AlignedADCPData alignedData, ProcessedADCPHead headID) {
         Date = date;
         Battery = battery;
         Heading = heading;
@@ -112,6 +114,7 @@ public class UpdateADCPDataRequest {
         Dir19_10_0m = dir19_10_0m;
         Dir20_10_5m = dir20_10_5m;
         this.isAligned = isAligned;
+        this.alignedData = alignedData;
         HeadID = headID;
     }
 
@@ -513,6 +516,14 @@ public class UpdateADCPDataRequest {
 
     public void setAligned(Boolean aligned) {
         isAligned = aligned;
+    }
+
+    public AlignedADCPData getAlignedData() {
+        return alignedData;
+    }
+
+    public void setAlignedData(AlignedADCPData alignedData) {
+        this.alignedData = alignedData;
     }
 
     public ProcessedADCPHead getHeadID() {

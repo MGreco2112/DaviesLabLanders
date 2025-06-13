@@ -1,16 +1,16 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.AlignedADCPRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.ADCP_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateADCPDataRequest;
-import com.davies.lab.lander.FormattedModels.ResponseBody.ADCPDataResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.ADCPHeadResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.TotalDataResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.*;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
+import com.davies.lab.lander.Models.AlignedADCPData;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedADCPData;
 import com.davies.lab.lander.Models.ProcessedADCPHead;
+import com.davies.lab.lander.Repositories.AlignedADCPDataRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
 import com.davies.lab.lander.Repositories.ProcessedADCPDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedADCPHeadRepository;
@@ -41,6 +41,8 @@ public class ProcessedADCPController {
     private ProcessedADCPHeadRepository headRepository;
     @Autowired
     private ProcessedADCPDataRepository repository;
+    @Autowired
+    private AlignedADCPDataRepository alignedRepository;
 
     @GetMapping("/headers")
     public List<ADCPHeadResponse> findAllHeads() {
@@ -227,66 +229,12 @@ public class ProcessedADCPController {
     }
 
     @GetMapping("/data/header/{id}/aligned/true")
-    public ResponseEntity<List<ADCPDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+    public ResponseEntity<List<AlignedADCPDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
         List<ProcessedADCPData> data = repository.findDataByHeadAndAlignedStatus(id, true);
-        List<ADCPDataResponse> res = new ArrayList<>();
+        List<AlignedADCPDataResponse> res = new ArrayList<>();
 
         for (ProcessedADCPData dataPoint : data) {
-            ADCPDataResponse temp = new ADCPDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getBattery(),
-                    dataPoint.getHeading(),
-                    dataPoint.getPitch(),
-                    dataPoint.getRoll(),
-                    dataPoint.getPressure(),
-                    dataPoint.getTemperature(),
-                    dataPoint.getAnalogIn1(),
-                    dataPoint.getAnalogIn2(),
-                    dataPoint.getSpeed1_1_0m(),
-                    dataPoint.getSpeed2_1_5m(),
-                    dataPoint.getSpeed3_2_0m(),
-                    dataPoint.getSpeed4_2_5m(),
-                    dataPoint.getSpeed5_3_0m(),
-                    dataPoint.getSpeed6_3_5m(),
-                    dataPoint.getSpeed7_4_0m(),
-                    dataPoint.getSpeed8_4_5m(),
-                    dataPoint.getSpeed9_5_0m(),
-                    dataPoint.getSpeed10_5_5m(),
-                    dataPoint.getSpeed11_6_0m(),
-                    dataPoint.getSpeed12_6_5m(),
-                    dataPoint.getSpeed13_7_0m(),
-                    dataPoint.getSpeed14_7_5m(),
-                    dataPoint.getSpeed15_8_0m(),
-                    dataPoint.getSpeed16_8_5m(),
-                    dataPoint.getSpeed17_9_0m(),
-                    dataPoint.getSpeed18_9_5m(),
-                    dataPoint.getSpeed19_10_0m(),
-                    dataPoint.getSpeed20_10_5m(),
-                    dataPoint.getDir1_1_0m(),
-                    dataPoint.getDir2_1_5m(),
-                    dataPoint.getDir3_2_0m(),
-                    dataPoint.getDir4_2_5m(),
-                    dataPoint.getDir5_3_0m(),
-                    dataPoint.getDir6_3_5m(),
-                    dataPoint.getDir7_4_0m(),
-                    dataPoint.getDir8_4_5m(),
-                    dataPoint.getDir9_5_0m(),
-                    dataPoint.getDir10_5_5m(),
-                    dataPoint.getDir11_6_0m(),
-                    dataPoint.getDir12_6_5m(),
-                    dataPoint.getDir13_7_0m(),
-                    dataPoint.getDir14_7_5m(),
-                    dataPoint.getDir15_8_0m(),
-                    dataPoint.getDir16_8_5m(),
-                    dataPoint.getDir17_9_0m(),
-                    dataPoint.getDir18_9_5m(),
-                    dataPoint.getDir19_10_0m(),
-                    dataPoint.getDir20_10_5m(),
-                    dataPoint.getHeadID().getHeadID()
-            );
-
-            res.add(temp);
+            res.add(new AlignedADCPDataResponse(dataPoint));
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -671,9 +619,21 @@ public class ProcessedADCPController {
         if (updates.getAnalogIn2() != null) {
             selData.setAnalogIn2(updates.getAnalogIn2());
         }
-        //TODO determine what Speed and Direction fields will be updated
         if (updates.getAligned() != null) {
             selData.setAligned(updates.getAligned());
+        }
+        if (updates.getAlignedData() != null) {
+            Optional<AlignedADCPData> updatesData = alignedRepository.findAlignedDataByRawDataID(selData.getID());
+            if (updatesData.isEmpty()) {
+                AlignedADCPData newAlignedData = alignedRepository.save(updates.getAlignedData());
+                newAlignedData.setRawData(selData);
+                selData.setAlignedData(newAlignedData);
+            } else {
+                updatesData.get().setVertical_Current_Speed_cm_s(updates.getAlignedData().getVertical_Current_Speed_cm_s());
+                updatesData.get().setHorizontal_Current_Speed_cm_s(updates.getAlignedData().getHorizontal_Current_Speed_cm_s());
+                updatesData.get().setCurrent_Direction(updates.getAlignedData().getCurrent_Direction());
+                alignedRepository.save(updatesData.get());
+            }
         }
         if (updates.getHeadID() != null) {
             selData.setHeadID(updates.getHeadID());
@@ -682,6 +642,18 @@ public class ProcessedADCPController {
         repository.save(selData);
 
         return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @PutMapping("/update/data/bulk_aligned")
+    public ResponseEntity<String> updateBulkAlignedData(@RequestBody List<AlignedADCPRequest> alignedData) {
+        for (AlignedADCPRequest req : alignedData) {
+            UpdateADCPDataRequest newRequest = new UpdateADCPDataRequest();
+            newRequest.setAligned(true);
+            newRequest.setAlignedData(new AlignedADCPData(req));
+            updateADCPDataByID(req.getRawID(), newRequest);
+        }
+
+        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/header/{id}")
