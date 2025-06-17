@@ -41,6 +41,7 @@ public class CTDHeadResponse {
     private Integer CondDepB;
     private String LanderID;
     private Integer dataPointCount;
+    private Integer alignedDataPointCount;
     private Set<CTDDataResponse> data = new HashSet<>();
 
     public CTDHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
@@ -345,6 +346,14 @@ public class CTDHeadResponse {
 
     public void setDataPointCount(Integer dataPointCount) {
         this.dataPointCount = dataPointCount;
+    }
+
+    public Integer getAlignedDataPointCount() {
+        return alignedDataPointCount;
+    }
+
+    public void setAlignedDataPointCount(Integer alignedDataPointCount) {
+        this.alignedDataPointCount = alignedDataPointCount;
     }
 
     public Set<CTDDataResponse> getData() {

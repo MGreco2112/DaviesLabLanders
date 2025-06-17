@@ -77,6 +77,7 @@ public class ProcessedADCPController {
         res = new ADCPHeadResponse(head.get().getHeadID(), head.get().getLanderID().getASDBLanderID());
 
         res.setDataPointCount(head.get().getData().size());
+        res.setAlignedDataPointCount(repository.findAlignedCountByHeadID(head.get().getHeadID()));
 
         res.setStartTime(repository.findDeploymentDateByHeadID(id));
         res.setEndTime(repository.findRecoveryDateByHeadID(id));

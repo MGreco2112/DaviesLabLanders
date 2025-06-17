@@ -140,6 +140,7 @@ public class ProcessedCTDController {
         );
 
         res.setDataPointCount(head.get().getData().size());
+        res.setAlignedDataPointCount(repository.findCountOfAlignedByHeadID(head.get().getHeadID()));
 
         if (res.getStartTime() == null && res.getDataPointCount() > 0) {
             ProcessedCTDData firstData = repository.findFirstDataPointInHead(head.get().getHeadID());

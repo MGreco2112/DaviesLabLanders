@@ -20,6 +20,9 @@ public interface ProcessedADCPDataRepository extends JpaRepository<ProcessedADCP
     @Query(value = "SELECT COUNT(*) FROM processedadcpdata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
 
+    @Query(value = "SELECT COUNT(*) FROM processedadcpdata WHERE head_id = :id AND is_aligned = true", nativeQuery = true)
+    Integer findAlignedCountByHeadID(@Param("id") Long id);
+
     @Query(value = "SELECT Date FROM processedadcpdata WHERE head_id = :id LIMIT 1", nativeQuery = true)
     LocalDateTime findDeploymentDateByHeadID(@Param("id") Long id);
 
