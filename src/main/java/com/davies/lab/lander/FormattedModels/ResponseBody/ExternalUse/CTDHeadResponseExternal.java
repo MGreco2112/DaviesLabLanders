@@ -4,7 +4,9 @@ import com.davies.lab.lander.Models.ProcessedCTDHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CTDHeadResponseExternal {
@@ -40,7 +42,7 @@ public class CTDHeadResponseExternal {
     private Integer DepM;
     private Integer CondDepB;
     private String LanderID;
-    private Set<CTDDataResponseExternal> data = new HashSet<>();
+    private List<CTDDataResponseExternal> data = new ArrayList<>();
 
     public CTDHeadResponseExternal() {
     }
@@ -340,11 +342,11 @@ public class CTDHeadResponseExternal {
         LanderID = landerID;
     }
 
-    public Set<CTDDataResponseExternal> getData() {
+    public List<CTDDataResponseExternal> getData() {
         return data;
     }
 
-    public void setData(Set<CTDDataResponseExternal> data) {
+    public void setData(List<CTDDataResponseExternal> data) {
         this.data = data;
     }
 }

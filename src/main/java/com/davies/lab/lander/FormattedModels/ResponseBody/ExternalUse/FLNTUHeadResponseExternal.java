@@ -4,6 +4,7 @@ import com.davies.lab.lander.Models.ProcessedFLNTUHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class FLNTUHeadResponseExternal {
@@ -33,7 +34,7 @@ public class FLNTUHeadResponseExternal {
     private String SensorType2;
     private Integer BuzzerNumber;
     private String LanderID;
-    private Set<FLNTUDataResponseExternal> data;
+    private List<FLNTUDataResponseExternal> data;
 
     public FLNTUHeadResponseExternal() {
     }
@@ -293,11 +294,11 @@ public class FLNTUHeadResponseExternal {
         LanderID = landerID;
     }
 
-    public Set<FLNTUDataResponseExternal> getData() {
+    public List<FLNTUDataResponseExternal> getData() {
         return data;
     }
 
-    public void setData(Set<FLNTUDataResponseExternal> data) {
+    public void setData(List<FLNTUDataResponseExternal> data) {
         this.data = data;
     }
 }

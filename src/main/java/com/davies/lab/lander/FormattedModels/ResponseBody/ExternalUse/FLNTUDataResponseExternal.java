@@ -3,6 +3,7 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,14 +32,14 @@ public class FLNTUDataResponseExternal {
         HeadID = data.getHeadID().getHeadID();
     }
 
-    public static Set<FLNTUDataResponseExternal> createDataResponse(List<ProcessedFLNTUData> data) {
-        Set<FLNTUDataResponseExternal> responseSet = new HashSet<>();
+    public static List<FLNTUDataResponseExternal> createDataResponse(List<ProcessedFLNTUData> data) {
+        List<FLNTUDataResponseExternal> responseList = new ArrayList<>();
 
         for (ProcessedFLNTUData dataPoint : data) {
-            responseSet.add(new FLNTUDataResponseExternal(dataPoint));
+            responseList.add(new FLNTUDataResponseExternal(dataPoint));
         }
 
-        return responseSet;
+        return responseList;
     }
 
     public Long getID() {

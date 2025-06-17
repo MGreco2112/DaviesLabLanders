@@ -3,13 +3,15 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.ADCPHeadResponse;
 import com.davies.lab.lander.Models.ProcessedADCPHead;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ADCPHeadResponseExternal {
     private Long HeadID;
     private String LanderID;
-    private Set<ADCPDataResponseExternal> data = new HashSet<>();
+    private List<ADCPDataResponseExternal> data = new ArrayList<>();
 
     public ADCPHeadResponseExternal() {
     }
@@ -35,11 +37,11 @@ public class ADCPHeadResponseExternal {
         LanderID = landerID;
     }
 
-    public Set<ADCPDataResponseExternal> getData() {
+    public List<ADCPDataResponseExternal> getData() {
         return data;
     }
 
-    public void setData(Set<ADCPDataResponseExternal> data) {
+    public void setData(List<ADCPDataResponseExternal> data) {
         this.data = data;
     }
 }

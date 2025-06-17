@@ -2,13 +2,15 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
 import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ALBEXCTDHeadResponseExternal {
     private Long HeadID;
     private String LanderID;
-    private Set<ALBEXCTDDataResponseExternal> data = new HashSet<>();
+    private List<ALBEXCTDDataResponseExternal> data = new ArrayList<>();
 
     public ALBEXCTDHeadResponseExternal() {
     }
@@ -38,11 +40,11 @@ public class ALBEXCTDHeadResponseExternal {
         LanderID = landerID;
     }
 
-    public Set<ALBEXCTDDataResponseExternal> getData() {
+    public List<ALBEXCTDDataResponseExternal> getData() {
         return data;
     }
 
-    public void setData(Set<ALBEXCTDDataResponseExternal> data) {
+    public void setData(List<ALBEXCTDDataResponseExternal> data) {
         this.data = data;
     }
 }

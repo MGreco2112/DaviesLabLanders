@@ -3,6 +3,7 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,14 +38,14 @@ public class ALBEXCTDDataResponseExternal {
         HeadID = data.getHeadID().getHeadID();
     }
 
-    public static Set<ALBEXCTDDataResponseExternal> createBulkResponses(List<ProcessedAlbexCTDData> headData) {
-        Set<ALBEXCTDDataResponseExternal> newSet = new HashSet<>();
+    public static List<ALBEXCTDDataResponseExternal> createBulkResponses(List<ProcessedAlbexCTDData> headData) {
+        List<ALBEXCTDDataResponseExternal> newList = new ArrayList<>();
 
         for (ProcessedAlbexCTDData data : headData) {
-            newSet.add(new ALBEXCTDDataResponseExternal(data));
+            newList.add(new ALBEXCTDDataResponseExternal(data));
         }
 
-        return newSet;
+        return newList;
     }
 
     public Long getID() {

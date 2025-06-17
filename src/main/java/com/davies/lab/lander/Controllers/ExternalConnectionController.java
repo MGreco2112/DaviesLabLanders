@@ -9,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -68,9 +66,9 @@ public class ExternalConnectionController {
         if (ctdHead.isPresent()) {
             CTDHeadResponseExternal newCtdHead = new CTDHeadResponseExternal(ctdHead.get());
 
-            Set<CTDDataResponseExternal> ctdDataSet = CTDDataResponseExternal.createBulkResponses(ctdDataRepository.findDataByHeadId(ctdHead.get().getHeadID()));
+            List<CTDDataResponseExternal> ctdDataList = CTDDataResponseExternal.createBulkResponses(ctdDataRepository.findDataByHeadAndAlingedStatus(ctdHead.get().getHeadID(), true));
 
-            newCtdHead.setData(ctdDataSet);
+            newCtdHead.setData(ctdDataList);
 
             selLander.setCtdHead(newCtdHead);
         }
@@ -82,9 +80,9 @@ public class ExternalConnectionController {
         if (doHead.isPresent()) {
             DOHeadResponseExternal newDoHead = new DOHeadResponseExternal(doHead.get());
 
-            Set<DODataResponseExternal> doDataSet = DODataResponseExternal.createDataResponses(doDataRepository.findDoDataByHeadId(doHead.get().getHeadID()));
+            List<DODataResponseExternal> doDataList = DODataResponseExternal.createDataResponses(doDataRepository.findDoDataByHeadId(doHead.get().getHeadID()));
 
-            newDoHead.setData(doDataSet);
+            newDoHead.setData(doDataList);
 
             selLander.setDoHead(newDoHead);
         }
@@ -95,9 +93,9 @@ public class ExternalConnectionController {
         if (flntuHead.isPresent()) {
             FLNTUHeadResponseExternal newFlntuHead = new FLNTUHeadResponseExternal(flntuHead.get());
 
-            Set<FLNTUDataResponseExternal> flntuDataSet = FLNTUDataResponseExternal.createDataResponse(flntuDataRepository.findDataFromHeadId(flntuHead.get().getHeadID()));
+            List<FLNTUDataResponseExternal> flntuDataList = FLNTUDataResponseExternal.createDataResponse(flntuDataRepository.findDataFromHeadId(flntuHead.get().getHeadID()));
 
-            newFlntuHead.setData(flntuDataSet);
+            newFlntuHead.setData(flntuDataList);
 
             selLander.setFlntuHead(newFlntuHead);
         }
@@ -109,9 +107,9 @@ public class ExternalConnectionController {
         if (albexHead.isPresent()) {
             ALBEXCTDHeadResponseExternal newAlbexHead = new ALBEXCTDHeadResponseExternal(albexHead.get());
 
-            Set<ALBEXCTDDataResponseExternal> albexDataSet = ALBEXCTDDataResponseExternal.createBulkResponses(albexDataRepository.findDataByHeadId(albexHead.get().getHeadID()));
+            List<ALBEXCTDDataResponseExternal> albexDataList = ALBEXCTDDataResponseExternal.createBulkResponses(albexDataRepository.findDataByHeadId(albexHead.get().getHeadID()));
 
-            newAlbexHead.setData(albexDataSet);
+            newAlbexHead.setData(albexDataList);
 
             selLander.setAlbexHead(newAlbexHead);
         }
@@ -122,9 +120,9 @@ public class ExternalConnectionController {
         if (adcpHead.isPresent()) {
             ADCPHeadResponseExternal newADCPHead = new ADCPHeadResponseExternal(adcpHead.get());
 
-            Set<ADCPDataResponseExternal> adcpDataSet = ADCPDataResponseExternal.createBulkResponses(adcpDataRepository.findDataByHeadId(adcpHead.get().getHeadID()));
+            List<ADCPDataResponseExternal> adcpDataList = ADCPDataResponseExternal.createBulkResponses(adcpDataRepository.findDataByHeadAndAlignedStatus(adcpHead.get().getHeadID(), true));
 
-            newADCPHead.setData(adcpDataSet);
+            newADCPHead.setData(adcpDataList);
 
             selLander.setAdcpHead(newADCPHead);
         }
@@ -142,15 +140,15 @@ public class ExternalConnectionController {
         }
 
         CTDHeadResponseExternal newHead = new CTDHeadResponseExternal(selHead.get());
-        Set<CTDDataResponseExternal> newDataSet = new HashSet<>();
+        List<CTDDataResponseExternal> newDataList = new ArrayList<>();
 
-        for (ProcessedCTDData selData : selHead.get().getData()) {
-            newDataSet.add(
+        for (ProcessedCTDData selData : ctdDataRepository.findDataByHeadAndAlingedStatus(selHead.get().getHeadID(), true)) {
+            newDataList.add(
                     new CTDDataResponseExternal(selData)
             );
         }
 
-        newHead.setData(newDataSet);
+        newHead.setData(newDataList);
 
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
@@ -165,15 +163,15 @@ public class ExternalConnectionController {
         }
 
         DOHeadResponseExternal newHead = new DOHeadResponseExternal(selHead.get());
-        Set<DODataResponseExternal> newDataSet = new HashSet<>();
+        List<DODataResponseExternal> newDataList = new ArrayList<>();
 
         for (ProcessedDOData selData : selHead.get().getData()) {
-            newDataSet.add(
+            newDataList.add(
                     new DODataResponseExternal(selData)
             );
         }
 
-        newHead.setData(newDataSet);
+        newHead.setData(newDataList);
 
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
@@ -188,15 +186,15 @@ public class ExternalConnectionController {
         }
 
         FLNTUHeadResponseExternal newHead = new FLNTUHeadResponseExternal(selHead.get());
-        Set<FLNTUDataResponseExternal> newDataSet = new HashSet<>();
+        List<FLNTUDataResponseExternal> newDataList = new ArrayList<>();
 
         for (ProcessedFLNTUData selData : selHead.get().getData()) {
-            newDataSet.add(
+            newDataList.add(
                     new FLNTUDataResponseExternal(selData)
             );
         }
 
-        newHead.setData(newDataSet);
+        newHead.setData(newDataList);
 
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
@@ -210,13 +208,13 @@ public class ExternalConnectionController {
         }
 
         ALBEXCTDHeadResponseExternal newHead = new ALBEXCTDHeadResponseExternal(selHead.get());
-        Set<ALBEXCTDDataResponseExternal> newDataSet = new HashSet<>();
+        List<ALBEXCTDDataResponseExternal> newDataList = new ArrayList<>();
 
         for (ProcessedAlbexCTDData data : selHead.get().getData()) {
-            newDataSet.add(new ALBEXCTDDataResponseExternal(data));
+            newDataList.add(new ALBEXCTDDataResponseExternal(data));
         }
 
-        newHead.setData(newDataSet);
+        newHead.setData(newDataList);
 
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
@@ -230,13 +228,13 @@ public class ExternalConnectionController {
         }
 
         ADCPHeadResponseExternal newHead = new ADCPHeadResponseExternal(selHead.get());
-        Set<ADCPDataResponseExternal> newDataSet = new HashSet<>();
+        List<ADCPDataResponseExternal> newDataList = new ArrayList<>();
 
-        for (ProcessedADCPData data : selHead.get().getData()) {
-            newDataSet.add(new ADCPDataResponseExternal(data));
+        for (ProcessedADCPData data : adcpDataRepository.findDataByHeadAndAlignedStatus(selHead.get().getHeadID(), true)) {
+            newDataList.add(new ADCPDataResponseExternal(data));
         }
 
-        newHead.setData(newDataSet);
+        newHead.setData(newDataList);
 
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }

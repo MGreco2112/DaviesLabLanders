@@ -4,6 +4,7 @@ import com.davies.lab.lander.Models.ProcessedDOHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class DOHeadResponseExternal {
@@ -34,7 +35,7 @@ public class DOHeadResponseExternal {
     private Integer SetSal;
     private String FilmNo;
     private String LanderID;
-    private Set<DODataResponseExternal> data;
+    private List<DODataResponseExternal> data;
 
     public DOHeadResponseExternal() {
     }
@@ -294,11 +295,11 @@ public class DOHeadResponseExternal {
         LanderID = landerID;
     }
 
-    public Set<DODataResponseExternal> getData() {
+    public List<DODataResponseExternal> getData() {
         return data;
     }
 
-    public void setData(Set<DODataResponseExternal> data) {
+    public void setData(List<DODataResponseExternal> data) {
         this.data = data;
     }
 }
