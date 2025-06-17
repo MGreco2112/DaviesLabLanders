@@ -5,6 +5,7 @@ import com.davies.lab.lander.Models.ProcessedFLNTUData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class UpdateFLNTUHeaderRequest {
@@ -33,12 +34,12 @@ public class UpdateFLNTUHeaderRequest {
     private String SensorType2;
     private Integer BuzzerNumber;
     private Lander LanderID;
-    private Set<ProcessedFLNTUData> data;
+    private List<ProcessedFLNTUData> data;
 
     public UpdateFLNTUHeaderRequest() {
     }
 
-    public UpdateFLNTUHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, Set<ProcessedFLNTUData> data) {
+    public UpdateFLNTUHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, List<ProcessedFLNTUData> data) {
         SondeName = sondeName;
         SondeNo = sondeNo;
         SensorType = sensorType;
@@ -285,11 +286,11 @@ public class UpdateFLNTUHeaderRequest {
         LanderID = landerID;
     }
 
-    public Set<ProcessedFLNTUData> getData() {
+    public List<ProcessedFLNTUData> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedFLNTUData> data) {
+    public void setData(List<ProcessedFLNTUData> data) {
         this.data = data;
     }
 }

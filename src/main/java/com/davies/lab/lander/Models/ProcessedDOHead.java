@@ -4,7 +4,9 @@ package com.davies.lab.lander.Models;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,10 +43,10 @@ public class ProcessedDOHead {
     @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    private Set<ProcessedDOData> data;
+    private List<ProcessedDOData> data;
 
     public ProcessedDOHead() {
-        data = new HashSet<>();
+        data = new ArrayList<>();
     }
 
     public ProcessedDOHead(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID) {
@@ -77,7 +79,7 @@ public class ProcessedDOHead {
         LanderID = landerID;
     }
 
-    public ProcessedDOHead(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
+    public ProcessedDOHead(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, List<ProcessedDOData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -333,11 +335,11 @@ public class ProcessedDOHead {
         LanderID = landerID;
     }
 
-    public Set<ProcessedDOData> getData() {
+    public List<ProcessedDOData> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedDOData> data) {
+    public void setData(List<ProcessedDOData> data) {
         this.data = data;
     }
 }

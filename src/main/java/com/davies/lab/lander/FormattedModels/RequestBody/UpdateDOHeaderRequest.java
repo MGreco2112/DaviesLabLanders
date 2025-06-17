@@ -5,6 +5,7 @@ import com.davies.lab.lander.Models.ProcessedDOData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class UpdateDOHeaderRequest {
@@ -34,12 +35,12 @@ public class UpdateDOHeaderRequest {
     private Integer SetSal;
     private String FilmNo;
     private Lander LanderID;
-    private Set<ProcessedDOData> data;
+    private List<ProcessedDOData> data;
 
     public UpdateDOHeaderRequest() {
     }
 
-    public UpdateDOHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, Set<ProcessedDOData> data) {
+    public UpdateDOHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, List<ProcessedDOData> data) {
         SondeName = sondeName;
         SondeNo = sondeNo;
         SensorType = sensorType;
@@ -286,11 +287,11 @@ public class UpdateDOHeaderRequest {
         LanderID = landerID;
     }
 
-    public Set<ProcessedDOData> getData() {
+    public List<ProcessedDOData> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedDOData> data) {
+    public void setData(List<ProcessedDOData> data) {
         this.data = data;
     }
 }
