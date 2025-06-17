@@ -442,6 +442,21 @@ public class ProcessedADCPController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/aligned_data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<AlignedADCPDataResponse>> getAlignedDataByRange(@PathVariable("id") Long headId, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<AlignedADCPDataResponse> res = new ArrayList<>();
+
+        List<ProcessedADCPData> data = repository.findDataByHeadAndAlignedByRange(headId, startDate, endDate);
+
+        for (ProcessedADCPData dataPoint : data) {
+            res.add(
+                    new AlignedADCPDataResponse(dataPoint)
+            );
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/count/{landerID}")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

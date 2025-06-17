@@ -27,6 +27,9 @@ public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDDa
     @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id AND is_aligned = :value", nativeQuery = true)
     List<ProcessedCTDData> findDataByHeadAndAlingedStatus(@Param("id") Long id, @Param("value") boolean value);
 
+    @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id AND is_aligned = 1 AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
+    List<ProcessedCTDData> findDataByHeadAndAlignedStatusInRange(@Param("id") Long id, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
     @Query(value = "SELECT COUNT(*) FROM processedctddata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
 }

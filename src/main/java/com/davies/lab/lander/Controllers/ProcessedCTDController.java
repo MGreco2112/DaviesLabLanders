@@ -338,6 +338,21 @@ public class ProcessedCTDController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/aligned_data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<AlignedCTDDataResponse>> getAlignedDataByRange(@PathVariable("id") Long headId, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<AlignedCTDDataResponse> res = new ArrayList<>();
+
+        List<ProcessedCTDData> data = repository.findDataByHeadAndAlignedStatusInRange(headId, startDate, endDate);
+
+        for (ProcessedCTDData dataPoint : data) {
+            res.add(
+                    new AlignedCTDDataResponse(dataPoint)
+            );
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/count/{landerID}")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
