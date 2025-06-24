@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface AlignedCTDDataRepository extends JpaRepository<AlignedCTDData, Long> {
     @Query(value = "SELECT * FROM alignedctddata WHERE raw_data = :id", nativeQuery = true)
     Optional<AlignedCTDData> findAlignedDataByRawDataID(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM alignedctddata", nativeQuery = true)
+    Integer getAlignedCTDCount();
 }

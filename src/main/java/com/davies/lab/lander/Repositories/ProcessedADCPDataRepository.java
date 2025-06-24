@@ -34,4 +34,7 @@ public interface ProcessedADCPDataRepository extends JpaRepository<ProcessedADCP
 
     @Query(value = "SELECT * FROM processedadcpdata WHERE head_id = :id AND is_aligned = true AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
     List<ProcessedADCPData> findDataByHeadAndAlignedByRange(@Param("id") Long id, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    @Query(value = "SELECT COUNT(*) FROM processedadcpdata", nativeQuery = true)
+    Integer getCountOfData();
 }

@@ -16,4 +16,7 @@ public interface LanderRepository extends JpaRepository<Lander, String> {
 
     @Query(value = "SELECT * FROM lander WHERE asdblanderID LIKE %:landerID%", nativeQuery = true)
     Set<Lander> selectLandersBySimilarID(@Param("landerID") String landerID);
+
+    @Query(value = "SELECT COUNT(*) FROM lander", nativeQuery = true)
+    Integer getLanderCount();
 }

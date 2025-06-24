@@ -27,4 +27,7 @@ public interface ProcessedFLNTUDataRepository extends JpaRepository<ProcessedFLN
 
     @Query(value = "SELECT COUNT(*) FROM processedflntudata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM processedflntudata", nativeQuery = true)
+    Integer findCountOfAllData();
 }

@@ -27,4 +27,7 @@ public interface ProcessedDODataRepository extends JpaRepository<ProcessedDOData
 
     @Query(value = "SELECT COUNT(*) FROM processeddodata WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM processeddodata", nativeQuery = true)
+    Integer findCountOfAllData();
 }

@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface AlignedADCPDataRepository extends JpaRepository<AlignedADCPData, Long> {
     @Query(value = "SELECT * FROM alignedadcpdata WHERE raw_data = :id", nativeQuery = true)
     Optional<AlignedADCPData> findAlignedDataByRawDataID(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM alignedadcpdata", nativeQuery = true)
+    Integer getAlignedCount();
 }

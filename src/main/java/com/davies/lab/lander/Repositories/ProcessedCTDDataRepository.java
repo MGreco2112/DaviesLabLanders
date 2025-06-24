@@ -35,4 +35,7 @@ public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDDa
 
     @Query(value = "SELECT COUNT(*) FROM processedctddata WHERE head_id = :id AND is_aligned = true", nativeQuery = true)
     Integer findCountOfAlignedByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM processedctddata", nativeQuery = true)
+    Integer findCountOfData();
 }
