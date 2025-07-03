@@ -24,13 +24,22 @@ public class DashboardController {
     @Autowired
     private ProcessedCTDDataRepository ctdDataRepository;
     @Autowired
+    private ProcessedCTDHeadRepository ctdHeadRepository;
+    @Autowired
     private ProcessedDODataRepository doDataRepository;
+    @Autowired
+    private ProcessedDOHeadRepository doHeadRepository;
     @Autowired
     private ProcessedFLNTUDataRepository flntuDataRepository;
     @Autowired
+    private ProcessedFLNTUHeadRepository flntuHeadRepository;
+    @Autowired
     private ProcessedAlbexCTDDataRepository albexDataRepository;
+    private ProcessedAlbexCTDHeaderRepository albexCTDHeadRepository;
     @Autowired
     private ProcessedADCPDataRepository adcpDataRepository;
+    @Autowired
+    private ProcessedADCPHeadRepository adcpHeadRepository;
     @Autowired
     private AlignedADCPDataRepository alignedADCPRepository;
     @Autowired
@@ -49,28 +58,40 @@ public class DashboardController {
     }
 
     @GetMapping("/dates")
-    public ResponseEntity<Object> returnDateDataCount() {
+    public ResponseEntity<Map<Integer, Integer>> returnDateDataCount() {
         List<Lander> landers = landerRepository.findAll();
-        Set<LocalDate> landerDates = new HashSet<>();
+        Map<Lander, LocalDate> landerDates = new HashMap<>();
         Map<Integer, Integer> pointsPerYear = new HashMap<>();
 
         for (Lander lander : landers) {
-            landerDates.add(LocalDate.of(lander.getDeploymentDateAndTime().toLocalDate().getYear(), 1, 1));
+            landerDates.put(lander, LocalDate.of(lander.getDeploymentDateAndTime().toLocalDate().getYear(), 1, 1));
         }
 
-        for (LocalDate date : landerDates) {
-            LocalDate endDate = LocalDate.of(date.getYear(), 12, 31);
-            Integer totalPerDate =
-                    adcpDataRepository.getDateCount(date, endDate) +
-                    albexDataRepository.getDateCount(date, endDate) +
-                    ctdDataRepository.getDateCount(date, endDate) +
-                    doDataRepository.getDateCount(date, endDate) +
-                    flntuDataRepository.getDateCount(date, endDate);
+        for (Lander lander : landerDates.keySet()) {
+            Integer totals = 0;
 
-            pointsPerYear.put(date.getYear(), totalPerDate);
+            if (pointsPerYear.containsKey(lander.getDeploymentDateAndTime().toLocalDate().getYear())) {
+                totals = pointsPerYear.get(lander.getDeploymentDateAndTime().toLocalDate().getYear());
+            }
+
+            if (lander.getADCPHead() != null) {
+                totals += adcpHeadRepository.getADCPHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getAlbexHead() != null) {
+                totals += albexCTDHeadRepository.getAlbexHeadsByLanderId(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getCTDHead() != null) {
+                totals += ctdHeadRepository.getCTDHeadsByLanderId(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getDOHead() != null) {
+                totals += doHeadRepository.getDOHeadsByLanderID(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getFLNTUHead() != null) {
+                totals += flntuHeadRepository.getFLNTUHeadsByLanderID(lander.getASDBLanderID()).get().getData().size();
+            }
+
+            pointsPerYear.put(landerDates.get(lander).getYear(), totals);
         }
-
-
 
         return new ResponseEntity<>(pointsPerYear, HttpStatus.OK);
     }
