@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -30,4 +31,7 @@ public interface ProcessedDODataRepository extends JpaRepository<ProcessedDOData
 
     @Query(value = "SELECT COUNT(*) FROM processeddodata", nativeQuery = true)
     Integer findCountOfAllData();
+
+    @Query(value = "SELECT COUNT(*) FROM processeddodata WHERE date BETWEEN :date AND :endDate", nativeQuery = true)
+    Integer getDateCount(@Param("date") LocalDate date, @Param("endDate") LocalDate endDate);
 }

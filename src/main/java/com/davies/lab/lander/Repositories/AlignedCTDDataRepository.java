@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface AlignedCTDDataRepository extends JpaRepository<AlignedCTDData, Long> {
@@ -13,4 +14,5 @@ public interface AlignedCTDDataRepository extends JpaRepository<AlignedCTDData, 
 
     @Query(value = "SELECT COUNT(*) FROM alignedctddata", nativeQuery = true)
     Integer getAlignedCTDCount();
+
 }

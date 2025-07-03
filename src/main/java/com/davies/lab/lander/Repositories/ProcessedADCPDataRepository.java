@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,4 +38,7 @@ public interface ProcessedADCPDataRepository extends JpaRepository<ProcessedADCP
 
     @Query(value = "SELECT COUNT(*) FROM processedadcpdata", nativeQuery = true)
     Integer getCountOfData();
+
+    @Query(value = "SELECT COUNT(*) FROM processedadcpdata WHERE date BETWEEN :date AND :endDate", nativeQuery = true)
+    Integer getDateCount(@Param("date") LocalDate date, @Param("endDate") LocalDate endDate);
 }

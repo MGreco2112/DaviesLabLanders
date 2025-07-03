@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,4 +39,7 @@ public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDDa
 
     @Query(value = "SELECT COUNT(*) FROM processedctddata", nativeQuery = true)
     Integer findCountOfData();
+
+    @Query(value = "SELECT COUNT(*) FROM processedctddata WHERE date BETWEEN :date AND :endDate", nativeQuery = true)
+    Integer getDateCount(@Param("date") LocalDate date, @Param("endDate") LocalDate endDate);
 }
