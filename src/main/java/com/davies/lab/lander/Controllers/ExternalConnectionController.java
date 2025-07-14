@@ -38,6 +38,13 @@ public class ExternalConnectionController {
     @Autowired
     private ProcessedADCPDataRepository adcpDataRepository;
 
+    @GetMapping("/online")
+    public ResponseEntity<APIOnlineResponse> checkOnlineStatus() {
+        APIOnlineResponse res = new APIOnlineResponse(200);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     //GET Lander without sensors
     @GetMapping("/basic_lander/id/{id}")
     public ResponseEntity<BasicLanderResponseExternal> getBasicLander(@PathVariable("id") String id) {
