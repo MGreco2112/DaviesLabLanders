@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.Dashboard.CompletedDashboard;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Dashboard.DashboardResponse;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.*;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @CrossOrigin
@@ -35,6 +35,7 @@ public class DashboardController {
     private ProcessedFLNTUHeadRepository flntuHeadRepository;
     @Autowired
     private ProcessedAlbexCTDDataRepository albexDataRepository;
+    @Autowired
     private ProcessedAlbexCTDHeaderRepository albexCTDHeadRepository;
     @Autowired
     private ProcessedADCPDataRepository adcpDataRepository;
@@ -46,19 +47,25 @@ public class DashboardController {
     private AlignedCTDDataRepository alignedCTDRepository;
 
     @GetMapping("/populate")
-    public ResponseEntity<DashboardResponse> populateDashboard() {
+    public ResponseEntity<CompletedDashboard> getDashboardInformation() {
+        DashboardResponse dash = populateDashboard();
+        Map<Integer, Integer> pointsPerYear = returnDateDataCount();
+
+        return new ResponseEntity<>(new CompletedDashboard(dash, pointsPerYear), HttpStatus.OK);
+    }
+
+    private DashboardResponse populateDashboard() {
         Integer landerCount = landerRepository.getLanderCount();
-        Integer alignedDataPointCount = 0;
-        Integer dataPointCount = 0;
+        int alignedDataPointCount = 0;
+        int dataPointCount = 0;
 
         alignedDataPointCount += alignedCTDRepository.getAlignedCTDCount() + alignedADCPRepository.getAlignedCount();
         dataPointCount += adcpDataRepository.getCountOfData() + albexDataRepository.getCountOfData() + ctdDataRepository.findCountOfData() + doDataRepository.findCountOfAllData() + flntuDataRepository.findCountOfAllData();
 
-        return new ResponseEntity<>(new DashboardResponse(landerCount, dataPointCount, alignedDataPointCount), HttpStatus.OK);
+        return new DashboardResponse(landerCount, dataPointCount, alignedDataPointCount);
     }
 
-    @GetMapping("/dates")
-    public ResponseEntity<Map<Integer, Integer>> returnDateDataCount() {
+    private Map<Integer, Integer> returnDateDataCount() {
         List<Lander> landers = landerRepository.findAll();
         Map<Lander, LocalDate> landerDates = new HashMap<>();
         Map<Integer, Integer> pointsPerYear = new HashMap<>();
@@ -93,6 +100,6 @@ public class DashboardController {
             pointsPerYear.put(landerDates.get(lander).getYear(), totals);
         }
 
-        return new ResponseEntity<>(pointsPerYear, HttpStatus.OK);
+        return pointsPerYear;
     }
 }
