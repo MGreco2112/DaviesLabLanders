@@ -1,5 +1,8 @@
 package com.davies.lab.lander.Models;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.DO_CSV_Request;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -40,6 +43,17 @@ public class ProcessedDOData {
         this.BKDOMgL = BKDOMgL;
         this.isAligned = false;
         HeadID = headID;
+    }
+
+    public ProcessedDOData(DO_CSV_Request dataElement, ProcessedDOHead head) {
+        Date = StringFormatting.formatDataDateString(dataElement.getDate());
+        TempDegC = dataElement.getTempDegC();
+        DO = dataElement.getDo();
+        WeissDoMgL = dataElement.getWeissDoMgL();
+        BattV = dataElement.getBattV();
+        GGDOMgL = dataElement.getGgDoMgL();
+        BKDOMgL = dataElement.getBkDoMgL();
+        HeadID = head;
     }
 
     public ProcessedDOData(LocalDateTime date, Double tempDegC, Double DO, Double weissDoMgL, Double battV, Double GGDOMgL, Double BKDOMgL, Boolean isAligned, ProcessedDOHead headID) {

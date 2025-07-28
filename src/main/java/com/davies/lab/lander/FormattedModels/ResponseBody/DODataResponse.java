@@ -1,5 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
+import com.davies.lab.lander.Models.ProcessedDOData;
+
 import java.time.LocalDateTime;
 
 public class DODataResponse {
@@ -23,6 +25,18 @@ public class DODataResponse {
         this.GGDOMgL = GGDOMgL;
         this.BKDOMgL = BKDOMgL;
         HeadID = headID;
+    }
+
+    public DODataResponse(ProcessedDOData data) {
+        ID = data.getID();
+        Date = data.getDate();
+        TempDegC = data.getTempDegC();
+        DO = data.getDO();
+        WeissDoMgL = data.getWeissDoMgL();
+        BattV = data.getBattV();
+        GGDOMgL = data.getGGDOMgL();
+        BKDOMgL = data.getBKDOMgL();
+        HeadID = data.getHeadID().getHeadID();
     }
 
     public Long getID() {

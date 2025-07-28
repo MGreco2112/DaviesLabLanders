@@ -1,6 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedDOData;
+import com.davies.lab.lander.Models.ProcessedDOHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -67,6 +68,37 @@ public class DOHeadResponse {
         SetSal = setSal;
         FilmNo = filmNo;
         LanderID = landerID;
+    }
+
+    public DOHeadResponse(ProcessedDOHead head) {
+        HeadID = head.getHeadID();
+        SondeName = head.getSondeName();
+        SondeNo = head.getSondeNo();
+        SensorType = head.getSensorType();
+        Channel = head.getChannel();
+        DelayTime = head.getDelayTime();
+        PreHeat = head.getPreHeat();
+        MeasModel = head.getMeasModel();
+        BurstTime = head.getBurstTime();
+        BurstCnt = head.getBurstCnt();
+        IntervalData = head.getIntervalData();
+        SampleCnt = head.getSampleCnt();
+        StartTime = head.getStartTime();
+        EndTime = head.getEndTime();
+        DepAdiRho = head.getDepAdiRho();
+        CoefDate = head.getCoefDate();
+        Ch1 = head.getCh1();
+        Ch2 = head.getCh2();
+        Ch3 = head.getCh3();
+        BuzzerEN = head.getBuzzerEN();
+        BuzzerInterval = head.getBuzzerInterval();
+        COMMENT = head.getCOMMENT();
+        SensorType2 = head.getSensorType2();
+        BuzzerNumber = head.getBuzzerNumber();
+        DepM = head.getDepM();
+        SetSal = head.getSetSal();
+        FilmNo = head.getFilmNo();
+        LanderID = head.getLanderID().getASDBLanderID();
     }
 
     public void createDODataResponse(ProcessedDOData dataPoint) {

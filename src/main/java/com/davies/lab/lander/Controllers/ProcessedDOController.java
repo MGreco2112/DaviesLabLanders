@@ -50,34 +50,7 @@ public class ProcessedDOController {
 
         for (ProcessedDOHead head : heads) {
             DOHeadResponse temp = new DOHeadResponse(
-                    head.getHeadID(),
-                    head.getSondeName(),
-                    head.getSondeNo(),
-                    head.getSensorType(),
-                    head.getChannel(),
-                    head.getDelayTime(),
-                    head.getPreHeat(),
-                    head.getMeasModel(),
-                    head.getBurstTime(),
-                    head.getBurstCnt(),
-                    head.getIntervalData(),
-                    head.getSampleCnt(),
-                    head.getStartTime(),
-                    head.getEndTime(),
-                    head.getDepAdiRho(),
-                    head.getCoefDate(),
-                    head.getCh1(),
-                    head.getCh2(),
-                    head.getCh3(),
-                    head.getBuzzerEN(),
-                    head.getBuzzerInterval(),
-                    head.getCOMMENT(),
-                    head.getSensorType2(),
-                    head.getBuzzerNumber(),
-                    head.getDepM(),
-                    head.getSetSal(),
-                    head.getFilmNo(),
-                    head.getLanderID().getASDBLanderID()
+                    head
             );
 
             for (ProcessedDOData data : head.getData()) {
@@ -100,34 +73,7 @@ public class ProcessedDOController {
         }
 
         res = new DOHeadResponse(
-                head.get().getHeadID(),
-                head.get().getSondeName(),
-                head.get().getSondeNo(),
-                head.get().getSensorType(),
-                head.get().getChannel(),
-                head.get().getDelayTime(),
-                head.get().getPreHeat(),
-                head.get().getMeasModel(),
-                head.get().getBurstTime(),
-                head.get().getBurstCnt(),
-                head.get().getIntervalData(),
-                head.get().getSampleCnt(),
-                head.get().getStartTime(),
-                head.get().getEndTime(),
-                head.get().getDepAdiRho(),
-                head.get().getCoefDate(),
-                head.get().getCh1(),
-                head.get().getCh2(),
-                head.get().getCh3(),
-                head.get().getBuzzerEN(),
-                head.get().getBuzzerInterval(),
-                head.get().getCOMMENT(),
-                head.get().getSensorType2(),
-                head.get().getBuzzerNumber(),
-                head.get().getDepM(),
-                head.get().getSetSal(),
-                head.get().getFilmNo(),
-                head.get().getLanderID().getASDBLanderID()
+                head.get()
         );
 
         res.setDataPointCount(head.get().getData().size());
@@ -159,34 +105,7 @@ public class ProcessedDOController {
         }
 
         res = new DOHeadResponse(
-                head.get().getHeadID(),
-                head.get().getSondeName(),
-                head.get().getSondeNo(),
-                head.get().getSensorType(),
-                head.get().getChannel(),
-                head.get().getDelayTime(),
-                head.get().getPreHeat(),
-                head.get().getMeasModel(),
-                head.get().getBurstTime(),
-                head.get().getBurstCnt(),
-                head.get().getIntervalData(),
-                head.get().getSampleCnt(),
-                head.get().getStartTime(),
-                head.get().getEndTime(),
-                head.get().getDepAdiRho(),
-                head.get().getCoefDate(),
-                head.get().getCh1(),
-                head.get().getCh2(),
-                head.get().getCh3(),
-                head.get().getBuzzerEN(),
-                head.get().getBuzzerInterval(),
-                head.get().getCOMMENT(),
-                head.get().getSensorType2(),
-                head.get().getBuzzerNumber(),
-                head.get().getDepM(),
-                head.get().getSetSal(),
-                head.get().getFilmNo(),
-                head.get().getLanderID().getASDBLanderID()
+                head.get()
         );
 
         for (ProcessedDOData data : head.get().getData()) {
@@ -204,15 +123,7 @@ public class ProcessedDOController {
 
         for (ProcessedDOData selData : data) {
             DODataResponse temp = new DODataResponse(
-                    selData.getID(),
-                    selData.getDate(),
-                    selData.getTempDegC(),
-                    selData.getDO(),
-                    selData.getWeissDoMgL(),
-                    selData.getBattV(),
-                    selData.getGGDOMgL(),
-                    selData.getBKDOMgL(),
-                    selData.getHeadID().getHeadID()
+                    selData
             );
 
             res.add(temp);
@@ -228,15 +139,7 @@ public class ProcessedDOController {
 
         for (ProcessedDOData selData : data) {
             DODataResponse temp = new DODataResponse(
-                    selData.getID(),
-                    selData.getDate(),
-                    selData.getTempDegC(),
-                    selData.getDO(),
-                    selData.getWeissDoMgL(),
-                    selData.getBattV(),
-                    selData.getGGDOMgL(),
-                    selData.getBKDOMgL(),
-                    selData.getHeadID().getHeadID()
+                    selData
             );
 
             res.add(temp);
@@ -252,15 +155,7 @@ public class ProcessedDOController {
 
         for (ProcessedDOData selData : data) {
             DODataResponse temp = new DODataResponse(
-                    selData.getID(),
-                    selData.getDate(),
-                    selData.getTempDegC(),
-                    selData.getDO(),
-                    selData.getWeissDoMgL(),
-                    selData.getBattV(),
-                    selData.getGGDOMgL(),
-                    selData.getBKDOMgL(),
-                    selData.getHeadID().getHeadID()
+                    selData
             );
 
             res.add(temp);
@@ -279,15 +174,7 @@ public class ProcessedDOController {
         }
 
         res = new DODataResponse(
-                data.get().getID(),
-                data.get().getDate(),
-                data.get().getTempDegC(),
-                data.get().getDO(),
-                data.get().getWeissDoMgL(),
-                data.get().getBattV(),
-                data.get().getGGDOMgL(),
-                data.get().getBKDOMgL(),
-                data.get().getHeadID().getHeadID()
+                data.get()
         );
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -304,15 +191,7 @@ public class ProcessedDOController {
 
         for (ProcessedDOData elem : data) {
             res.add(new DODataResponse(
-                    elem.getID(),
-                    elem.getDate(),
-                    elem.getTempDegC(),
-                    elem.getDO(),
-                    elem.getWeissDoMgL(),
-                    elem.getBattV(),
-                    elem.getGGDOMgL(),
-                    elem.getBKDOMgL(),
-                    elem.getHeadID().getHeadID()
+                    elem
             ));
         }
 
@@ -328,15 +207,7 @@ public class ProcessedDOController {
         for (ProcessedDOData selData: data) {
             res.add(
                     new DODataResponse(
-                            selData.getID(),
-                            selData.getDate(),
-                            selData.getTempDegC(),
-                            selData.getDO(),
-                            selData.getWeissDoMgL(),
-                            selData.getBattV(),
-                            selData.getGGDOMgL(),
-                            selData.getBKDOMgL(),
-                            selData.getHeadID().getHeadID()
+                            selData
                     )
             );
         }
@@ -426,13 +297,7 @@ public class ProcessedDOController {
         try {
             for (DO_CSV_Request dataElement : rawData) {
                 repository.save(new ProcessedDOData(
-                        StringFormatting.formatDataDateString(dataElement.getDate()),
-                        dataElement.getTempDegC(),
-                        dataElement.getDo(),
-                        dataElement.getWeissDoMgL(),
-                        dataElement.getBattV(),
-                        dataElement.getGgDoMgL(),
-                        dataElement.getBkDoMgL(),
+                        dataElement,
                         savedHead
                 ));
             }
@@ -596,13 +461,7 @@ public class ProcessedDOController {
 
             for (DO_CSV_Request inputDataPoint : outputData) {
                 ProcessedDOData newData = new ProcessedDOData(
-                        StringFormatting.formatDateString(inputDataPoint.getDate()),
-                        inputDataPoint.getTempDegC(),
-                        inputDataPoint.getDo(),
-                        inputDataPoint.getWeissDoMgL(),
-                        inputDataPoint.getBattV(),
-                        inputDataPoint.getGgDoMgL(),
-                        inputDataPoint.getBkDoMgL(),
+                        inputDataPoint,
                         newHead
                 );
 
