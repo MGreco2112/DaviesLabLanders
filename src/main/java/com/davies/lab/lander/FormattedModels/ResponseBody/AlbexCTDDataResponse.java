@@ -1,5 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
+import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
+
 import java.time.LocalDateTime;
 
 public class AlbexCTDDataResponse {
@@ -27,6 +29,20 @@ public class AlbexCTDDataResponse {
         Pressure_db = pressure_db;
         Flag = flag;
         HeadID = headID;
+    }
+
+    public AlbexCTDDataResponse(ProcessedAlbexCTDData data) {
+        ID = data.getID();
+        Date = data.getDate();
+        Salinity = data.getSalinity();
+        Temperature = data.getTemperature();
+        Oxygen_ml_l = data.getOxygen_ml_l();
+        OxygenSat_percent = data.getOxygenSat_percent();
+        Turbidity_ntu = data.getTurbidity_ntu();
+        Chla_ug_ml = data.getChla_ug_ml();
+        Pressure_db = data.getPressure_db();
+        Flag = data.getFlag();
+        HeadID = data.getHeadID().getHeadID();
     }
 
     public Long getID() {

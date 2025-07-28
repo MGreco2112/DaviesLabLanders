@@ -107,17 +107,7 @@ public class ProcessedAlbexCTDController {
 
         for (ProcessedAlbexCTDData dataPoint : data) {
             AlbexCTDDataResponse temp = new AlbexCTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getSalinity(),
-                    dataPoint.getTemperature(),
-                    dataPoint.getOxygen_ml_l(),
-                    dataPoint.getOxygenSat_percent(),
-                    dataPoint.getTurbidity_ntu(),
-                    dataPoint.getChla_ug_ml(),
-                    dataPoint.getPressure_db(),
-                    dataPoint.getFlag(),
-                    dataPoint.getHeadID().getHeadID()
+                    dataPoint
             );
 
             res.add(temp);
@@ -133,17 +123,7 @@ public class ProcessedAlbexCTDController {
 
         for (ProcessedAlbexCTDData dataPoint : data) {
             AlbexCTDDataResponse temp = new AlbexCTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getSalinity(),
-                    dataPoint.getTemperature(),
-                    dataPoint.getOxygen_ml_l(),
-                    dataPoint.getOxygenSat_percent(),
-                    dataPoint.getTurbidity_ntu(),
-                    dataPoint.getChla_ug_ml(),
-                    dataPoint.getPressure_db(),
-                    dataPoint.getFlag(),
-                    dataPoint.getHeadID().getHeadID()
+                    dataPoint
             );
 
             res.add(temp);
@@ -159,17 +139,7 @@ public class ProcessedAlbexCTDController {
 
         for (ProcessedAlbexCTDData dataPoint : data) {
             AlbexCTDDataResponse temp = new AlbexCTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getSalinity(),
-                    dataPoint.getTemperature(),
-                    dataPoint.getOxygen_ml_l(),
-                    dataPoint.getOxygenSat_percent(),
-                    dataPoint.getTurbidity_ntu(),
-                    dataPoint.getChla_ug_ml(),
-                    dataPoint.getPressure_db(),
-                    dataPoint.getFlag(),
-                    dataPoint.getHeadID().getHeadID()
+                    dataPoint
             );
 
             res.add(temp);
@@ -188,17 +158,7 @@ public class ProcessedAlbexCTDController {
         }
 
         res = new AlbexCTDDataResponse(
-                dataPoint.get().getID(),
-                dataPoint.get().getDate(),
-                dataPoint.get().getSalinity(),
-                dataPoint.get().getTemperature(),
-                dataPoint.get().getOxygen_ml_l(),
-                dataPoint.get().getOxygenSat_percent(),
-                dataPoint.get().getTurbidity_ntu(),
-                dataPoint.get().getChla_ug_ml(),
-                dataPoint.get().getPressure_db(),
-                dataPoint.get().getFlag(),
-                dataPoint.get().getHeadID().getHeadID()
+                dataPoint.get()
         );
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -215,17 +175,7 @@ public class ProcessedAlbexCTDController {
 
         for (ProcessedAlbexCTDData dataPoint : data) {
             res.add(new AlbexCTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getSalinity(),
-                    dataPoint.getTemperature(),
-                    dataPoint.getOxygen_ml_l(),
-                    dataPoint.getOxygenSat_percent(),
-                    dataPoint.getTurbidity_ntu(),
-                    dataPoint.getChla_ug_ml(),
-                    dataPoint.getPressure_db(),
-                    dataPoint.getFlag(),
-                    dataPoint.getHeadID().getHeadID()
+                    dataPoint
             ));
         }
 
@@ -240,17 +190,7 @@ public class ProcessedAlbexCTDController {
 
         for (ProcessedAlbexCTDData dataPoint : data) {
             res.add(new AlbexCTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getSalinity(),
-                    dataPoint.getTemperature(),
-                    dataPoint.getOxygen_ml_l(),
-                    dataPoint.getOxygenSat_percent(),
-                    dataPoint.getTurbidity_ntu(),
-                    dataPoint.getChla_ug_ml(),
-                    dataPoint.getPressure_db(),
-                    dataPoint.getFlag(),
-                    dataPoint.getHeadID().getHeadID()
+                    dataPoint
             ));
         }
 
@@ -326,15 +266,7 @@ public class ProcessedAlbexCTDController {
         try {
             for (AlbexCTD_CSV_Request dataElement : rawData) {
                 repository.save( new ProcessedAlbexCTDData(
-                        StringFormatting.formatDataDateString(dataElement.getDate()),
-                        dataElement.getSalinity_psu(),
-                        dataElement.getTemperature_c(),
-                        dataElement.getOxygen_ml_l(),
-                        dataElement.getOxygen_sat_percent(),
-                        dataElement.getTurbidity_ntu(),
-                        dataElement.getChla_ug_ml(),
-                        dataElement.getPressure_db(),
-                        dataElement.getFlag(),
+                        dataElement,
                         savedHead
                 ));
             }

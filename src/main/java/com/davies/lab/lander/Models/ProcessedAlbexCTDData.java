@@ -1,5 +1,8 @@
 package com.davies.lab.lander.Models;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.AlbexCTD_CSV_Request;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -37,6 +40,20 @@ public class ProcessedAlbexCTDData {
         Flag = flag;
         isAligned = false;
         HeadID = headID;
+    }
+
+    public ProcessedAlbexCTDData(AlbexCTD_CSV_Request request, ProcessedAlbexCTDHeader head) {
+        Date = StringFormatting.formatDataDateString(request.getDate());
+        Salinity = request.getSalinity_psu();
+        Temperature = request.getTemperature_c();
+        Oxygen_ml_l = request.getOxygen_ml_l();
+        Turbidity_ntu = request.getOxygen_sat_percent();
+        Turbidity_ntu = request.getTurbidity_ntu();
+        Chla_ug_ml = request.getChla_ug_ml();
+        Pressure_db = request.getPressure_db();
+        Flag = request.getFlag();
+        isAligned = false;
+        HeadID = head;
     }
 
     public ProcessedAlbexCTDData(Long ID, LocalDateTime date, Double salinity, Double temperature, Double oxygen_ml_l, Double oxygenSat_percent, Double turbidity_ntu, Double chla_ug_ml, Double pressure_db, Integer flag, Boolean isAligned, ProcessedAlbexCTDHeader headID) {
