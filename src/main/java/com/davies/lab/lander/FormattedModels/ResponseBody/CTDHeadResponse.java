@@ -1,6 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedCTDData;
+import com.davies.lab.lander.Models.ProcessedCTDHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -77,6 +78,41 @@ public class CTDHeadResponse {
         DepM = depM;
         CondDepB = condDepB;
         LanderID = landerID;
+    }
+
+    public CTDHeadResponse(ProcessedCTDHead head) {
+        HeadID = head.getHeadID();
+        SondeName = head.getSondeName();
+        SondeNo = getSondeNo();
+        SensorType = head.getSensorType();
+        Channel = head.getChannel();
+        DelayTime = head.getDelayTime();
+        PreHeat = head.getPreHeat();
+        MeasMode = head.getMeasMode();
+        BurstTime = head.getBurstTime();
+        BurstCnt = head.getBurstCnt();
+        IntervalData = head.getIntervalData();
+        SampleCnt = head.getSampleCnt();
+        StartTime = head.getStartTime();
+        EndTime = head.getEndTime();
+        DepAdiRho = head.getDepAdiRho();
+        this.ECA = head.getECA();
+        this.ECB = head.getECB();
+        this.ECDeg = head.getECDeg();
+        this.ECCoef = head.getECCoef();
+        CoefDate = head.getCoefDate();
+        Ch1 = head.getCh1();
+        Ch2 = head.getCh2();
+        Ch3 = head.getCh3();
+        Ch4 = head.getCh4();
+        BuzzerEN = head.getBuzzerEN();
+        BuzzerInterval = head.getBuzzerInterval();
+        this.COMMENT = head.getCOMMENT();
+        SensorType2 = head.getSensorType2();
+        BuzzerNumber = head.getBuzzerNumber();
+        DepM = head.getDepM();
+        CondDepB = head.getCondDepB();
+        LanderID = head.getLanderID().getASDBLanderID();
     }
 
     public void createDataResponse(ProcessedCTDData CTDData) {

@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Models;
 
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.CTD_CSV_Request;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -58,6 +60,17 @@ public class ProcessedCTDData {
         this.isAligned = isAligned;
         this.alignedData = alignedData;
         HeadID = headID;
+    }
+
+    public ProcessedCTDData(CTD_CSV_Request data, ProcessedCTDHead head) {
+        Date = StringFormatting.formatDataDateString(data.getDate());
+        TempDegC = data.getTempDegC();
+        Sal = data.getSal();
+        CondMsCm = data.getCondMsCm();
+        Ec25UsCm = data.geteC25uScM();
+        BattV = data.getBattV();
+        this.isAligned = false;
+        HeadID = head;
     }
 
     public Long getID() {

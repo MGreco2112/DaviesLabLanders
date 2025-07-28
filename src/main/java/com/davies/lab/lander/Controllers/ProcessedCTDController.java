@@ -51,38 +51,7 @@ public class ProcessedCTDController {
 
         for (ProcessedCTDHead head : heads) {
             CTDHeadResponse temp = new CTDHeadResponse(
-                    head.getHeadID(),
-                    head.getSondeName(),
-                    head.getSondeNo(),
-                    head.getSensorType(),
-                    head.getChannel(),
-                    head.getDelayTime(),
-                    head.getPreHeat(),
-                    head.getMeasMode(),
-                    head.getBurstTime(),
-                    head.getBurstCnt(),
-                    head.getIntervalData(),
-                    head.getSampleCnt(),
-                    head.getStartTime(),
-                    head.getEndTime(),
-                    head.getDepAdiRho(),
-                    head.getECA(),
-                    head.getECB(),
-                    head.getECDeg(),
-                    head.getECCoef(),
-                    head.getCoefDate(),
-                    head.getCh1(),
-                    head.getCh2(),
-                    head.getCh3(),
-                    head.getCh4(),
-                    head.getBuzzerEN(),
-                    head.getBuzzerInterval(),
-                    head.getCOMMENT(),
-                    head.getSensorType2(),
-                    head.getBuzzerNumber(),
-                    head.getDepM(),
-                    head.getCondDepB(),
-                    head.getLanderID().getASDBLanderID()
+                    head
             );
 
             for (ProcessedCTDData data : head.getData()) {
@@ -105,38 +74,7 @@ public class ProcessedCTDController {
         }
 
         res = new CTDHeadResponse(
-                head.get().getHeadID(),
-                head.get().getSondeName(),
-                head.get().getSondeNo(),
-                head.get().getSensorType(),
-                head.get().getChannel(),
-                head.get().getDelayTime(),
-                head.get().getPreHeat(),
-                head.get().getMeasMode(),
-                head.get().getBurstTime(),
-                head.get().getBurstCnt(),
-                head.get().getIntervalData(),
-                head.get().getSampleCnt(),
-                head.get().getStartTime(),
-                head.get().getEndTime(),
-                head.get().getDepAdiRho(),
-                head.get().getECA(),
-                head.get().getECB(),
-                head.get().getECDeg(),
-                head.get().getECCoef(),
-                head.get().getCoefDate(),
-                head.get().getCh1(),
-                head.get().getCh2(),
-                head.get().getCh3(),
-                head.get().getCh4(),
-                head.get().getBuzzerEN(),
-                head.get().getBuzzerInterval(),
-                head.get().getCOMMENT(),
-                head.get().getSensorType2(),
-                head.get().getBuzzerNumber(),
-                head.get().getDepM(),
-                head.get().getCondDepB(),
-                head.get().getLanderID().getASDBLanderID()
+                head.get()
         );
 
         res.setDataPointCount(head.get().getData().size());
@@ -169,38 +107,7 @@ public class ProcessedCTDController {
         }
 
         res = new CTDHeadResponse(
-                head.get().getHeadID(),
-                head.get().getSondeName(),
-                head.get().getSondeNo(),
-                head.get().getSensorType(),
-                head.get().getChannel(),
-                head.get().getDelayTime(),
-                head.get().getPreHeat(),
-                head.get().getMeasMode(),
-                head.get().getBurstTime(),
-                head.get().getBurstCnt(),
-                head.get().getIntervalData(),
-                head.get().getSampleCnt(),
-                head.get().getStartTime(),
-                head.get().getEndTime(),
-                head.get().getDepAdiRho(),
-                head.get().getECA(),
-                head.get().getECB(),
-                head.get().getECDeg(),
-                head.get().getECCoef(),
-                head.get().getCoefDate(),
-                head.get().getCh1(),
-                head.get().getCh2(),
-                head.get().getCh3(),
-                head.get().getCh4(),
-                head.get().getBuzzerEN(),
-                head.get().getBuzzerInterval(),
-                head.get().getCOMMENT(),
-                head.get().getSensorType2(),
-                head.get().getBuzzerNumber(),
-                head.get().getDepM(),
-                head.get().getCondDepB(),
-                head.get().getLanderID().getASDBLanderID()
+                head.get()
         );
 
         for (ProcessedCTDData data : head.get().getData()) {
@@ -218,14 +125,7 @@ public class ProcessedCTDController {
 
         for (ProcessedCTDData dataPoint : data) {
             CTDDataResponse temp = new CTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getTempDegC(),
-                    dataPoint.getSal(),
-                    dataPoint.getCondMsCm(),
-                    dataPoint.getEc25UsCm(),
-                    dataPoint.getBattV(),
-                    dataPoint.getHeadID().getHeadID()
+                    dataPoint
             );
 
             res.add(temp);
@@ -253,14 +153,7 @@ public class ProcessedCTDController {
 
         for (ProcessedCTDData dataPoint : data) {
             res.add(new CTDDataResponse(
-                    dataPoint.getID(),
-                    dataPoint.getDate(),
-                    dataPoint.getTempDegC(),
-                    dataPoint.getSal(),
-                    dataPoint.getCondMsCm(),
-                    dataPoint.getEc25UsCm(),
-                    dataPoint.getBattV(),
-                    dataPoint.getHeadID().getHeadID()
+                    dataPoint
             ));
         }
 
@@ -277,14 +170,7 @@ public class ProcessedCTDController {
         }
 
         res = new CTDDataResponse(
-                data.get().getID(),
-                data.get().getDate(),
-                data.get().getTempDegC(),
-                data.get().getSal(),
-                data.get().getCondMsCm(),
-                data.get().getEc25UsCm(),
-                data.get().getBattV(),
-                data.get().getHeadID().getHeadID()
+                data.get()
         );
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -301,14 +187,7 @@ public class ProcessedCTDController {
 
         for (ProcessedCTDData elem : data) {
             res.add(new CTDDataResponse(
-                    elem.getID(),
-                    elem.getDate(),
-                    elem.getTempDegC(),
-                    elem.getSal(),
-                    elem.getCondMsCm(),
-                    elem.getEc25UsCm(),
-                    elem.getBattV(),
-                    elem.getHeadID().getHeadID()
+                    elem
             ));
         }
 
@@ -324,14 +203,7 @@ public class ProcessedCTDController {
         for (ProcessedCTDData selData : data) {
             res.add(
                     new CTDDataResponse(
-                            selData.getID(),
-                            selData.getDate(),
-                            selData.getTempDegC(),
-                            selData.getSal(),
-                            selData.getCondMsCm(),
-                            selData.getEc25UsCm(),
-                            selData.getBattV(),
-                            selData.getHeadID().getHeadID()
+                            selData
                     )
             );
         }
@@ -438,12 +310,7 @@ public class ProcessedCTDController {
        try {
            for (CTD_CSV_Request dataElement : rawData) {
                repository.save(new ProcessedCTDData(
-                       StringFormatting.formatDataDateString(dataElement.getDate()),
-                       dataElement.getTempDegC(),
-                       dataElement.getSal(),
-                       dataElement.getCondMsCm(),
-                       dataElement.geteC25uScM(),
-                       dataElement.getBattV(),
+                       dataElement,
                        savedHead
                ));
            }
@@ -614,12 +481,7 @@ public class ProcessedCTDController {
 
             for (CTD_CSV_Request inputDataPoint : outputData) {
                 ProcessedCTDData newData = new ProcessedCTDData(
-                        StringFormatting.formatDateString(inputDataPoint.getDate()),
-                        inputDataPoint.getTempDegC(),
-                        inputDataPoint.getSal(),
-                        inputDataPoint.getCondMsCm(),
-                        inputDataPoint.geteC25uScM(),
-                        inputDataPoint.getBattV(),
+                        inputDataPoint,
                         newHead
                 );
 
