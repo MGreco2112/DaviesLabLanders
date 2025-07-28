@@ -1,5 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
+import com.davies.lab.lander.Models.ProcessedFLNTUData;
+
 import java.time.LocalDateTime;
 
 public class FLNTUDataResponse {
@@ -21,6 +23,17 @@ public class FLNTUDataResponse {
         TurbMFTU = turbMFTU;
         BattV = battV;
         HeadID = headID;
+    }
+
+    public FLNTUDataResponse(ProcessedFLNTUData data) {
+        ID = data.getID();
+        Date = data.getDate();
+        TempDegC = data.getTempDegC();
+        ChlFluPPB = data.getChlFluPPB();
+        ChlAUgL = data.getChlAUgL();
+        TurbMFTU = data.getTurbMFTU();
+        BattV = data.getBattV();
+        HeadID = data.getHeadID().getHeadID();
     }
 
     public Long getID() {

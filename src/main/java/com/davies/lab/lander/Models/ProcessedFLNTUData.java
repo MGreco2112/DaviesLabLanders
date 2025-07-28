@@ -1,5 +1,8 @@
 package com.davies.lab.lander.Models;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.FLNTU_CSV_Request;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -48,6 +51,17 @@ public class ProcessedFLNTUData {
         BattV = battV;
         this.isAligned = isAligned;
         HeadID = headID;
+    }
+
+    public ProcessedFLNTUData(FLNTU_CSV_Request dataElement, ProcessedFLNTUHead head) {
+        Date = StringFormatting.formatDataDateString(dataElement.getDate());
+        TempDegC = dataElement.getTempDegC();
+        ChlFluPPB = dataElement.getChlFluPpb();
+        ChlAUgL = dataElement.getChlAUgL();
+        TurbMFTU = dataElement.getTurbMFtu();
+        BattV = dataElement.getBattV();
+        isAligned = false;
+        HeadID = head;
     }
 
     public Long getID() {

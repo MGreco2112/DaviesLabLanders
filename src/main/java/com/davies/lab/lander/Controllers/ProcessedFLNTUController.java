@@ -49,34 +49,7 @@ public class ProcessedFLNTUController {
 
         for (ProcessedFLNTUHead selHead : heads) {
             FLNTUHeadResponse temp = new FLNTUHeadResponse(
-                    selHead.getHeadID(),
-                    selHead.getSondeName(),
-                    selHead.getSondeNo(),
-                    selHead.getSensorType(),
-                    selHead.getChannel(),
-                    selHead.getDelayTime(),
-                    selHead.getPreHeat(),
-                    selHead.getMeasMode(),
-                    selHead.getBurstTime(),
-                    selHead.getBurstCnt(),
-                    selHead.getIntervalData(),
-                    selHead.getWiperInterval(),
-                    selHead.getSampleCnt(),
-                    selHead.getStartTime(),
-                    selHead.getEndTime(),
-                    selHead.getCHLA(),
-                    selHead.getCHLB(),
-                    selHead.getCoefDate(),
-                    selHead.getCh1(),
-                    selHead.getCh2(),
-                    selHead.getCh3(),
-                    selHead.getCh4(),
-                    selHead.getBuzzerEN(),
-                    selHead.getBuzzerInterval(),
-                    selHead.getComment(),
-                    selHead.getSensorType2(),
-                    selHead.getBuzzerNumber(),
-                    selHead.getLanderID().getASDBLanderID()
+                    selHead
             );
 
             for (ProcessedFLNTUData selData : selHead.getData()) {
@@ -99,34 +72,7 @@ public class ProcessedFLNTUController {
         }
 
         res = new FLNTUHeadResponse(
-                head.get().getHeadID(),
-                head.get().getSondeName(),
-                head.get().getSondeNo(),
-                head.get().getSensorType(),
-                head.get().getChannel(),
-                head.get().getDelayTime(),
-                head.get().getPreHeat(),
-                head.get().getMeasMode(),
-                head.get().getBurstTime(),
-                head.get().getBurstCnt(),
-                head.get().getIntervalData(),
-                head.get().getWiperInterval(),
-                head.get().getSampleCnt(),
-                head.get().getStartTime(),
-                head.get().getEndTime(),
-                head.get().getCHLA(),
-                head.get().getCHLB(),
-                head.get().getCoefDate(),
-                head.get().getCh1(),
-                head.get().getCh2(),
-                head.get().getCh3(),
-                head.get().getCh4(),
-                head.get().getBuzzerEN(),
-                head.get().getBuzzerInterval(),
-                head.get().getComment(),
-                head.get().getSensorType2(),
-                head.get().getBuzzerNumber(),
-                head.get().getLanderID().getASDBLanderID()
+                head.get()
         );
 
         res.setDataPointCount(head.get().getData().size());
@@ -158,34 +104,7 @@ public class ProcessedFLNTUController {
         }
 
         res = new FLNTUHeadResponse(
-                head.get().getHeadID(),
-                head.get().getSondeName(),
-                head.get().getSondeNo(),
-                head.get().getSensorType(),
-                head.get().getChannel(),
-                head.get().getDelayTime(),
-                head.get().getPreHeat(),
-                head.get().getMeasMode(),
-                head.get().getBurstTime(),
-                head.get().getBurstCnt(),
-                head.get().getIntervalData(),
-                head.get().getWiperInterval(),
-                head.get().getSampleCnt(),
-                head.get().getStartTime(),
-                head.get().getEndTime(),
-                head.get().getCHLA(),
-                head.get().getCHLB(),
-                head.get().getCoefDate(),
-                head.get().getCh1(),
-                head.get().getCh2(),
-                head.get().getCh3(),
-                head.get().getCh4(),
-                head.get().getBuzzerEN(),
-                head.get().getBuzzerInterval(),
-                head.get().getComment(),
-                head.get().getSensorType2(),
-                head.get().getBuzzerNumber(),
-                head.get().getLanderID().getASDBLanderID()
+                head.get()
         );
 
         for (ProcessedFLNTUData data : head.get().getData()) {
@@ -203,14 +122,7 @@ public class ProcessedFLNTUController {
 
         for (ProcessedFLNTUData selData : data) {
             FLNTUDataResponse temp = new FLNTUDataResponse(
-                    selData.getID(),
-                    selData.getDate(),
-                    selData.getTempDegC(),
-                    selData.getChlFluPPB(),
-                    selData.getChlAUgL(),
-                    selData.getTurbMFTU(),
-                    selData.getBattV(),
-                    selData.getHeadID().getHeadID()
+                    selData
             );
 
             res.add(temp);
@@ -229,14 +141,7 @@ public class ProcessedFLNTUController {
         }
 
         res = new FLNTUDataResponse(
-                data.get().getID(),
-                data.get().getDate(),
-                data.get().getTempDegC(),
-                data.get().getChlFluPPB(),
-                data.get().getChlAUgL(),
-                data.get().getTurbMFTU(),
-                data.get().getBattV(),
-                data.get().getHeadID().getHeadID()
+                data.get()
         );
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -249,14 +154,7 @@ public class ProcessedFLNTUController {
 
         for (ProcessedFLNTUData selData : data) {
             FLNTUDataResponse temp = new FLNTUDataResponse(
-                    selData.getID(),
-                    selData.getDate(),
-                    selData.getTempDegC(),
-                    selData.getChlFluPPB(),
-                    selData.getChlAUgL(),
-                    selData.getTurbMFTU(),
-                    selData.getBattV(),
-                    selData.getHeadID().getHeadID()
+                    selData
             );
 
             res.add(temp);
@@ -272,14 +170,7 @@ public class ProcessedFLNTUController {
 
         for (ProcessedFLNTUData selData : data) {
             FLNTUDataResponse temp = new FLNTUDataResponse(
-                    selData.getID(),
-                    selData.getDate(),
-                    selData.getTempDegC(),
-                    selData.getChlFluPPB(),
-                    selData.getChlAUgL(),
-                    selData.getTurbMFTU(),
-                    selData.getBattV(),
-                    selData.getHeadID().getHeadID()
+                    selData
             );
 
             res.add(temp);
@@ -299,14 +190,7 @@ public class ProcessedFLNTUController {
 
         for (ProcessedFLNTUData elem : data) {
             res.add(new FLNTUDataResponse(
-                    elem.getID(),
-                    elem.getDate(),
-                    elem.getTempDegC(),
-                    elem.getChlFluPPB(),
-                    elem.getChlAUgL(),
-                    elem.getTurbMFTU(),
-                    elem.getBattV(),
-                    elem.getHeadID().getHeadID()
+                    elem
             ));
         }
 
@@ -322,14 +206,7 @@ public class ProcessedFLNTUController {
         for (ProcessedFLNTUData selData : data) {
             res.add(
                     new FLNTUDataResponse(
-                            selData.getID(),
-                            selData.getDate(),
-                            selData.getTempDegC(),
-                            selData.getChlFluPPB(),
-                            selData.getChlAUgL(),
-                            selData.getTurbMFTU(),
-                            selData.getBattV(),
-                            selData.getHeadID().getHeadID()
+                            selData
                     )
             );
         }
@@ -420,12 +297,7 @@ public class ProcessedFLNTUController {
         try {
             for (FLNTU_CSV_Request dataElement : rawData) {
                 repository.save(new ProcessedFLNTUData(
-                        StringFormatting.formatDataDateString(dataElement.getDate()),
-                        dataElement.getTempDegC(),
-                        dataElement.getChlFluPpb(),
-                        dataElement.getChlAUgL(),
-                        dataElement.getTurbMFtu(),
-                        dataElement.getBattV(),
+                        dataElement,
                         savedHead
                 ));
             }
@@ -588,12 +460,7 @@ public class ProcessedFLNTUController {
 
             for (FLNTU_CSV_Request inputDataPoint : outputData) {
                 ProcessedFLNTUData newData = new ProcessedFLNTUData (
-                        StringFormatting.formatDateString(inputDataPoint.getDate()),
-                        inputDataPoint.getTempDegC(),
-                        inputDataPoint.getChlFluPpb(),
-                        inputDataPoint.getChlAUgL(),
-                        inputDataPoint.getTurbMFtu(),
-                        inputDataPoint.getBattV(),
+                        inputDataPoint,
                         newHead
                 );
 

@@ -1,6 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
+import com.davies.lab.lander.Models.ProcessedFLNTUHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -96,6 +97,37 @@ public class FLNTUHeadResponse {
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
         LanderID = landerID;
+    }
+
+    public FLNTUHeadResponse(ProcessedFLNTUHead head) {
+        HeadID = head.getHeadID();
+        SondeName = head.getSondeName();
+        SondeNo = head.getSondeNo();
+        SensorType = head.getSensorType();
+        Channel = head.getChannel();
+        DelayTime = head.getDelayTime();
+        PreHeat = head.getPreHeat();
+        MeasMode = head.getMeasMode();
+        BurstTime = head.getBurstTime();
+        BurstCnt = head.getBurstCnt();
+        IntervalData = head.getIntervalData();
+        WiperInterval = head.getWiperInterval();
+        SampleCnt = head.getSampleCnt();
+        StartTime = head.getStartTime();
+        EndTime = head.getEndTime();
+        CHLA = head.getCHLA();
+        CHLB = head.getCHLB();
+        CoefDate = head.getCoefDate();
+        Ch1 = head.getCh1();
+        Ch2 = head.getCh2();
+        Ch3 = head.getCh3();
+        Ch4 = head.getCh4();
+        BuzzerEN = head.getBuzzerEN();
+        BuzzerInterval = head.getBuzzerInterval();
+        Comment = head.getComment();
+        SensorType2 = head.getSensorType2();
+        BuzzerNumber = head.getBuzzerNumber();
+        LanderID = head.getLanderID().getASDBLanderID();
     }
 
     public void createFLNTUDataResponse(ProcessedFLNTUData selData) {
