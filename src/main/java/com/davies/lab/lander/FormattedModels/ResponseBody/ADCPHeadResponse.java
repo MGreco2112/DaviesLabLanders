@@ -1,9 +1,12 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedADCPData;
+import com.davies.lab.lander.Models.ProcessedADCPHead;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ADCPHeadResponse {
@@ -13,11 +16,19 @@ public class ADCPHeadResponse {
     private Integer AlignedDataPointCount;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Set<ADCPDataResponse> data = new HashSet<>();
+    private List<ADCPDataResponse> data = new ArrayList<>();
 
     public ADCPHeadResponse(Long headID, String landerID) {
         HeadID = headID;
         LanderID = landerID;
+    }
+
+    public ADCPHeadResponse(ProcessedADCPHead head) {
+        HeadID = head.getHeadID();
+        LanderID = head.getLanderID().getASDBLanderID();
+        dataPointCount = head.getData().size();
+        startTime = head.getLanderID().getDeploymentDateAndTime();
+        endTime = head.getLanderID().getRecoveryDateAndTime();
     }
 
     public void createDataResponse(ProcessedADCPData newData) {
@@ -73,11 +84,11 @@ public class ADCPHeadResponse {
         this.endTime = endTime;
     }
 
-    public Set<ADCPDataResponse> getData() {
+    public List<ADCPDataResponse> getData() {
         return data;
     }
 
-    public void setData(Set<ADCPDataResponse> data) {
+    public void setData(List<ADCPDataResponse> data) {
         this.data = data;
     }
 

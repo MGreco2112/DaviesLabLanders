@@ -5,7 +5,9 @@ import com.davies.lab.lander.Models.ProcessedDOHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class DOHeadResponse {
@@ -37,7 +39,7 @@ public class DOHeadResponse {
     private String FilmNo;
     private String LanderID;
     private Integer dataPointCount;
-    private Set<DODataResponse> data = new HashSet<>();
+    private List<DODataResponse> data = new ArrayList<>();
 
     public DOHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
         HeadID = headID;
@@ -342,11 +344,11 @@ public class DOHeadResponse {
         this.dataPointCount = dataPointCount;
     }
 
-    public Set<DODataResponse> getData() {
+    public List<DODataResponse> getData() {
         return data;
     }
 
-    public void setData(Set<DODataResponse> data) {
+    public void setData(List<DODataResponse> data) {
         this.data = data;
     }
 

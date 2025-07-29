@@ -7,7 +7,6 @@ import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.TotalDataResponse;
-import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
 import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;

@@ -1,7 +1,9 @@
 package com.davies.lab.lander.Models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,17 +15,17 @@ public class ProcessedADCPHead {
     @JoinColumn(name = "Lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    private Set<ProcessedADCPData> data;
+    private List<ProcessedADCPData> data;
 
     public ProcessedADCPHead() {
-        data = new HashSet<>();
+        data = new ArrayList<>();
     }
 
     public ProcessedADCPHead(Lander landerID) {
         LanderID = landerID;
     }
 
-    public ProcessedADCPHead(Long headID, Lander landerID, Set<ProcessedADCPData> data) {
+    public ProcessedADCPHead(Long headID, Lander landerID, ArrayList<ProcessedADCPData> data) {
         HeadID = headID;
         LanderID = landerID;
         this.data = data;
@@ -45,11 +47,11 @@ public class ProcessedADCPHead {
         LanderID = landerID;
     }
 
-    public Set<ProcessedADCPData> getData() {
+    public List<ProcessedADCPData> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedADCPData> data) {
+    public void setData(List<ProcessedADCPData> data) {
         this.data = data;
     }
 }

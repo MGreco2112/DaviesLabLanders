@@ -5,7 +5,9 @@ import com.davies.lab.lander.Models.ProcessedFLNTUHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FLNTUHeadResponse {
@@ -36,7 +38,7 @@ public class FLNTUHeadResponse {
     private Integer BuzzerNumber;
     private String LanderID;
     private Integer dataPointCount;
-    private Set<FLNTUDataResponse> data = new HashSet<>();
+    private List<FLNTUDataResponse> data = new ArrayList<>();
 
     public FLNTUHeadResponse(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
         SondeName = sondeName;
@@ -371,11 +373,11 @@ public class FLNTUHeadResponse {
         this.dataPointCount = dataPointCount;
     }
 
-    public Set<FLNTUDataResponse> getData() {
+    public List<FLNTUDataResponse> getData() {
         return data;
     }
 
-    public void setData(Set<FLNTUDataResponse> data) {
+    public void setData(List<FLNTUDataResponse> data) {
         this.data = data;
     }
 

@@ -4,7 +4,9 @@ package com.davies.lab.lander.Models;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,10 +48,10 @@ public class ProcessedCTDHead {
     @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    private Set<ProcessedCTDData> data;
+    private List<ProcessedCTDData> data;
 
     public ProcessedCTDHead() {
-        data = new HashSet<>();
+        data = new ArrayList<>();
     }
 
     public ProcessedCTDHead(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID) {
@@ -86,7 +88,7 @@ public class ProcessedCTDHead {
         LanderID = landerID;
     }
 
-    public ProcessedCTDHead(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, Set<ProcessedCTDData> data) {
+    public ProcessedCTDHead(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, ArrayList<ProcessedCTDData> data) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -378,11 +380,11 @@ public class ProcessedCTDHead {
         LanderID = landerID;
     }
 
-    public Set<ProcessedCTDData> getData() {
+    public List<ProcessedCTDData> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedCTDData> data) {
+    public void setData(List<ProcessedCTDData> data) {
         this.data = data;
     }
 }

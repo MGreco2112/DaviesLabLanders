@@ -1,7 +1,9 @@
 package com.davies.lab.lander.Models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,17 +15,17 @@ public class ProcessedAlbexCTDHeader {
     @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;
     @OneToMany(mappedBy = "HeadID", fetch = FetchType.LAZY)
-    private Set<ProcessedAlbexCTDData> data;
+    private List<ProcessedAlbexCTDData> data;
 
     public ProcessedAlbexCTDHeader() {
-        data = new HashSet<>();
+        data = new ArrayList<>();
     }
 
     public ProcessedAlbexCTDHeader(Lander landerID) {
         this.LanderID = landerID;
     }
 
-    public ProcessedAlbexCTDHeader(Long headID, Lander landerID, Set<ProcessedAlbexCTDData> data) {
+    public ProcessedAlbexCTDHeader(Long headID, Lander landerID, List<ProcessedAlbexCTDData> data) {
         this.headID = headID;
         this.LanderID = landerID;
         this.data = data;
@@ -45,11 +47,11 @@ public class ProcessedAlbexCTDHeader {
         this.LanderID = LanderID;
     }
 
-    public Set<ProcessedAlbexCTDData> getData() {
+    public List<ProcessedAlbexCTDData> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedAlbexCTDData> data) {
+    public void setData(List<ProcessedAlbexCTDData> data) {
         this.data = data;
     }
 }

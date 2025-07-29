@@ -1,9 +1,12 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
+import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AlbexCTDHeadResponse {
@@ -12,11 +15,19 @@ public class AlbexCTDHeadResponse {
     private Integer dataPointCount;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Set<AlbexCTDDataResponse> data = new HashSet<>();
+    private List<AlbexCTDDataResponse> data = new ArrayList<>();
 
     public AlbexCTDHeadResponse(Long headID, String landerID) {
         HeadID = headID;
         LanderID = landerID;
+    }
+
+    public AlbexCTDHeadResponse(ProcessedAlbexCTDHeader head) {
+        HeadID = head.getHeadID();
+        LanderID = head.getLanderID().getASDBLanderID();
+        dataPointCount = head.getData().size();
+        startTime = head.getLanderID().getDeploymentDateAndTime();
+        endTime = head.getLanderID().getRecoveryDateAndTime();
     }
 
     public void createDataResponse(ProcessedAlbexCTDData AlbexData) {
@@ -64,11 +75,11 @@ public class AlbexCTDHeadResponse {
         this.endTime = endTime;
     }
 
-    public Set<AlbexCTDDataResponse> getData() {
+    public List<AlbexCTDDataResponse> getData() {
         return data;
     }
 
-    public void setData(Set<AlbexCTDDataResponse> data) {
+    public void setData(List<AlbexCTDDataResponse> data) {
         this.data = data;
     }
 

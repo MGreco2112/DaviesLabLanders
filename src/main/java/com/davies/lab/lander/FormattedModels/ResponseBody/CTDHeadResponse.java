@@ -5,7 +5,9 @@ import com.davies.lab.lander.Models.ProcessedCTDHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CTDHeadResponse {
@@ -43,7 +45,7 @@ public class CTDHeadResponse {
     private String LanderID;
     private Integer dataPointCount;
     private Integer alignedDataPointCount;
-    private Set<CTDDataResponse> data = new HashSet<>();
+    private List<CTDDataResponse> data = new ArrayList<>();
 
     public CTDHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
         HeadID = headID;
@@ -392,11 +394,11 @@ public class CTDHeadResponse {
         this.alignedDataPointCount = alignedDataPointCount;
     }
 
-    public Set<CTDDataResponse> getData() {
+    public List<CTDDataResponse> getData() {
         return data;
     }
 
-    public void setData(Set<CTDDataResponse> data) {
+    public void setData(List<CTDDataResponse> data) {
         this.data = data;
     }
 

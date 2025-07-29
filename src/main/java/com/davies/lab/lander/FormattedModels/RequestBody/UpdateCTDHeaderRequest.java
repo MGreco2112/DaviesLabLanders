@@ -5,6 +5,7 @@ import com.davies.lab.lander.Models.ProcessedCTDData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class UpdateCTDHeaderRequest {
@@ -39,12 +40,12 @@ public class UpdateCTDHeaderRequest {
     private Integer DepM;
     private Integer CondDepB;
     private Lander LanderID;
-    private Set<ProcessedCTDData> data;
+    private List<ProcessedCTDData> data;
 
     public UpdateCTDHeaderRequest() {
     }
 
-    public UpdateCTDHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, Set<ProcessedCTDData> data) {
+    public UpdateCTDHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, List<ProcessedCTDData> data) {
         SondeName = sondeName;
         SondeNo = sondeNo;
         SensorType = sensorType;
@@ -327,11 +328,11 @@ public class UpdateCTDHeaderRequest {
         LanderID = landerID;
     }
 
-    public Set<ProcessedCTDData> getData() {
+    public List<ProcessedCTDData> getData() {
         return data;
     }
 
-    public void setData(Set<ProcessedCTDData> data) {
+    public void setData(List<ProcessedCTDData> data) {
         this.data = data;
     }
 }
