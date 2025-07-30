@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -51,8 +50,10 @@ public class FrontendCacheController {
         for (ProcessedCTDHead head : heads) {
             CTDHeadResponse temp = new CTDHeadResponse(head);
 
+            temp.setDataPointCount(head.getData().size());
+
             for (ProcessedCTDData data : head.getData()) {
-                temp.createDataResponse(data);
+                temp.createFullDataResponse(data);
             }
 
             res.add(temp);
@@ -69,8 +70,10 @@ public class FrontendCacheController {
         for (ProcessedDOHead head : heads) {
             DOHeadResponse temp = new DOHeadResponse(head);
 
+            temp.setDataPointCount(head.getData().size());
+
             for (ProcessedDOData data : head.getData()) {
-                temp.createDODataResponse(data);
+                temp.createFullDataResponse(data);
             }
 
             res.add(temp);
@@ -87,8 +90,10 @@ public class FrontendCacheController {
         for (ProcessedFLNTUHead head : heads) {
             FLNTUHeadResponse temp = new FLNTUHeadResponse(head);
 
+            temp.setDataPointCount(head.getData().size());
+
             for (ProcessedFLNTUData data : head.getData()) {
-                temp.createFLNTUDataResponse(data);
+                temp.createFullDataResponse(data);
             }
 
             res.add(temp);
@@ -105,8 +110,10 @@ public class FrontendCacheController {
         for (ProcessedAlbexCTDHeader head : heads) {
             AlbexCTDHeadResponse temp = new AlbexCTDHeadResponse(head);
 
+            temp.setDataPointCount(head.getData().size());
+
             for (ProcessedAlbexCTDData data : head.getData()) {
-                temp.createDataResponse(data);
+                temp.createFullDataResponse(data);
             }
 
             res.add(temp);
@@ -123,8 +130,10 @@ public class FrontendCacheController {
         for (ProcessedADCPHead head : heads) {
             ADCPHeadResponse temp = new ADCPHeadResponse(head);
 
+            temp.setDataPointCount(head.getData().size());
+
             for (ProcessedADCPData data : head.getData()) {
-                temp.createDataResponse(data);
+                temp.createFullDataResponse(data);
             }
 
             res.add(temp);

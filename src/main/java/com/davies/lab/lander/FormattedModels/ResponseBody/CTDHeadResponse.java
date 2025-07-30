@@ -6,9 +6,7 @@ import com.davies.lab.lander.Models.ProcessedCTDHead;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CTDHeadResponse {
     private Long HeadID;
@@ -119,6 +117,11 @@ public class CTDHeadResponse {
 
     public void createDataResponse(ProcessedCTDData CTDData) {
         CTDDataResponse res = new CTDDataResponse(CTDData.getID(), CTDData.getDate());
+        data.add(res);
+    }
+
+    public void createFullDataResponse(ProcessedCTDData dataPoint) {
+        CTDDataResponse res = new CTDDataResponse(dataPoint);
         data.add(res);
     }
 
@@ -405,10 +408,30 @@ public class CTDHeadResponse {
     private class CTDDataResponse {
         private Long ID;
         private LocalDateTime Date;
+        private Double TempDegC;
+        private Double Sal;
+        private Double CondMsCm;
+        private Double Ec25UsCm;
+        private Double BattV;
+        private Boolean isAligned;
+        private Long HeadID;
+
 
         public CTDDataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
             Date = date;
+        }
+
+        public CTDDataResponse(ProcessedCTDData data) {
+            ID = data.getID();
+            Date = data.getDate();
+            TempDegC = data.getTempDegC();
+            Sal = data.getSal();
+            CondMsCm = data.getCondMsCm();
+            Ec25UsCm = data.getEc25UsCm();
+            BattV = data.getBattV();
+            isAligned = data.getAligned();
+            HeadID = data.getHeadID().getHeadID();
         }
 
         public Long getID() {
@@ -425,6 +448,62 @@ public class CTDHeadResponse {
 
         public void setDate(LocalDateTime date) {
             Date = date;
+        }
+
+        public Double getTempDegC() {
+            return TempDegC;
+        }
+
+        public void setTempDegC(Double tempDegC) {
+            TempDegC = tempDegC;
+        }
+
+        public Double getSal() {
+            return Sal;
+        }
+
+        public void setSal(Double sal) {
+            Sal = sal;
+        }
+
+        public Double getCondMsCm() {
+            return CondMsCm;
+        }
+
+        public void setCondMsCm(Double condMsCm) {
+            CondMsCm = condMsCm;
+        }
+
+        public Double getEc25UsCm() {
+            return Ec25UsCm;
+        }
+
+        public void setEc25UsCm(Double ec25UsCm) {
+            Ec25UsCm = ec25UsCm;
+        }
+
+        public Double getBattV() {
+            return BattV;
+        }
+
+        public void setBattV(Double battV) {
+            BattV = battV;
+        }
+
+        public Boolean getAligned() {
+            return isAligned;
+        }
+
+        public void setAligned(Boolean aligned) {
+            isAligned = aligned;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
         }
     }
 }

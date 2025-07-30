@@ -3,6 +3,9 @@ package com.davies.lab.lander.FormattedModels.ResponseBody;
 import com.davies.lab.lander.Models.ProcessedFLNTUData;
 import com.davies.lab.lander.Models.ProcessedFLNTUHead;
 
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -139,6 +142,12 @@ public class FLNTUHeadResponse {
         );
 
         data.add(newData);
+    }
+
+    public void createFullDataResponse(ProcessedFLNTUData dataPoint) {
+        FLNTUDataResponse temp = new FLNTUDataResponse(dataPoint);
+
+        data.add(temp);
     }
 
     public Long getHeadID() {
@@ -384,10 +393,28 @@ public class FLNTUHeadResponse {
     private class FLNTUDataResponse {
         private Long ID;
         private LocalDateTime date;
+        private Double TempDegC;
+        private Double ChlFluPPB;
+        private Double ChlAUgL;
+        private Double TurbMFTU;
+        private Double BattV;
+        private Boolean isAligned;
+        private Long HeadID;
 
         public FLNTUDataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
             this.date = date;
+        }
+
+        public FLNTUDataResponse(ProcessedFLNTUData data) {
+            ID = data.getID();
+            date = data.getDate();
+            TempDegC = data.getTempDegC();
+            ChlAUgL = data.getChlAUgL();
+            TurbMFTU = data.getTurbMFTU();
+            BattV = data.getBattV();
+            isAligned = data.getAligned();
+            HeadID = data.getHeadID().getHeadID();
         }
 
         public Long getID() {
@@ -404,6 +431,62 @@ public class FLNTUHeadResponse {
 
         public void setDate(LocalDateTime date) {
             this.date = date;
+        }
+
+        public Double getTempDegC() {
+            return TempDegC;
+        }
+
+        public void setTempDegC(Double tempDegC) {
+            TempDegC = tempDegC;
+        }
+
+        public Double getChlFluPPB() {
+            return ChlFluPPB;
+        }
+
+        public void setChlFluPPB(Double chlFluPPB) {
+            ChlFluPPB = chlFluPPB;
+        }
+
+        public Double getChlAUgL() {
+            return ChlAUgL;
+        }
+
+        public void setChlAUgL(Double chlAUgL) {
+            ChlAUgL = chlAUgL;
+        }
+
+        public Double getTurbMFTU() {
+            return TurbMFTU;
+        }
+
+        public void setTurbMFTU(Double turbMFTU) {
+            TurbMFTU = turbMFTU;
+        }
+
+        public Double getBattV() {
+            return BattV;
+        }
+
+        public void setBattV(Double battV) {
+            BattV = battV;
+        }
+
+        public Boolean getAligned() {
+            return isAligned;
+        }
+
+        public void setAligned(Boolean aligned) {
+            isAligned = aligned;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
         }
     }
 }
