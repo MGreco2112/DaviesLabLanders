@@ -3,26 +3,30 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.Cache;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DOHeadResponse;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DOCacheResponse {
 
-    private List<DOHeadResponse> heads;
+    private Map<Long, DOHeadResponse> heads = new HashMap<>();
     private Date cacheDate;
 
     public DOCacheResponse() {
     }
 
     public DOCacheResponse(List<DOHeadResponse> heads) {
-        this.heads = heads;
+        for (DOHeadResponse head : heads) {
+            this.heads.put(head.getHeadID(), head);
+        }
         cacheDate = new Date();
     }
 
-    public List<DOHeadResponse> getHeads() {
+    public Map<Long, DOHeadResponse> getHeads() {
         return heads;
     }
 
-    public void setHeads(List<DOHeadResponse> heads) {
+    public void setHeads(Map<Long, DOHeadResponse> heads) {
         this.heads = heads;
     }
 

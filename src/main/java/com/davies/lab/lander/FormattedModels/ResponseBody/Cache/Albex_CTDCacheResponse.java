@@ -3,25 +3,29 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.Cache;
 import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDHeadResponse;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Albex_CTDCacheResponse {
-    private List<AlbexCTDHeadResponse> heads;
+    private Map<Long, AlbexCTDHeadResponse> heads = new HashMap<>();
     private Date cacheDate;
 
     public Albex_CTDCacheResponse() {
     }
 
     public Albex_CTDCacheResponse(List<AlbexCTDHeadResponse> heads) {
-        this.heads = heads;
+        for (AlbexCTDHeadResponse head : heads) {
+            this.heads.put(head.getHeadID(), head);
+        }
         cacheDate = new Date();
     }
 
-    public List<AlbexCTDHeadResponse> getHeads() {
+    public Map<Long, AlbexCTDHeadResponse> getHeads() {
         return heads;
     }
 
-    public void setHeads(List<AlbexCTDHeadResponse> heads) {
+    public void setHeads(Map<Long, AlbexCTDHeadResponse> heads) {
         this.heads = heads;
     }
 

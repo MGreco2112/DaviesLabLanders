@@ -3,25 +3,29 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.Cache;
 import com.davies.lab.lander.FormattedModels.ResponseBody.ADCPHeadResponse;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ADCPCacheResponse {
-    private List<ADCPHeadResponse> heads;
+    private Map<Long, ADCPHeadResponse> heads = new HashMap<>();
     private Date cacheDate;
 
     public ADCPCacheResponse() {
     }
 
     public ADCPCacheResponse(List<ADCPHeadResponse> heads) {
-        this.heads = heads;
+        for (ADCPHeadResponse head : heads) {
+            this.heads.put(head.getHeadID(), head);
+        }
         cacheDate = new Date();
     }
 
-    public List<ADCPHeadResponse> getHeads() {
+    public Map<Long, ADCPHeadResponse> getHeads() {
         return heads;
     }
 
-    public void setHeads(List<ADCPHeadResponse> heads) {
+    public void setHeads(Map<Long, ADCPHeadResponse> heads) {
         this.heads = heads;
     }
 
