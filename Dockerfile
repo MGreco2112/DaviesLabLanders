@@ -13,6 +13,12 @@ COPY src/main/resources/application.properties ./
 # copy keystore
 COPY src/main/resources/keystore.p12 keystore.p12
 
+#copy compose
+COPY /docker-compose.yml docker-compose.yml
+
+#copy nginx.conf
+COPY /nginx.conf nginx.conf
+
 # expose the port your Spring application runs on
 EXPOSE 8444
 

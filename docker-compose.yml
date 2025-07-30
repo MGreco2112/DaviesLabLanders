@@ -1,0 +1,16 @@
+services:
+  lander:
+    build: lander-0.0.1-SNAPSHOT.jar
+    ports:
+      - "8444" #expose internal port of the api
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+
+  nginx-proxy:
+    image: nginx:latest
+    ports:
+      - "80:80" #expose port 80 for internal access
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro #mount custom nginx config
+    depends_on:
+      - lander
