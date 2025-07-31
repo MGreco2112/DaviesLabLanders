@@ -5,6 +5,7 @@ import com.davies.lab.lander.FormattedModels.ResponseBody.Dashboard.DashboardRes
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -47,6 +48,7 @@ public class DashboardController {
     private AlignedCTDDataRepository alignedCTDRepository;
 
     @GetMapping("/populate")
+    @Cacheable("dashboard")
     public ResponseEntity<CompletedDashboard> getDashboardInformation() {
         DashboardResponse dash = populateDashboard();
         Map<Integer, Integer> pointsPerYear = returnDateDataCount();
