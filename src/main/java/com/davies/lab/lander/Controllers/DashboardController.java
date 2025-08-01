@@ -6,6 +6,7 @@ import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +20,7 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/dashboard")
+@EnableCaching
 public class DashboardController {
     @Autowired
     private LanderRepository landerRepository;
