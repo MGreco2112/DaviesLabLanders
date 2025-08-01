@@ -20,6 +20,12 @@ public class LanderResponse {
         this.ADDBROVDiveID = ADDBROVDiveID;
     }
 
+    public LanderResponse(Lander lander) {
+        ASDBLanderID = lander.getASDBLanderID();
+        LanderPlatform = lander.getLanderPlatform();
+        ADDBROVDiveID = lander.getASDBROVDiveID();
+    }
+
     public void createCTDHeadResponse(ProcessedCTDHead head) {
         CTDHead = new CTDHeadResponse(head.getHeadID(), head.getBurstTime(), head.getBurstCnt(), head.getStartTime(), head.getEndTime());
     }

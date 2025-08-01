@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -19,4 +20,7 @@ public interface LanderRepository extends JpaRepository<Lander, String> {
 
     @Query(value = "SELECT COUNT(*) FROM lander", nativeQuery = true)
     Integer getLanderCount();
+
+    @Query(value = "SELECT * FROM lander ORDER BY deployment_date_and_time DESC LIMIT 3", nativeQuery = true)
+    List<Lander> getLatestThreeLanders();
 }

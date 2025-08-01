@@ -3,10 +3,13 @@ package com.davies.lab.lander.Controllers;
 import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.LatestLandersResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.*;
 import com.davies.lab.lander.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/landers")
+@EnableCaching
 public class LanderController {
     @Autowired
     private LanderRepository repository;
@@ -144,6 +148,19 @@ public class LanderController {
         }
 
         return res;
+    }
+
+    @GetMapping("/latest_uploads")
+    @Cacheable("latest-landers")
+    public ResponseEntity<LatestLandersResponse> getLatestLanders() {
+        List<Lander> landers = repository.getLatestThreeLanders();
+        List<LanderResponse> res = new ArrayList<>();
+
+        for (Lander lander : landers) {
+            res.add(new LanderResponse(lander));
+        }
+
+        return new ResponseEntity<>(new LatestLandersResponse(res), HttpStatus.OK);
     }
 
     @PostMapping("/new_lander")
