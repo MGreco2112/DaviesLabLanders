@@ -55,13 +55,13 @@ public class LanderController {
              LanderResponse res = new LanderResponse(lander.getASDBLanderID(), lander.getLanderPlatform(), lander.getASDBROVDiveID());
 
              if (lander.getCTDHead() != null) {
-                 res.createCTDHeadResponse(lander.getCTDHead());
+                 res.createBasicCTDHeadResponse(lander.getCTDHead());
              }
              if (lander.getDOHead() != null) {
-                 res.createDOHeadResponse(lander.getDOHead());
+                 res.createBasicDOHeadResponse(lander.getDOHead());
              }
              if (lander.getFLNTUHead() != null) {
-                 res.createFLNTUHeadResponse(lander.getFLNTUHead());
+                 res.createBasicFLNTUHeadResponse(lander.getFLNTUHead());
              }
              if (lander.getAlbexHead() != null) {
                  LocalDateTime startTime = albexCTDDataRepository.findDeploymentDateByHeadID(lander.getAlbexHead().getHeadID());
@@ -72,6 +72,14 @@ public class LanderController {
                  LocalDateTime startTime = adcpDataRepository.findDeploymentDateByHeadID(lander.getADCPHead().getHeadID());
                  LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.getADCPHead().getHeadID());
                  res.createADCPHeadResponse(lander.getADCPHead(), startTime, endTime);
+             }
+
+             if (lander.getDeploymentDateAndTime() != null) {
+                 res.setDeploymentDate(lander.getDeploymentDateAndTime());
+             }
+
+             if (lander.getRecoveryDateAndTime() != null) {
+                 res.setRecoveryDate(lander.getRecoveryDateAndTime());
              }
 
              resList.add(res);
@@ -91,13 +99,13 @@ public class LanderController {
         res = new LanderResponse(lander.get().getASDBLanderID(), lander.get().getLanderPlatform(), lander.get().getASDBROVDiveID());
 
         if (lander.get().getCTDHead() != null) {
-            res.createCTDHeadResponse(lander.get().getCTDHead());
+            res.createBasicCTDHeadResponse(lander.get().getCTDHead());
         }
         if (lander.get().getDOHead() != null) {
-            res.createDOHeadResponse(lander.get().getDOHead());
+            res.createBasicDOHeadResponse(lander.get().getDOHead());
         }
         if (lander.get().getFLNTUHead() != null) {
-            res.createFLNTUHeadResponse(lander.get().getFLNTUHead());
+            res.createBasicFLNTUHeadResponse(lander.get().getFLNTUHead());
         }
         if (lander.get().getAlbexHead() != null) {
             LocalDateTime startTime = albexCTDDataRepository.findDeploymentDateByHeadID(lander.get().getAlbexHead().getHeadID());
@@ -108,6 +116,14 @@ public class LanderController {
             LocalDateTime startTime = adcpDataRepository.findDeploymentDateByHeadID(lander.get().getADCPHead().getHeadID());
             LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.get().getADCPHead().getHeadID());
             res.createADCPHeadResponse(lander.get().getADCPHead(), startTime, endTime);
+        }
+
+        if (lander.get().getDeploymentDateAndTime() != null) {
+            res.setDeploymentDate(lander.get().getDeploymentDateAndTime());
+        }
+
+        if (lander.get().getRecoveryDateAndTime() != null) {
+            res.setRecoveryDate(lander.get().getRecoveryDateAndTime());
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);

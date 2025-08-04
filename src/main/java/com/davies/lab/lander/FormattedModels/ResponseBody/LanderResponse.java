@@ -8,6 +8,8 @@ public class LanderResponse {
     private String ASDBLanderID;
     private String LanderPlatform;
     private String ADDBROVDiveID;
+    public LocalDateTime deploymentDate;
+    public LocalDateTime recoveryDate;
     private CTDHeadResponse CTDHead;
     private DOHeadResponse DOHead;
     private FLNTUHeadResponse FLNTUHead;
@@ -30,12 +32,24 @@ public class LanderResponse {
         CTDHead = new CTDHeadResponse(head.getHeadID(), head.getBurstTime(), head.getBurstCnt(), head.getStartTime(), head.getEndTime());
     }
 
+    public void createBasicCTDHeadResponse(ProcessedCTDHead head) {
+        CTDHead = new CTDHeadResponse(head.getHeadID());
+    }
+
     public void createDOHeadResponse(ProcessedDOHead head) {
         DOHead = new DOHeadResponse(head.getHeadID(), head.getBurstTime(), head.getBurstCnt(), head.getStartTime(), head.getEndTime());
     }
 
+    public void createBasicDOHeadResponse(ProcessedDOHead head) {
+        DOHead = new DOHeadResponse(head.getHeadID());
+    }
+
     public void createFLNTUHeadResponse(ProcessedFLNTUHead head) {
         FLNTUHead = new FLNTUHeadResponse(head.getHeadID(), head.getBurstTime(), head.getBurstCnt(), head.getStartTime(), head.getEndTime());
+    }
+
+    public void createBasicFLNTUHeadResponse(ProcessedFLNTUHead head) {
+        FLNTUHead = new FLNTUHeadResponse(head.getHeadID());
     }
 
     public void createAlbexCTDHeadResponse(ProcessedAlbexCTDHeader head, LocalDateTime startTime, LocalDateTime endTime) {
@@ -112,6 +126,22 @@ public class LanderResponse {
 
     public void setADCPHead(ADCPHeadResponse ADCPHead) {
         this.ADCPHead = ADCPHead;
+    }
+
+    public LocalDateTime getDeploymentDate() {
+        return deploymentDate;
+    }
+
+    public void setDeploymentDate(LocalDateTime deploymentDate) {
+        this.deploymentDate = deploymentDate;
+    }
+
+    public LocalDateTime getRecoveryDate() {
+        return recoveryDate;
+    }
+
+    public void setRecoveryDate(LocalDateTime recoveryDate) {
+        this.recoveryDate = recoveryDate;
     }
 
     private class CTDHeadResponse {
