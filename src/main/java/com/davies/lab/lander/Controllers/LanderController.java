@@ -173,7 +173,11 @@ public class LanderController {
         List<LanderResponse> res = new ArrayList<>();
 
         for (Lander lander : landers) {
-            res.add(new LanderResponse(lander));
+            LanderResponse temp = new LanderResponse(lander);
+            temp.setDeploymentDate(lander.getDeploymentDateAndTime());
+            temp.setRecoveryDate(lander.getRecoveryDateAndTime());
+
+            res.add(temp);
         }
 
         return new ResponseEntity<>(new LatestLandersResponse(res), HttpStatus.OK);
