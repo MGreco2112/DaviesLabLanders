@@ -8,10 +8,12 @@ import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.*;
 import com.davies.lab.lander.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -168,6 +170,8 @@ public class LanderController {
 
     @GetMapping("/latest_uploads")
     @Cacheable("latest-landers")
+    @CacheEvict(value = "latest-landers", allEntries = true)
+    @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
     public ResponseEntity<LatestLandersResponse> getLatestLanders() {
         List<Lander> landers = repository.getLatestThreeLanders();
         List<LanderResponse> res = new ArrayList<>();
