@@ -1,5 +1,7 @@
 package com.davies.lab.lander.Models;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.ADCP_CSV_Request;
+import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -68,6 +70,60 @@ public class ProcessedADCPData {
     private ProcessedADCPHead HeadID;
 
     public ProcessedADCPData() {
+    }
+
+    public ProcessedADCPData(ADCP_CSV_Request request, ProcessedADCPHead head) {
+        Date = StringFormatting.formatDataDateString(request.getDate());
+        Battery = request.getBattery();
+        Heading = request.getHeading();
+        Pitch = request.getPitch();
+        Roll = request.getRoll();
+        Pressure = request.getPressure();
+        Temperature = request.getTemperature();
+        AnalogIn1 = request.getAnalogIn1();
+        AnalogIn2 = request.getAnalogIn2();
+        Speed1_1_0m = request.getSpeed1_1_0m();
+        Speed2_1_5m = request.getSpeed2_1_5m();
+        Speed3_2_0m = request.getSpeed3_2_0m();
+        Speed4_2_5m = request.getSpeed4_2_5m();
+        Speed5_3_0m = request.getSpeed5_3_0m();
+        Speed6_3_5m = request.getSpeed6_3_5m();
+        Speed7_4_0m = request.getSpeed7_4_0m();
+        Speed8_4_5m = request.getSpeed8_4_5m();
+        Speed9_5_0m = request.getSpeed9_5_0m();
+        Speed10_5_5m = request.getSpeed10_5_5m();
+        Speed11_6_0m = request.getSpeed11_6_0m();
+        Speed12_6_5m = request.getSpeed12_6_5m();
+        Speed13_7_0m = request.getSpeed13_7_0m();
+        Speed14_7_5m = request.getSpeed14_7_5m();
+        Speed15_8_0m = request.getSpeed15_8_0m();
+        Speed16_8_5m = request.getSpeed16_8_5m();
+        Speed17_9_0m = request.getSpeed17_9_0m();
+        Speed18_9_5m = request.getSpeed18_9_5m();
+        Speed19_10_0m = request.getSpeed19_10_0m();
+        Speed20_10_5m = request.getSpeed20_10_5m();
+        Dir1_1_0m = request.getDir1_1_0m();
+        Dir2_1_5m = request.getDir2_1_5m();
+        Dir3_2_0m = request.getDir3_2_0m();
+        Dir4_2_5m = request.getDir4_2_5m();
+        Dir5_3_0m = request.getDir5_3_0m();
+        Dir6_3_5m = request.getDir6_3_5m();
+        Dir7_4_0m = request.getDir7_4_0m();
+        Dir8_4_5m = request.getDir8_4_5m();
+        Dir9_5_0m = request.getDir9_5_0m();
+        Dir10_5_5m = request.getDir10_5_5m();
+        Dir11_6_0m = request.getDir11_6_0m();
+        Dir12_6_5m = request.getDir12_6_5m();
+        Dir13_7_0m = request.getDir13_7_0m();
+        Dir14_7_5m = request.getDir14_7_5m();
+        Dir15_8_0m = request.getDir15_8_0m();
+        Dir16_8_5m = request.getDir16_8_5m();
+        Dir17_9_0m = request.getDir17_9_0m();
+        Dir18_9_5m = request.getDir18_9_5m();
+        Dir19_10_0m = request.getDir19_10_0m();
+        Dir20_10_5m = request.getDir20_10_5m();
+        isAligned = false;
+        HeadID = head;
     }
 
     public ProcessedADCPData(LocalDateTime date, Double battery, Double heading, Double pitch, Double roll, Double pressure, Double temperature, Double analogIn1, Double analogIn2, Double speed1_1_0m, Double speed2_1_5m, Double speed3_2_0m, Double speed4_2_5m, Double speed5_3_0m, Double speed6_3_5m, Double speed7_4_0m, Double speed8_4_5m, Double speed9_5_0m, Double speed10_5_5m, Double speed11_6_0m, Double speed12_6_5m, Double speed13_7_0m, Double speed14_7_5m, Double speed15_8_0m, Double speed16_8_5m, Double speed17_9_0m, Double speed18_9_5m, Double speed19_10_0m, Double speed20_10_5m, Double dir1_1_0m, Double dir2_1_5m, Double dir3_2_0m, Double dir4_2_5m, Double dir5_3_0m, Double dir6_3_5m, Double dir7_4_0m, Double dir8_4_5m, Double dir9_5_0m, Double dir10_5_5m, Double dir11_6_0m, Double dir12_6_5m, Double dir13_7_0m, Double dir14_7_5m, Double dir15_8_0m, Double dir16_8_5m, Double dir17_9_0m, Double dir18_9_5m, Double dir19_10_0m, Double dir20_10_5m, ProcessedADCPHead headID) {

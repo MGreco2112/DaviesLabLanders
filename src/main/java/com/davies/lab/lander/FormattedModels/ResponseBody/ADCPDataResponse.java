@@ -1,5 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
+import com.davies.lab.lander.HelperClasses.StringFormatting;
+import com.davies.lab.lander.Models.ProcessedADCPData;
 import com.davies.lab.lander.Models.ProcessedADCPHead;
 
 import java.time.LocalDateTime;
@@ -109,6 +111,59 @@ public class ADCPDataResponse {
         Dir19_10_0m = dir19_10_0m;
         Dir20_10_5m = dir20_10_5m;
         HeadID = headID;
+    }
+    
+    public ADCPDataResponse(ProcessedADCPData data) {
+        Date = data.getDate();
+        Battery = data.getBattery();
+        Heading = data.getHeading();
+        Pitch = data.getPitch();
+        Roll = data.getRoll();
+        Pressure = data.getPressure();
+        Temperature = data.getTemperature();
+        AnalogIn1 = data.getAnalogIn1();
+        AnalogIn2 = data.getAnalogIn2();
+        Speed1_1_0m = data.getSpeed1_1_0m();
+        Speed2_1_5m = data.getSpeed2_1_5m();
+        Speed3_2_0m = data.getSpeed3_2_0m();
+        Speed4_2_5m = data.getSpeed4_2_5m();
+        Speed5_3_0m = data.getSpeed5_3_0m();
+        Speed6_3_5m = data.getSpeed6_3_5m();
+        Speed7_4_0m = data.getSpeed7_4_0m();
+        Speed8_4_5m = data.getSpeed8_4_5m();
+        Speed9_5_0m = data.getSpeed9_5_0m();
+        Speed10_5_5m = data.getSpeed10_5_5m();
+        Speed11_6_0m = data.getSpeed11_6_0m();
+        Speed12_6_5m = data.getSpeed12_6_5m();
+        Speed13_7_0m = data.getSpeed13_7_0m();
+        Speed14_7_5m = data.getSpeed14_7_5m();
+        Speed15_8_0m = data.getSpeed15_8_0m();
+        Speed16_8_5m = data.getSpeed16_8_5m();
+        Speed17_9_0m = data.getSpeed17_9_0m();
+        Speed18_9_5m = data.getSpeed18_9_5m();
+        Speed19_10_0m = data.getSpeed19_10_0m();
+        Speed20_10_5m = data.getSpeed20_10_5m();
+        Dir1_1_0m = data.getDir1_1_0m();
+        Dir2_1_5m = data.getDir2_1_5m();
+        Dir3_2_0m = data.getDir3_2_0m();
+        Dir4_2_5m = data.getDir4_2_5m();
+        Dir5_3_0m = data.getDir5_3_0m();
+        Dir6_3_5m = data.getDir6_3_5m();
+        Dir7_4_0m = data.getDir7_4_0m();
+        Dir8_4_5m = data.getDir8_4_5m();
+        Dir9_5_0m = data.getDir9_5_0m();
+        Dir10_5_5m = data.getDir10_5_5m();
+        Dir11_6_0m = data.getDir11_6_0m();
+        Dir12_6_5m = data.getDir12_6_5m();
+        Dir13_7_0m = data.getDir13_7_0m();
+        Dir14_7_5m = data.getDir14_7_5m();
+        Dir15_8_0m = data.getDir15_8_0m();
+        Dir16_8_5m = data.getDir16_8_5m();
+        Dir17_9_0m = data.getDir17_9_0m();
+        Dir18_9_5m = data.getDir18_9_5m();
+        Dir19_10_0m = data.getDir19_10_0m();
+        Dir20_10_5m = data.getDir20_10_5m();
+        HeadID = data.getHeadID().getHeadID();
     }
 
     public Long getID() {
