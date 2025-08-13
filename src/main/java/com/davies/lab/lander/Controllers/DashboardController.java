@@ -53,13 +53,17 @@ public class DashboardController {
 
     @GetMapping("/populate")
     @Cacheable("dashboard")
-    @CacheEvict(value = "dashboard", allEntries = true)
-    @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
     public ResponseEntity<CompletedDashboard> getDashboardInformation() {
         DashboardResponse dash = populateDashboard();
         Map<Integer, Integer> pointsPerYear = returnDateDataCount();
 
         return new ResponseEntity<>(new CompletedDashboard(dash, pointsPerYear), HttpStatus.OK);
+    }
+
+    @CacheEvict(value = "dashboard", allEntries = true)
+    @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
+    public void evictMyCache() {
+        System.out.println("Cache Cleared");
     }
 
     private DashboardResponse populateDashboard() {

@@ -170,8 +170,6 @@ public class LanderController {
 
     @GetMapping("/latest_uploads")
     @Cacheable("latest-landers")
-    @CacheEvict(value = "latest-landers", allEntries = true)
-    @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
     public ResponseEntity<LatestLandersResponse> getLatestLanders() {
         List<Lander> landers = repository.getLatestThreeLanders();
         List<LanderResponse> res = new ArrayList<>();
@@ -185,6 +183,12 @@ public class LanderController {
         }
 
         return new ResponseEntity<>(new LatestLandersResponse(res), HttpStatus.OK);
+    }
+
+    @CacheEvict(value = "latest-landers", allEntries = true)
+    @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
+    public void evictMyCache() {
+        System.out.println("Cleared Cache");
     }
 
     @PostMapping("/new_lander")
