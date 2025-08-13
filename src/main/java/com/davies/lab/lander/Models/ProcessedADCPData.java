@@ -16,7 +16,7 @@ public class ProcessedADCPData {
     private Double Pitch;
     private Double Roll;
     private Double Pressure;
-    private  Double Temperature;
+    private Double Temperature;
     private Double AnalogIn1;
     private Double AnalogIn2;
     private Double Speed1_1_0m;

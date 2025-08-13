@@ -1,6 +1,7 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.AlignedADCPRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.BulkADCPUploadRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.ADCP_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.UpdateADCPDataRequest;
@@ -602,6 +603,22 @@ public class ProcessedADCPController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+//    TODO: Create Posting Head method as well, or incorporate Head Data into below method as well
+
+//    TODO: Update Request based on Jane's response to this. Will refactor base Entity Object anyway based on Response
+    @PostMapping("/upload/bulk/{head_id}")
+    public ResponseEntity<String> uploadBulkData(@PathVariable("head_id") Long id, @RequestBody BulkADCPUploadRequest request) {
+        Optional<ProcessedADCPHead> selHead = headRepository.findById(id);
+
+        if (selHead.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        repository.saveAll(request.getData());
+
+        return new ResponseEntity<>("Saved", HttpStatus.OK);
     }
 
     @PutMapping("/update/data/{id}")
