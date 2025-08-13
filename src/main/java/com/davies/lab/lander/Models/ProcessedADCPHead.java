@@ -8,9 +8,12 @@ import java.util.Set;
 
 @Entity
 public class ProcessedADCPHead {
+//    TODO: Update this model with incoming metadata from Andy and Jane
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long HeadID;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;

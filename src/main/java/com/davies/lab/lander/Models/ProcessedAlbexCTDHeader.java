@@ -8,9 +8,12 @@ import java.util.Set;
 
 @Entity
 public class ProcessedAlbexCTDHeader {
+//    TODO: Add new metadata fields from info from Andy and Jane
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long headID;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
     private Lander LanderID;
