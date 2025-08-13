@@ -114,6 +114,7 @@ public class ADCPDataResponse {
     }
     
     public ADCPDataResponse(ProcessedADCPData data) {
+        ID = data.getID();
         Date = data.getDate();
         Battery = data.getBattery();
         Heading = data.getHeading();
