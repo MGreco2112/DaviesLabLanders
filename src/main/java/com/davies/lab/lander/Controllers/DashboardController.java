@@ -52,7 +52,7 @@ public class DashboardController {
     private AlignedCTDDataRepository alignedCTDRepository;
 
     @GetMapping("/populate")
-    @Cacheable("dashboard")
+    @Cacheable(value = "dashboard")
     public ResponseEntity<CompletedDashboard> getDashboardInformation() {
         DashboardResponse dash = populateDashboard();
         Map<Integer, Integer> pointsPerYear = returnDateDataCount();

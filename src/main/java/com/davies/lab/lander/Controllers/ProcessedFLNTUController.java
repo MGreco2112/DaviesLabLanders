@@ -18,6 +18,8 @@ import com.davies.lab.lander.Repositories.ProcessedFLNTUHeadRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,7 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/flntu")
+@Cacheable
 public class ProcessedFLNTUController {
     @Autowired
     private LanderRepository landerRepository;
@@ -215,6 +218,7 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/data/count/{landerID}")
+    @Cacheable(value = "FLNTUCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -246,6 +250,7 @@ public class ProcessedFLNTUController {
     }
 
     @PostMapping("/data/count/headless")
+    @Cacheable(value = "FLNTUCount-Headless")
     public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
         LocalDateTime startTime = request.getStartTime();
         LocalDateTime endTime = request.getEndTime();
@@ -265,18 +270,31 @@ public class ProcessedFLNTUController {
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
         Optional<Lander> selLander = landerRepository.findById(landerID);
         List<FLNTU_CSV_Request> rawData = null;
+        Optional<ProcessedFLNTUHead> optionalHead;
         ProcessedFLNTUHead savedHead;
 
         if (selLander.isEmpty()) {
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (selLander.get().getFLNTUHead() != null) {
-            savedHead = headRepository.findById(selLander.get().getFLNTUHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            optionalHead = headRepository.findById(selLander.get().getFLNTUHead().getHeadID());
+
+            if (optionalHead.isEmpty()) {
+                clearFLNTUCache();
+
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+
+            savedHead = optionalHead.get();
         } else {
             ProcessedFLNTUHead dummyHead = new ProcessedFLNTUHead();
             dummyHead.setLanderID(selLander.get());
@@ -287,10 +305,15 @@ public class ProcessedFLNTUController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             rawData = processData(reader);
         } catch (Exception e) {
+            clearFLNTUCache();
+
             System.out.println(e.getLocalizedMessage());
         }
 
         if (rawData == null) {
+            clearFLNTUCache();
+
+
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
 
@@ -302,8 +325,12 @@ public class ProcessedFLNTUController {
                 ));
             }
         } catch (Exception e) {
+            clearFLNTUCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
+
+        clearFLNTUCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -313,10 +340,14 @@ public class ProcessedFLNTUController {
         Optional<Lander> selLander = landerRepository.findById(landerID);
 
         if (selLander.isEmpty()) {
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedHead.isEmpty()) {
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
@@ -382,23 +413,40 @@ public class ProcessedFLNTUController {
 
             updateFLNTUHeader(selLander.get().getFLNTUHead().getHeadID(), updates);
 
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearFLNTUCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/upload_csv/combined/{lander_id}")
     public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerId) {
-        Lander lander = landerRepository.findById(landerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Optional<Lander> selLander = landerRepository.findById(landerId);
+
+        if (selLander.isEmpty()) {
+            clearFLNTUCache();
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        Lander lander = selLander.get();
 
 
         if (processedFile.isEmpty()) {
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (lander.getFLNTUHead() != null) {
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
 
@@ -455,6 +503,8 @@ public class ProcessedFLNTUController {
             List<FLNTU_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
+                clearFLNTUCache();
+
                 return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
             }
 
@@ -468,9 +518,14 @@ public class ProcessedFLNTUController {
 
             }
 
+            clearFLNTUCache();
+
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearFLNTUCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -491,6 +546,11 @@ public class ProcessedFLNTUController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @CacheEvict(value = {"FLNTUCount", "FLNTUCount-Headless"}, allEntries = true)
+    private void clearFLNTUCache() {
+
     }
 
     @PutMapping("/update/header/{id}")

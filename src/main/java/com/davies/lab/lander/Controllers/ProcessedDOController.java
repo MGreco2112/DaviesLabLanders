@@ -18,6 +18,9 @@ import com.davies.lab.lander.Repositories.ProcessedDOHeadRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +37,7 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/do")
+@EnableCaching
 public class ProcessedDOController {
     @Autowired
     private LanderRepository landerRepository;
@@ -216,6 +220,7 @@ public class ProcessedDOController {
     }
 
     @GetMapping("/data/count/{landerID}")
+    @Cacheable(value = "DOCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -246,6 +251,7 @@ public class ProcessedDOController {
     }
 
     @PostMapping("/data/count/headless")
+    @Cacheable("DOCount-Headless")
     public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
         LocalDateTime startTime = request.getStartTime();
         LocalDateTime endTime = request.getEndTime();
@@ -265,18 +271,31 @@ public class ProcessedDOController {
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
         Optional<Lander> selLander = landerRepository.findById(landerID);
         List<DO_CSV_Request> rawData = null;
+        Optional<ProcessedDOHead> optionalHead;
         ProcessedDOHead savedHead;
 
         if (selLander.isEmpty()) {
+            clearDOCache();
+
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
+            clearDOCache();
+
             return new ResponseEntity<>("Missing Uploadded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (selLander.get().getDOHead() != null) {
-            savedHead = headRepository.findById(selLander.get().getDOHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            optionalHead = headRepository.findById(selLander.get().getDOHead().getHeadID());
+
+            if (optionalHead.isEmpty()) {
+                clearDOCache();
+
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+
+            savedHead = optionalHead.get();
         } else {
             ProcessedDOHead dummyHead = new ProcessedDOHead();
             dummyHead.setLanderID(selLander.get());
@@ -287,10 +306,14 @@ public class ProcessedDOController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             rawData = processData(reader);
         } catch (Exception e) {
+            clearDOCache();
+
             System.out.println(e.getLocalizedMessage());
         }
 
         if (rawData == null) {
+            clearDOCache();
+
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
 
@@ -303,9 +326,13 @@ public class ProcessedDOController {
             }
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearDOCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
+        clearDOCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -315,10 +342,14 @@ public class ProcessedDOController {
         Optional<Lander> selLander = landerRepository.findById(landerID);
 
         if (selLander.isEmpty()) {
+            clearDOCache();
+
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedHead.isEmpty()) {
+            clearDOCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
@@ -382,23 +413,41 @@ public class ProcessedDOController {
 
             updateDOHeader(selLander.get().getDOHead().getHeadID(), updates);
 
+            clearDOCache();
+
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearDOCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/upload_csv/combined/{lander_id}")
     public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerId) {
-        Lander lander = landerRepository.findById(landerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Optional<Lander> selLander = landerRepository.findById(landerId);
+        Lander lander;
+
+        if (selLander.isEmpty()) {
+            clearDOCache();
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        lander = selLander.get();
 
 
         if (processedFile.isEmpty()) {
+            clearDOCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (lander.getDOHead() != null) {
+            clearDOCache();
+
             return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
 
@@ -456,6 +505,8 @@ public class ProcessedDOController {
             List<DO_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
+                clearDOCache();
+
                 return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
             }
 
@@ -468,9 +519,14 @@ public class ProcessedDOController {
                 repository.save(newData);
             }
 
+            clearDOCache();
+
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearDOCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -491,6 +547,11 @@ public class ProcessedDOController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @CacheEvict(value = {"DOCache", "DOCache-Headless"}, allEntries = true)
+    private void clearDOCache() {
+
     }
 
     @PutMapping("/update/header/{id}")

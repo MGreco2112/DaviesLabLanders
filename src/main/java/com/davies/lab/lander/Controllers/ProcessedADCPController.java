@@ -18,6 +18,9 @@ import com.davies.lab.lander.Repositories.ProcessedADCPHeadRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +38,7 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/adcp")
+@EnableCaching
 public class ProcessedADCPController {
     @Autowired
     private LanderRepository landerRepository;
@@ -210,6 +214,7 @@ public class ProcessedADCPController {
     }
 
     @GetMapping("/data/count/{landerID}")
+    @Cacheable(value = "ADCPCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -225,6 +230,7 @@ public class ProcessedADCPController {
     }
 
     @PostMapping("/data/count/headless")
+    @Cacheable(value = "ADCPCount-Headless")
     public ResponseEntity<TotalDataResponse> getHeaderlessResponse(@RequestBody HeaderDataRequest request) {
         LocalDateTime startTime = request.getStartTime();
         LocalDateTime endTime = request.getEndTime();
@@ -245,18 +251,32 @@ public class ProcessedADCPController {
 
         Optional<Lander> selLander = landerRepository.findById(landerId);
         List<ADCP_CSV_Request> rawData;
+        Optional<ProcessedADCPHead> optionalHead;
         ProcessedADCPHead savedHead;
 
         if (selLander.isEmpty()) {
+            clearADCPCache();
+
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
+            clearADCPCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (selLander.get().getADCPHead() != null) {
-            savedHead = headRepository.findById(selLander.get().getADCPHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            optionalHead = headRepository.findById(selLander.get().getADCPHead().getHeadID());
+
+            if (optionalHead.isEmpty()) {
+                clearADCPCache();
+
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+
+            savedHead = optionalHead.get();
+
         } else {
             ProcessedADCPHead dummyHead = new ProcessedADCPHead();
             dummyHead.setLanderID(selLander.get());
@@ -268,10 +288,15 @@ public class ProcessedADCPController {
             rawData = processData(reader);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearADCPCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (rawData == null) {
+            clearADCPCache();
+
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
 
@@ -285,8 +310,13 @@ public class ProcessedADCPController {
                 );
             }
         } catch (Exception e) {
+            clearADCPCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
+
+        clearADCPCache();
+
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
@@ -305,6 +335,11 @@ public class ProcessedADCPController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @CacheEvict(value = {"ADCPCount", "ADCPCount-Headless"}, allEntries = true)
+    private void clearADCPCache() {
+
     }
 
 //    TODO: Create Posting Head method as well, or incorporate Head Data into below method as well

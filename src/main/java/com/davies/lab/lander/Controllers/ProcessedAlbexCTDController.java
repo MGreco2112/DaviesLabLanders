@@ -15,7 +15,11 @@ import com.davies.lab.lander.Repositories.ProcessedAlbexCTDDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedAlbexCTDHeaderRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +37,7 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/albex_ctd")
+@EnableCaching
 public class ProcessedAlbexCTDController {
     @Autowired
     private LanderRepository landerRepository;
@@ -197,6 +202,7 @@ public class ProcessedAlbexCTDController {
     }
 
     @GetMapping("/data/count/{landerID}")
+    @Cacheable(value = "AlbexCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -212,6 +218,7 @@ public class ProcessedAlbexCTDController {
     }
 
     @PostMapping("/data/count/headless")
+    @Cacheable(value = "AlbexCount-Headless")
     public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
         LocalDateTime startTime = request.getStartTime();
         LocalDateTime endTime = request.getEndTime();
@@ -232,18 +239,32 @@ public class ProcessedAlbexCTDController {
 
         Optional<Lander> selLander = landerRepository.findById(LanderID);
         List<AlbexCTD_CSV_Request> rawData;
+        Optional<ProcessedAlbexCTDHeader> optionalHead;
         ProcessedAlbexCTDHeader savedHead;
 
         if (selLander.isEmpty()) {
+            clearAlbexCache();
+
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
+            clearAlbexCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (selLander.get().getAlbexHead() != null) {
-            savedHead = headerRepository.findById(selLander.get().getAlbexHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            optionalHead = headerRepository.findById(selLander.get().getAlbexHead().getHeadID());
+
+            if (optionalHead.isEmpty()) {
+                clearAlbexCache();
+
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+
+            savedHead = optionalHead.get();
+
         } else {
             ProcessedAlbexCTDHeader dummyHead = new ProcessedAlbexCTDHeader();
             dummyHead.setLanderID(selLander.get());
@@ -255,10 +276,15 @@ public class ProcessedAlbexCTDController {
             rawData = processData(reader);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearAlbexCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (rawData == null) {
+            clearAlbexCache();
+
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
 
@@ -271,8 +297,13 @@ public class ProcessedAlbexCTDController {
             }
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearAlbexCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
+
+        clearAlbexCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -293,6 +324,11 @@ public class ProcessedAlbexCTDController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @CacheEvict(value = {"AlbexCount", "AlbexCount-Headless"}, allEntries = true)
+    private void clearAlbexCache() {
+
     }
 
     @PutMapping("/update/data/{id}")

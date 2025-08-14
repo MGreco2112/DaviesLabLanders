@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # copy the JAR file into the container
-COPY build/libs/lander-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/lander-1.0.0-SNAPSHOT.jar app.jar
 
 # copy Application.Properties file into container
 COPY src/main/resources/application.properties ./

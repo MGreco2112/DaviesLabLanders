@@ -17,7 +17,11 @@ import com.davies.lab.lander.Repositories.ProcessedCTDDataRepository;
 import com.davies.lab.lander.Repositories.ProcessedCTDHeadRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +37,7 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/ctd")
+@EnableCaching
 public class ProcessedCTDController {
     @Autowired
     private LanderRepository landerRepository;
@@ -227,6 +232,7 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/data/count/{landerID}")
+    @Cacheable(value = "CTDCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -257,6 +263,7 @@ public class ProcessedCTDController {
     }
 
     @PostMapping("/data/count/headless")
+    @Cacheable(value = "CTDCount-Headless")
     public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
         LocalDateTime startTime = request.getStartTime();
         LocalDateTime endTime = request.getEndTime();
@@ -280,10 +287,14 @@ public class ProcessedCTDController {
        ProcessedCTDHead savedHead;
 
        if (selLander.isEmpty()) {
+           clearCTDCache();
+
            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
        }
 
        if (processedFile.isEmpty()) {
+           clearCTDCache();
+
            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
        }
 
@@ -300,10 +311,15 @@ public class ProcessedCTDController {
            rawData = processData(reader);
        } catch (Exception e) {
            System.out.println(e.getLocalizedMessage());
+
+           clearCTDCache();
+
            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
 
        if (rawData == null) {
+           clearCTDCache();
+
            return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
        }
 
@@ -316,8 +332,13 @@ public class ProcessedCTDController {
            }
        } catch (Exception e) {
            System.out.println(e.getLocalizedMessage());
+
+           clearCTDCache();
+
            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
+
+        clearCTDCache();
 
        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -327,10 +348,14 @@ public class ProcessedCTDController {
         Optional<Lander> selLander = landerRepository.findById(landerID);
 
         if (selLander.isEmpty()) {
+            clearCTDCache();
+
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedHead.isEmpty()) {
+            clearCTDCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
@@ -398,23 +423,42 @@ public class ProcessedCTDController {
 
             updateCTDHeader(selLander.get().getCTDHead().getHeadID(), updates);
 
+            clearCTDCache();
+
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearCTDCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/upload_csv/combined/{lander_id}")
     public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerId) {
-        Lander lander = landerRepository.findById(landerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Optional<Lander> selLander = landerRepository.findById(landerId);
+        Lander lander;
 
+        if (selLander.isEmpty()) {
+            clearCTDCache();
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        lander = selLander.get();
 
         if (processedFile.isEmpty()) {
+
+            clearCTDCache();
+
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (lander.getCTDHead() != null) {
+
+            clearCTDCache();
+
             return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
 
@@ -476,6 +520,9 @@ public class ProcessedCTDController {
             List<CTD_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
+
+                clearCTDCache();
+
                 return new ResponseEntity<>("Bad Data", HttpStatus.BAD_REQUEST);
             }
 
@@ -488,9 +535,14 @@ public class ProcessedCTDController {
                 repository.save(newData);
             }
 
+            clearCTDCache();
+
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
+
+            clearCTDCache();
+
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
@@ -512,6 +564,11 @@ public class ProcessedCTDController {
             System.out.println(e.getLocalizedMessage());
             return null;
         }
+    }
+
+    @CacheEvict(value = {"CTDCache", "CTDCache-Headless"}, allEntries = true)
+    private void clearCTDCache() {
+
     }
 
     @PutMapping("/update/header/{id}")
