@@ -232,7 +232,6 @@ public class ProcessedCTDController {
     }
 
     @GetMapping("/data/count/{landerID}")
-    @Cacheable(value = "CTDCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -242,16 +241,7 @@ public class ProcessedCTDController {
             Integer dataCount = repository.findCountByHeadID(selHead.getHeadID());
 
             if (selHead.getStartTime() != null && selHead.getEndTime() != null && selHead.getBurstCnt() != null && selHead.getBurstTime() != null) {
-                LocalDateTime startTime = selHead.getStartTime();
-                LocalDateTime endTime = selHead.getEndTime();
-                int burstCount = selHead.getBurstCnt();
-                int burstTime = selHead.getBurstTime();
-
-                double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
-
-                hoursBetween *= (60.0 / burstTime);
-
-                hoursBetween *= burstCount;
+                double hoursBetween = calculateDataSize(selHead);
 
                 return new ResponseEntity<>(new DataProgressResponse( (dataCount / hoursBetween) ), HttpStatus.OK);
             }
@@ -260,6 +250,22 @@ public class ProcessedCTDController {
         }
 
         return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
+    }
+
+    @Cacheable(value = "CTDCount")
+    private double calculateDataSize(ProcessedCTDHead selHead) {
+        LocalDateTime startTime = selHead.getStartTime();
+        LocalDateTime endTime = selHead.getEndTime();
+        int burstCount = selHead.getBurstCnt();
+        int burstTime = selHead.getBurstTime();
+
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return hoursBetween;
     }
 
     @PostMapping("/data/count/headless")

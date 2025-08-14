@@ -202,7 +202,6 @@ public class ProcessedAlbexCTDController {
     }
 
     @GetMapping("/data/count/{landerID}")
-    @Cacheable(value = "AlbexCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -326,7 +325,7 @@ public class ProcessedAlbexCTDController {
         }
     }
 
-    @CacheEvict(value = {"AlbexCount", "AlbexCount-Headless"}, allEntries = true)
+    @CacheEvict(value = "AlbexCount-Headless", allEntries = true)
     private void clearAlbexCache() {
 
     }

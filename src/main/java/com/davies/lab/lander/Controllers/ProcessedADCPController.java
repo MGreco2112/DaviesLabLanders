@@ -214,7 +214,6 @@ public class ProcessedADCPController {
     }
 
     @GetMapping("/data/count/{landerID}")
-    @Cacheable(value = "ADCPCount")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -337,7 +336,7 @@ public class ProcessedADCPController {
         }
     }
 
-    @CacheEvict(value = {"ADCPCount", "ADCPCount-Headless"}, allEntries = true)
+    @CacheEvict(value = "ADCPCount-Headless", allEntries = true)
     private void clearADCPCache() {
 
     }
