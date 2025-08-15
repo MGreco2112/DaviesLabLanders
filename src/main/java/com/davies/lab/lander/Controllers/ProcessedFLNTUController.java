@@ -43,6 +43,8 @@ public class ProcessedFLNTUController {
     private ProcessedFLNTUDataRepository repository;
     @Autowired
     private ProcessedFLNTUHeadRepository headRepository;
+    @Autowired
+    private DashboardController dashboardController;
 
     //Header Routes
     @GetMapping("/headers")
@@ -337,6 +339,7 @@ public class ProcessedFLNTUController {
         }
 
         clearFLNTUCache();
+        dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -420,6 +423,7 @@ public class ProcessedFLNTUController {
             updateFLNTUHeader(selLander.get().getFLNTUHead().getHeadID(), updates);
 
             clearFLNTUCache();
+            dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
@@ -525,6 +529,8 @@ public class ProcessedFLNTUController {
             }
 
             clearFLNTUCache();
+
+            dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {

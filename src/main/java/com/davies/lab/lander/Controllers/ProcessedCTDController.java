@@ -47,6 +47,8 @@ public class ProcessedCTDController {
     private ProcessedCTDHeadRepository headRepository;
     @Autowired
     private AlignedCTDDataRepository alignedRepository;
+    @Autowired
+    private DashboardController dashboardController;
 
     //Head Routes
     @GetMapping("/headers")
@@ -345,6 +347,7 @@ public class ProcessedCTDController {
        }
 
         clearCTDCache();
+        dashboardController.evictMyCache();
 
        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -430,6 +433,7 @@ public class ProcessedCTDController {
             updateCTDHeader(selLander.get().getCTDHead().getHeadID(), updates);
 
             clearCTDCache();
+            dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
@@ -542,6 +546,7 @@ public class ProcessedCTDController {
             }
 
             clearCTDCache();
+            dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
