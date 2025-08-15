@@ -283,13 +283,11 @@ public class ProcessedDOController {
         ProcessedDOHead savedHead;
 
         if (selLander.isEmpty()) {
-            clearDOCache();
 
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
-            clearDOCache();
 
             return new ResponseEntity<>("Missing Uploadded CSV in Request", HttpStatus.BAD_REQUEST);
         }
@@ -298,7 +296,6 @@ public class ProcessedDOController {
             optionalHead = headRepository.findById(selLander.get().getDOHead().getHeadID());
 
             if (optionalHead.isEmpty()) {
-                clearDOCache();
 
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
@@ -314,13 +311,11 @@ public class ProcessedDOController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             rawData = processData(reader);
         } catch (Exception e) {
-            clearDOCache();
 
             System.out.println(e.getLocalizedMessage());
         }
 
         if (rawData == null) {
-            clearDOCache();
 
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
@@ -334,8 +329,6 @@ public class ProcessedDOController {
             }
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-
-            clearDOCache();
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -351,13 +344,11 @@ public class ProcessedDOController {
         Optional<Lander> selLander = landerRepository.findById(landerID);
 
         if (selLander.isEmpty()) {
-            clearDOCache();
 
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedHead.isEmpty()) {
-            clearDOCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
@@ -429,8 +420,6 @@ public class ProcessedDOController {
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
 
-            clearDOCache();
-
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -450,13 +439,11 @@ public class ProcessedDOController {
 
 
         if (processedFile.isEmpty()) {
-            clearDOCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (lander.getDOHead() != null) {
-            clearDOCache();
 
             return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
@@ -515,7 +502,6 @@ public class ProcessedDOController {
             List<DO_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
-                clearDOCache();
 
                 return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
             }
@@ -535,8 +521,6 @@ public class ProcessedDOController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-
-            clearDOCache();
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }

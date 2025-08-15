@@ -282,13 +282,11 @@ public class ProcessedFLNTUController {
         ProcessedFLNTUHead savedHead;
 
         if (selLander.isEmpty()) {
-            clearFLNTUCache();
 
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
-            clearFLNTUCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
@@ -297,7 +295,6 @@ public class ProcessedFLNTUController {
             optionalHead = headRepository.findById(selLander.get().getFLNTUHead().getHeadID());
 
             if (optionalHead.isEmpty()) {
-                clearFLNTUCache();
 
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
@@ -313,14 +310,11 @@ public class ProcessedFLNTUController {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
             rawData = processData(reader);
         } catch (Exception e) {
-            clearFLNTUCache();
 
             System.out.println(e.getLocalizedMessage());
         }
 
         if (rawData == null) {
-            clearFLNTUCache();
-
 
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
@@ -440,7 +434,6 @@ public class ProcessedFLNTUController {
         Optional<Lander> selLander = landerRepository.findById(landerId);
 
         if (selLander.isEmpty()) {
-            clearFLNTUCache();
 
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -449,13 +442,11 @@ public class ProcessedFLNTUController {
 
 
         if (processedFile.isEmpty()) {
-            clearFLNTUCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (lander.getFLNTUHead() != null) {
-            clearFLNTUCache();
 
             return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
@@ -513,7 +504,6 @@ public class ProcessedFLNTUController {
             List<FLNTU_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
-                clearFLNTUCache();
 
                 return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
             }
@@ -535,8 +525,6 @@ public class ProcessedFLNTUController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-
-            clearFLNTUCache();
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }

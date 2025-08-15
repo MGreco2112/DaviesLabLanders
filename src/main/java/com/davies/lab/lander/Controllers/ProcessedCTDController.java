@@ -295,13 +295,11 @@ public class ProcessedCTDController {
        ProcessedCTDHead savedHead;
 
        if (selLander.isEmpty()) {
-           clearCTDCache();
 
            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
        }
 
        if (processedFile.isEmpty()) {
-           clearCTDCache();
 
            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
        }
@@ -320,13 +318,10 @@ public class ProcessedCTDController {
        } catch (Exception e) {
            System.out.println(e.getLocalizedMessage());
 
-           clearCTDCache();
-
            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
 
        if (rawData == null) {
-           clearCTDCache();
 
            return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
        }
@@ -340,8 +335,6 @@ public class ProcessedCTDController {
            }
        } catch (Exception e) {
            System.out.println(e.getLocalizedMessage());
-
-           clearCTDCache();
 
            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
        }
@@ -357,13 +350,11 @@ public class ProcessedCTDController {
         Optional<Lander> selLander = landerRepository.findById(landerID);
 
         if (selLander.isEmpty()) {
-            clearCTDCache();
 
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedHead.isEmpty()) {
-            clearCTDCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
@@ -439,8 +430,6 @@ public class ProcessedCTDController {
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
 
-            clearCTDCache();
-
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -451,7 +440,6 @@ public class ProcessedCTDController {
         Lander lander;
 
         if (selLander.isEmpty()) {
-            clearCTDCache();
 
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -460,14 +448,10 @@ public class ProcessedCTDController {
 
         if (processedFile.isEmpty()) {
 
-            clearCTDCache();
-
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
         if (lander.getCTDHead() != null) {
-
-            clearCTDCache();
 
             return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
@@ -531,8 +515,6 @@ public class ProcessedCTDController {
 
             if (outputData == null) {
 
-                clearCTDCache();
-
                 return new ResponseEntity<>("Bad Data", HttpStatus.BAD_REQUEST);
             }
 
@@ -551,8 +533,6 @@ public class ProcessedCTDController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-
-            clearCTDCache();
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -46,7 +46,7 @@ public class ProcessedDOData {
     }
 
     public ProcessedDOData(DO_CSV_Request dataElement, ProcessedDOHead head) {
-        Date = StringFormatting.formatDataDateString(dataElement.getDate());
+        Date = StringFormatting.formatDateString(dataElement.getDate());
         TempDegC = dataElement.getTempDegC();
         DO = dataElement.getDo();
         WeissDoMgL = dataElement.getWeissDoMgL();

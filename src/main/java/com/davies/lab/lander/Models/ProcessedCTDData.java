@@ -63,7 +63,7 @@ public class ProcessedCTDData {
     }
 
     public ProcessedCTDData(CTD_CSV_Request data, ProcessedCTDHead head) {
-        Date = StringFormatting.formatDataDateString(data.getDate());
+        Date = StringFormatting.formatDateString(data.getDate());
         TempDegC = data.getTempDegC();
         Sal = data.getSal();
         CondMsCm = data.getCondMsCm();

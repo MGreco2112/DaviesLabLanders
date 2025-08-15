@@ -244,13 +244,11 @@ public class ProcessedAlbexCTDController {
         ProcessedAlbexCTDHeader savedHead;
 
         if (selLander.isEmpty()) {
-            clearAlbexCache();
 
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
-            clearAlbexCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
@@ -259,7 +257,6 @@ public class ProcessedAlbexCTDController {
             optionalHead = headerRepository.findById(selLander.get().getAlbexHead().getHeadID());
 
             if (optionalHead.isEmpty()) {
-                clearAlbexCache();
 
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
@@ -278,13 +275,10 @@ public class ProcessedAlbexCTDController {
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
 
-            clearAlbexCache();
-
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (rawData == null) {
-            clearAlbexCache();
 
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
@@ -298,8 +292,6 @@ public class ProcessedAlbexCTDController {
             }
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-
-            clearAlbexCache();
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }

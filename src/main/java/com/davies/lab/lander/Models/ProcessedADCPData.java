@@ -73,7 +73,7 @@ public class ProcessedADCPData {
     }
 
     public ProcessedADCPData(ADCP_CSV_Request request, ProcessedADCPHead head) {
-        Date = StringFormatting.formatDataDateString(request.getDate());
+        Date = StringFormatting.formatDateString(request.getDate());
         Battery = request.getBattery();
         Heading = request.getHeading();
         Pitch = request.getPitch();

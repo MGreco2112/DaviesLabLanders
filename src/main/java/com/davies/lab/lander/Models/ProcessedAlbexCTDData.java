@@ -43,7 +43,7 @@ public class ProcessedAlbexCTDData {
     }
 
     public ProcessedAlbexCTDData(AlbexCTD_CSV_Request request, ProcessedAlbexCTDHeader head) {
-        Date = StringFormatting.formatDataDateString(request.getDate());
+        Date = StringFormatting.formatDateString(request.getDate());
         Salinity = request.getSalinity_psu();
         Temperature = request.getTemperature_c();
         Oxygen_ml_l = request.getOxygen_ml_l();

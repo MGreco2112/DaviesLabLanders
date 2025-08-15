@@ -54,7 +54,7 @@ public class ProcessedFLNTUData {
     }
 
     public ProcessedFLNTUData(FLNTU_CSV_Request dataElement, ProcessedFLNTUHead head) {
-        Date = StringFormatting.formatDataDateString(dataElement.getDate());
+        Date = StringFormatting.formatDateString(dataElement.getDate());
         TempDegC = dataElement.getTempDegC();
         ChlFluPPB = dataElement.getChlFluPpb();
         ChlAUgL = dataElement.getChlAUgL();

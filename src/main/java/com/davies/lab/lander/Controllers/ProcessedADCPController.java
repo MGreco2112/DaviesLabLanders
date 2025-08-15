@@ -256,13 +256,11 @@ public class ProcessedADCPController {
         ProcessedADCPHead savedHead;
 
         if (selLander.isEmpty()) {
-            clearADCPCache();
 
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedFile.isEmpty()) {
-            clearADCPCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
@@ -271,7 +269,6 @@ public class ProcessedADCPController {
             optionalHead = headRepository.findById(selLander.get().getADCPHead().getHeadID());
 
             if (optionalHead.isEmpty()) {
-                clearADCPCache();
 
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
@@ -290,13 +287,10 @@ public class ProcessedADCPController {
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
 
-            clearADCPCache();
-
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (rawData == null) {
-            clearADCPCache();
 
             return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
         }
@@ -311,7 +305,6 @@ public class ProcessedADCPController {
                 );
             }
         } catch (Exception e) {
-            clearADCPCache();
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
