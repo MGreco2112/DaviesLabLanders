@@ -1,5 +1,6 @@
-package com.davies.lab.lander.Controllers;
+package com.davies.lab.lander.Controllers.Sensors;
 
+import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.FormattedModels.RequestBody.AlignedCTDRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.CTD_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;

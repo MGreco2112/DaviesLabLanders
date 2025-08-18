@@ -16,6 +16,10 @@ public class LanderResponse {
     private FLNTUHeadResponse FLNTUHead;
     private AlbexCTDHeadResponse AlbexCTDHead;
     private ADCPHeadResponse ADCPHead;
+    private BatteryHeadResponse BatteryHead;
+    private BeaconHeadResponse BeaconHead;
+    private CameraHeadResponse CameraHead;
+    private SedimentTrapHeadResponse SedimentTrapHead;
 
     public LanderResponse(String ASDBLanderID, String landerPlatform, String ADDBROVDiveID) {
         this.ASDBLanderID = ASDBLanderID;
@@ -55,14 +59,38 @@ public class LanderResponse {
 
     public void createAlbexCTDHeadResponse(ProcessedAlbexCTDHeader head, LocalDateTime startTime, LocalDateTime endTime) {
         AlbexCTDHead = new AlbexCTDHeadResponse(head.getHeadID());
-        getAlbexCTDHead().setStartTime(startTime);
-        getAlbexCTDHead().setEndTime(endTime);
+        AlbexCTDHead.setStartTime(startTime);
+        AlbexCTDHead.setEndTime(endTime);
     }
 
     public void createADCPHeadResponse(ProcessedADCPHead head, LocalDateTime startTime, LocalDateTime endTime) {
         ADCPHead = new ADCPHeadResponse(head.getHeadID());
-        getADCPHead().setStartTime(startTime);
-        getADCPHead().setEndTime(endTime);
+        ADCPHead.setStartTime(startTime);
+        ADCPHead.setEndTime(endTime);
+    }
+
+    public void createBatteryHeadResponse(ProcessedBatteryHeader head, LocalDateTime startTime, LocalDateTime endTime) {
+        BatteryHead = new BatteryHeadResponse(head.getHeadID());
+        BatteryHead.setStartTime(startTime);
+        BatteryHead.setEndTime(endTime);
+    }
+
+    public void createBeaconHeadResponse(ProcessedBeaconHeader head, LocalDateTime startTime, LocalDateTime endTime) {
+        BeaconHead = new BeaconHeadResponse(head.getHeadID());
+        BeaconHead.setStartTime(startTime);
+        BeaconHead.setEndTime(endTime);
+    }
+
+    public void createCameraHeadResponse(ProcessedCameraHeader head, LocalDateTime startTime, LocalDateTime endTime) {
+        CameraHead = new CameraHeadResponse(head.getHeadID());
+        CameraHead.setStartTime(startTime);
+        CameraHead.setEndTime(endTime);
+    }
+
+    public void createSedimentTrapHeadResponse(ProcessedSedimentTrapHeader head, LocalDateTime startTime, LocalDateTime endTime) {
+        SedimentTrapHead = new SedimentTrapHeadResponse(head.getHeadID());
+        SedimentTrapHead.setStartTime(startTime);
+        SedimentTrapHead.setEndTime(endTime);
     }
 
     public String getASDBLanderID() {
@@ -143,6 +171,38 @@ public class LanderResponse {
 
     public void setRecoveryDate(LocalDateTime recoveryDate) {
         this.recoveryDate = recoveryDate;
+    }
+
+    public BatteryHeadResponse getBatteryHead() {
+        return BatteryHead;
+    }
+
+    public void setBatteryHead(BatteryHeadResponse batteryHead) {
+        BatteryHead = batteryHead;
+    }
+
+    public BeaconHeadResponse getBeaconHead() {
+        return BeaconHead;
+    }
+
+    public void setBeaconHead(BeaconHeadResponse beaconHead) {
+        BeaconHead = beaconHead;
+    }
+
+    public CameraHeadResponse getCameraHead() {
+        return CameraHead;
+    }
+
+    public void setCameraHead(CameraHeadResponse cameraHead) {
+        CameraHead = cameraHead;
+    }
+
+    public SedimentTrapHeadResponse getSedimentTrapHead() {
+        return SedimentTrapHead;
+    }
+
+    public void setSedimentTrapHead(SedimentTrapHeadResponse sedimentTrapHead) {
+        SedimentTrapHead = sedimentTrapHead;
     }
 
     private class CTDHeadResponse {
@@ -399,5 +459,153 @@ public class LanderResponse {
         }
     }
 
+    private class BatteryHeadResponse {
+        private Long HeadID;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+
+        public BatteryHeadResponse() {
+
+        }
+
+        public BatteryHeadResponse(Long headID) {
+            HeadID = headID;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
+        }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalDateTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalDateTime endTime) {
+            this.endTime = endTime;
+        }
+    }
+
+    private class BeaconHeadResponse {
+        private Long HeadID;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+
+        public BeaconHeadResponse() {
+        }
+
+        public BeaconHeadResponse(Long headID) {
+            HeadID = headID;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
+        }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalDateTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalDateTime endTime) {
+            this.endTime = endTime;
+        }
+    }
+
+    private class CameraHeadResponse {
+        private Long HeadID;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+
+        public CameraHeadResponse() {
+        }
+
+        public CameraHeadResponse(Long headID) {
+            HeadID = headID;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
+        }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalDateTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalDateTime endTime) {
+            this.endTime = endTime;
+        }
+    }
+
+    private class SedimentTrapHeadResponse {
+        private Long HeadID;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+
+        public SedimentTrapHeadResponse() {
+        }
+
+        public SedimentTrapHeadResponse(Long headID) {
+            HeadID = headID;
+        }
+
+        public Long getHeadID() {
+            return HeadID;
+        }
+
+        public void setHeadID(Long headID) {
+            HeadID = headID;
+        }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalDateTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalDateTime endTime) {
+            this.endTime = endTime;
+        }
+    }
 }
 

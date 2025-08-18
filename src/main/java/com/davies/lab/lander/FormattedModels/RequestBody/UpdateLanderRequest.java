@@ -14,11 +14,15 @@ public class UpdateLanderRequest {
     private ProcessedFLNTUHead FLNTUHead;
     private ProcessedAlbexCTDHeader AlbexHead;
     private ProcessedADCPHead ADCPHead;
+    private ProcessedBatteryHeader BatteryHead;
+    private ProcessedBeaconHeader BeaconHead;
+    private ProcessedCameraHeader CameraHead;
+    private ProcessedSedimentTrapHeader SedimentTrapHead;
 
     public UpdateLanderRequest() {
     }
 
-    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, ProcessedCTDHead CTDHead, ProcessedDOHead DOHead, ProcessedFLNTUHead FLNTUHead, ProcessedAlbexCTDHeader albexHead, ProcessedADCPHead ADCPHead) {
+    public UpdateLanderRequest(String landerPlatform, String ASDBROBDiveID, LocalDateTime deploymentDateAndTime, LocalDateTime recoveryDateAndTime, ProcessedCTDHead CTDHead, ProcessedDOHead DOHead, ProcessedFLNTUHead FLNTUHead, ProcessedAlbexCTDHeader albexHead, ProcessedADCPHead ADCPHead, ProcessedBatteryHeader BatteryHead, ProcessedBeaconHeader BeaconHead, ProcessedCameraHeader CameraHead, ProcessedSedimentTrapHeader SedimentTrapHead) {
         LanderPlatform = landerPlatform;
         this.ASDBROBDiveID = ASDBROBDiveID;
         this.deploymentDateAndTime = deploymentDateAndTime;
@@ -26,8 +30,12 @@ public class UpdateLanderRequest {
         this.CTDHead = CTDHead;
         this.DOHead = DOHead;
         this.FLNTUHead = FLNTUHead;
-        AlbexHead = albexHead;
-        ADCPHead = ADCPHead;
+        this.AlbexHead = albexHead;
+        this.ADCPHead = ADCPHead;
+        this.BatteryHead = BatteryHead;
+        this.BeaconHead = BeaconHead;
+        this.CameraHead = CameraHead;
+        this.SedimentTrapHead = SedimentTrapHead;
     }
 
     public String getLanderPlatform() {
@@ -100,5 +108,37 @@ public class UpdateLanderRequest {
 
     public void setADCPHead(ProcessedADCPHead ADCPHead) {
         this.ADCPHead = ADCPHead;
+    }
+
+    public ProcessedBatteryHeader getBatteryHead() {
+        return BatteryHead;
+    }
+
+    public void setBatteryHead(ProcessedBatteryHeader batteryHead) {
+        BatteryHead = batteryHead;
+    }
+
+    public ProcessedBeaconHeader getBeaconHead() {
+        return BeaconHead;
+    }
+
+    public void setBeaconHead(ProcessedBeaconHeader beaconHead) {
+        BeaconHead = beaconHead;
+    }
+
+    public ProcessedCameraHeader getCameraHead() {
+        return CameraHead;
+    }
+
+    public void setCameraHead(ProcessedCameraHeader cameraHead) {
+        CameraHead = cameraHead;
+    }
+
+    public ProcessedSedimentTrapHeader getSedimentTrapHead() {
+        return SedimentTrapHead;
+    }
+
+    public void setSedimentTrapHead(ProcessedSedimentTrapHeader sedimentTrapHead) {
+        SedimentTrapHead = sedimentTrapHead;
     }
 }

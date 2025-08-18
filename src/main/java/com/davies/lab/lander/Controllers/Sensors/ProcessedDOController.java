@@ -1,20 +1,21 @@
-package com.davies.lab.lander.Controllers;
+package com.davies.lab.lander.Controllers.Sensors;
 
-import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.FLNTU_CSV_Request;
+import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.DO_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.UpdateFLNTUDataRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.UpdateFLNTUHeaderRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateDODataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateDOHeaderRequest;
+import com.davies.lab.lander.FormattedModels.ResponseBody.DODataResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.DOHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.DataProgressResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUDataResponse;
-import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.TotalDataResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.Lander;
-import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
-import com.davies.lab.lander.Models.Headers.ProcessedFLNTUHead;
+import com.davies.lab.lander.Models.Data.ProcessedDOData;
+import com.davies.lab.lander.Models.Headers.ProcessedDOHead;
 import com.davies.lab.lander.Repositories.LanderRepository;
-import com.davies.lab.lander.Repositories.Data.ProcessedFLNTUDataRepository;
-import com.davies.lab.lander.Repositories.Header.ProcessedFLNTUHeadRepository;
+import com.davies.lab.lander.Repositories.Data.ProcessedDODataRepository;
+import com.davies.lab.lander.Repositories.Header.ProcessedDOHeadRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,31 +36,31 @@ import java.util.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/processed/flntu")
+@RequestMapping("/api/processed/do")
 @EnableCaching
-public class ProcessedFLNTUController {
+public class ProcessedDOController {
     @Autowired
     private LanderRepository landerRepository;
     @Autowired
-    private ProcessedFLNTUDataRepository repository;
+    private ProcessedDODataRepository repository;
     @Autowired
-    private ProcessedFLNTUHeadRepository headRepository;
+    private ProcessedDOHeadRepository headRepository;
     @Autowired
     private DashboardController dashboardController;
 
-    //Header Routes
+    //Head Routes
     @GetMapping("/headers")
-    public List<FLNTUHeadResponse> findAllHeads() {
-        List<ProcessedFLNTUHead> heads = headRepository.findAll();
-        List<FLNTUHeadResponse> res = new ArrayList<>();
+    public List<DOHeadResponse> findAllHeads() {
+        List<ProcessedDOHead> heads = headRepository.findAll();
+        List<DOHeadResponse> res = new ArrayList<>();
 
-        for (ProcessedFLNTUHead selHead : heads) {
-            FLNTUHeadResponse temp = new FLNTUHeadResponse(
-                    selHead
+        for (ProcessedDOHead head : heads) {
+            DOHeadResponse temp = new DOHeadResponse(
+                    head
             );
 
-            for (ProcessedFLNTUData selData : selHead.getData()) {
-                temp.createFLNTUDataResponse(selData);
+            for (ProcessedDOData data : head.getData()) {
+                temp.createDODataResponse(data);
             }
 
             res.add(temp);
@@ -69,29 +70,29 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/headers/sanitized/{id}")
-    public ResponseEntity<FLNTUHeadResponse> findHeadWithoutDataById(@PathVariable("id") Long id) {
-        Optional<ProcessedFLNTUHead> head = headRepository.findById(id);
-        FLNTUHeadResponse res;
+    public ResponseEntity<DOHeadResponse> findHeadWithoutData(@PathVariable("id") Long id) {
+        Optional<ProcessedDOHead> head = headRepository.findById(id);
+        DOHeadResponse res;
 
         if (head.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        res = new FLNTUHeadResponse(
+        res = new DOHeadResponse(
                 head.get()
         );
 
         res.setDataPointCount(head.get().getData().size());
 
         if (res.getStartTime() == null && res.getDataPointCount() > 0) {
-            ProcessedFLNTUData firstData = repository.findFirstDataPointInHead(head.get().getHeadID());
+            ProcessedDOData firstData = repository.findFirstDataPointInHead(head.get().getHeadID());
             if (firstData != null) {
                 res.setStartTime(firstData.getDate());
             }
         }
 
         if (res.getEndTime() == null && res.getDataPointCount() > 0) {
-            ProcessedFLNTUData lastData = repository.findLastDataPointInHead(head.get().getHeadID());
+            ProcessedDOData lastData = repository.findLastDataPointInHead(head.get().getHeadID());
             if (lastData != null) {
                 res.setEndTime(lastData.getDate());
             }
@@ -101,20 +102,20 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/headers/{id}")
-    public ResponseEntity<FLNTUHeadResponse> findHeadByID(@PathVariable("id") Long id) {
-        Optional<ProcessedFLNTUHead> head = headRepository.findById(id);
-        FLNTUHeadResponse res;
+    public ResponseEntity<DOHeadResponse> findHeadById(@PathVariable("id") Long id) {
+        Optional<ProcessedDOHead> head = headRepository.findById(id);
+        DOHeadResponse res;
 
         if (head.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        res = new FLNTUHeadResponse(
+        res = new DOHeadResponse(
                 head.get()
         );
 
-        for (ProcessedFLNTUData data : head.get().getData()) {
-            res.createFLNTUDataResponse(data);
+        for (ProcessedDOData data : head.get().getData()) {
+            res.createDODataResponse(data);
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -122,12 +123,12 @@ public class ProcessedFLNTUController {
 
     //Data Routes
     @GetMapping("/data")
-    public List<FLNTUDataResponse> findAllEntries() {
-        List<ProcessedFLNTUData> data = repository.findAll();
-        List<FLNTUDataResponse> res = new ArrayList<>();
+    public List<DODataResponse> findAllEntries() {
+        List<ProcessedDOData> data = repository.findAll();
+        List<DODataResponse> res = new ArrayList<>();
 
-        for (ProcessedFLNTUData selData : data) {
-            FLNTUDataResponse temp = new FLNTUDataResponse(
+        for (ProcessedDOData selData : data) {
+            DODataResponse temp = new DODataResponse(
                     selData
             );
 
@@ -137,29 +138,13 @@ public class ProcessedFLNTUController {
         return res;
     }
 
-    @GetMapping("/data/{id}")
-    public ResponseEntity<FLNTUDataResponse> findDataById(@PathVariable("id") Long id) {
-        Optional<ProcessedFLNTUData> data = repository.findById(id);
-        FLNTUDataResponse res;
-
-        if (data.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-
-        res = new FLNTUDataResponse(
-                data.get()
-        );
-
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-
     @GetMapping("/data/header/{id}/aligned/true")
-    public ResponseEntity<List<FLNTUDataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
-        List<ProcessedFLNTUData> data = repository.findDataByHeadAndAlignedStatus(id, true);
-        List<FLNTUDataResponse> res = new ArrayList<>();
+    public ResponseEntity<List<DODataResponse>> findAlignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedDOData> data = repository.findDataByHeadAndAlignedStatus(id, true);
+        List<DODataResponse> res = new ArrayList<>();
 
-        for (ProcessedFLNTUData selData : data) {
-            FLNTUDataResponse temp = new FLNTUDataResponse(
+        for (ProcessedDOData selData : data) {
+            DODataResponse temp = new DODataResponse(
                     selData
             );
 
@@ -170,12 +155,12 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/data/header/{id}/aligned/false")
-    public ResponseEntity<List<FLNTUDataResponse>> findUnalignedDataByHeader(@PathVariable("id") Long id) {
-        List<ProcessedFLNTUData> data = repository.findDataByHeadAndAlignedStatus(id, false);
-        List<FLNTUDataResponse> res = new ArrayList<>();
+    public ResponseEntity<List<DODataResponse>> findUnalignedDataByHeader(@PathVariable("id") Long id) {
+        List<ProcessedDOData> data = repository.findDataByHeadAndAlignedStatus(id, false);
+        List<DODataResponse> res = new ArrayList<>();
 
-        for (ProcessedFLNTUData selData : data) {
-            FLNTUDataResponse temp = new FLNTUDataResponse(
+        for (ProcessedDOData selData : data) {
+            DODataResponse temp = new DODataResponse(
                     selData
             );
 
@@ -185,17 +170,33 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/{id}")
+    public ResponseEntity<DODataResponse> findDataById(@PathVariable("id") Long id) {
+        Optional<ProcessedDOData> data = repository.findById(id);
+        DODataResponse res;
+
+        if (data.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new DODataResponse(
+                data.get()
+        );
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/headId/{id}")
-    public ResponseEntity<List<FLNTUDataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
-        List<ProcessedFLNTUData> data = repository.findDataFromHeadId(id);
-        List<FLNTUDataResponse> res = new ArrayList<>();
+    public ResponseEntity<List<DODataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
+        List<ProcessedDOData> data = repository.findDoDataByHeadId(id);
+        List<DODataResponse> res = new ArrayList<>();
 
         if (data.size() == 0) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        for (ProcessedFLNTUData elem : data) {
-            res.add(new FLNTUDataResponse(
+        for (ProcessedDOData elem : data) {
+            res.add(new DODataResponse(
                     elem
             ));
         }
@@ -204,14 +205,14 @@ public class ProcessedFLNTUController {
     }
 
     @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
-    public ResponseEntity<List<FLNTUDataResponse>> getDataByRange(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
-        List<FLNTUDataResponse> res = new ArrayList<>();
+    public ResponseEntity<List<DODataResponse>> getDataByRange(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<DODataResponse> res = new ArrayList<>();
 
-        List<ProcessedFLNTUData> data = repository.findDataByHeadAndDateRange(id, startDate, endDate);
+        List<ProcessedDOData> data = repository.findDataByHeadAndDateRange(id, startDate, endDate);
 
-        for (ProcessedFLNTUData selData : data) {
+        for (ProcessedDOData selData: data) {
             res.add(
-                    new FLNTUDataResponse(
+                    new DODataResponse(
                             selData
                     )
             );
@@ -224,9 +225,8 @@ public class ProcessedFLNTUController {
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (selLander.getFLNTUHead() != null) {
-
-            ProcessedFLNTUHead selHead = headRepository.findById(selLander.getFLNTUHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        if (selLander.getDOHead() != null) {
+            ProcessedDOHead selHead = headRepository.findById(selLander.getDOHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
             Integer dataCount = repository.findCountByHeadID(selHead.getHeadID());
 
@@ -242,8 +242,8 @@ public class ProcessedFLNTUController {
         return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
     }
 
-    @Cacheable(value = "FLNTUCount")
-    private double calculateDataSize(ProcessedFLNTUHead selHead) {
+    @Cacheable(value = "DOCount")
+    private double calculateDataSize(ProcessedDOHead selHead) {
         LocalDateTime startTime = selHead.getStartTime();
         LocalDateTime endTime = selHead.getEndTime();
         int burstCount = selHead.getBurstCnt();
@@ -259,7 +259,7 @@ public class ProcessedFLNTUController {
     }
 
     @PostMapping("/data/count/headless")
-    @Cacheable(value = "FLNTUCount-Headless")
+    @Cacheable("DOCount-Headless")
     public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
         LocalDateTime startTime = request.getStartTime();
         LocalDateTime endTime = request.getEndTime();
@@ -278,9 +278,9 @@ public class ProcessedFLNTUController {
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
         Optional<Lander> selLander = landerRepository.findById(landerID);
-        List<FLNTU_CSV_Request> rawData = null;
-        Optional<ProcessedFLNTUHead> optionalHead;
-        ProcessedFLNTUHead savedHead;
+        List<DO_CSV_Request> rawData = null;
+        Optional<ProcessedDOHead> optionalHead;
+        ProcessedDOHead savedHead;
 
         if (selLander.isEmpty()) {
 
@@ -289,11 +289,11 @@ public class ProcessedFLNTUController {
 
         if (processedFile.isEmpty()) {
 
-            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Missing Uploadded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
-        if (selLander.get().getFLNTUHead() != null) {
-            optionalHead = headRepository.findById(selLander.get().getFLNTUHead().getHeadID());
+        if (selLander.get().getDOHead() != null) {
+            optionalHead = headRepository.findById(selLander.get().getDOHead().getHeadID());
 
             if (optionalHead.isEmpty()) {
 
@@ -302,7 +302,7 @@ public class ProcessedFLNTUController {
 
             savedHead = optionalHead.get();
         } else {
-            ProcessedFLNTUHead dummyHead = new ProcessedFLNTUHead();
+            ProcessedDOHead dummyHead = new ProcessedDOHead();
             dummyHead.setLanderID(selLander.get());
 
             savedHead = headRepository.save(dummyHead);
@@ -321,19 +321,19 @@ public class ProcessedFLNTUController {
         }
 
         try {
-            for (FLNTU_CSV_Request dataElement : rawData) {
-                repository.save(new ProcessedFLNTUData(
+            for (DO_CSV_Request dataElement : rawData) {
+                repository.save(new ProcessedDOData(
                         dataElement,
                         savedHead
                 ));
             }
         } catch (Exception e) {
-            clearFLNTUCache();
+            System.out.println(e.getLocalizedMessage());
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        clearFLNTUCache();
+        clearDOCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
@@ -344,29 +344,26 @@ public class ProcessedFLNTUController {
         Optional<Lander> selLander = landerRepository.findById(landerID);
 
         if (selLander.isEmpty()) {
-            clearFLNTUCache();
 
             return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
         }
 
         if (processedHead.isEmpty()) {
-            clearFLNTUCache();
 
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
-        if (selLander.get().getFLNTUHead() == null) {
-            ProcessedFLNTUHead newHead = new ProcessedFLNTUHead();
+        if (selLander.get().getDOHead() == null) {
+            ProcessedDOHead newHead = new ProcessedDOHead();
             newHead.setLanderID(selLander.get());
-            ProcessedFLNTUHead savedHead = headRepository.save(newHead);
-            selLander.get().setFLNTUHead(savedHead);
+            ProcessedDOHead savedHead = headRepository.save(newHead);
+            selLander.get().setDOHead(savedHead);
             landerRepository.save(selLander.get());
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedHead.getInputStream()))) {
             String temp = "";
             List<String> output = new ArrayList<>();
-            List<String> keyNames = new ArrayList<>();
             Map<String, String> valuesMap = new HashMap<>();
 
             while (!Objects.equals(temp, "[Item]")) {
@@ -379,12 +376,11 @@ public class ProcessedFLNTUController {
 
             for (String datapoint : output) {
                 String[] hold = datapoint.split("=");
-                keyNames.add(hold[0]);
 
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            UpdateFLNTUHeaderRequest updates = new UpdateFLNTUHeaderRequest(
+            UpdateDOHeaderRequest updates = new UpdateDOHeaderRequest(
                     valuesMap.get("SondeName"),
                     valuesMap.get("SondeNo"),
                     valuesMap.get("SensorType"),
@@ -395,36 +391,34 @@ public class ProcessedFLNTUController {
                     Integer.parseInt(valuesMap.get("BurstTime")),
                     Integer.parseInt(valuesMap.get("BurstCnt")),
                     Integer.parseInt(valuesMap.get("Interval")),
-                    Integer.parseInt(valuesMap.get("WiperInterval")),
                     Integer.parseInt(valuesMap.get("SampleCnt")),
                     StringFormatting.formatDateString(valuesMap.get("StartTime")),
                     StringFormatting.formatDateString(valuesMap.get("EndTime")),
-                    Integer.parseInt(valuesMap.get("CHLA")),
-                    Integer.parseInt(valuesMap.get("CHLB")),
+                    Double.parseDouble(valuesMap.get("DepAdjRho")),
                     StringFormatting.formatCoefDateString(valuesMap.get("CoefDate")),
                     Double.parseDouble(valuesMap.get("Ch1").split(",")[0]),
                     Double.parseDouble(valuesMap.get("Ch2").split(",")[0]),
                     Double.parseDouble(valuesMap.get("Ch3").split(",")[0]),
-                    Double.parseDouble(valuesMap.get("Ch4").split(",")[0]),
                     Integer.parseInt(valuesMap.get("BuzzerEN")),
                     Integer.parseInt(valuesMap.get("BuzzerInterval")),
                     valuesMap.get("COMMENT"),
                     valuesMap.get("SensorType2"),
                     Integer.parseInt(valuesMap.get("BuzzerNumber")),
+                    Integer.parseInt(valuesMap.get("DepM")),
+                    Integer.parseInt(valuesMap.get("SetSal")),
+                    valuesMap.get("FilmNo"),
                     selLander.get(),
-                    selLander.get().getFLNTUHead().getData()
+                    selLander.get().getDOHead().getData()
             );
 
-            updateFLNTUHeader(selLander.get().getFLNTUHead().getHeadID(), updates);
+            updateDOHeader(selLander.get().getDOHead().getHeadID(), updates);
 
-            clearFLNTUCache();
+            clearDOCache();
             dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-
-            clearFLNTUCache();
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -433,13 +427,15 @@ public class ProcessedFLNTUController {
     @PostMapping("/upload_csv/combined/{lander_id}")
     public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerId) {
         Optional<Lander> selLander = landerRepository.findById(landerId);
+        Lander lander;
 
         if (selLander.isEmpty()) {
+            clearDOCache();
 
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        Lander lander = selLander.get();
+        lander = selLander.get();
 
 
         if (processedFile.isEmpty()) {
@@ -447,7 +443,7 @@ public class ProcessedFLNTUController {
             return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
         }
 
-        if (lander.getFLNTUHead() != null) {
+        if (lander.getDOHead() != null) {
 
             return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
         }
@@ -459,6 +455,7 @@ public class ProcessedFLNTUController {
 
             while (!Objects.equals(temp, "[Item]")) {
                 temp = reader.readLine();
+
                 if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
                     output.add(temp);
                 }
@@ -470,7 +467,7 @@ public class ProcessedFLNTUController {
                 valuesMap.put(hold[0], hold[1].stripTrailing());
             }
 
-            ProcessedFLNTUHead flntuHead = new ProcessedFLNTUHead(
+            ProcessedDOHead doHead = new ProcessedDOHead(
                     valuesMap.get("SondeName"),
                     valuesMap.get("SondeNo"),
                     valuesMap.get("SensorType"),
@@ -481,46 +478,44 @@ public class ProcessedFLNTUController {
                     Integer.parseInt(valuesMap.get("BurstTime")),
                     Integer.parseInt(valuesMap.get("BurstCnt")),
                     Integer.parseInt(valuesMap.get("Interval")),
-                    Integer.parseInt(valuesMap.get("WiperInterval")),
                     Integer.parseInt(valuesMap.get("SampleCnt")),
                     StringFormatting.formatDateString(valuesMap.get("StartTime")),
                     StringFormatting.formatDateString(valuesMap.get("EndTime")),
-                    Integer.parseInt(valuesMap.get("CHLA")),
-                    Integer.parseInt(valuesMap.get("CHLB")),
+                    Double.parseDouble(valuesMap.get("DepAdjRho")),
                     StringFormatting.formatCoefDateString(valuesMap.get("CoefDate")),
                     Double.parseDouble(valuesMap.get("Ch1").split(",")[0]),
                     Double.parseDouble(valuesMap.get("Ch2").split(",")[0]),
                     Double.parseDouble(valuesMap.get("Ch3").split(",")[0]),
-                    Double.parseDouble(valuesMap.get("Ch4").split(",")[0]),
                     Integer.parseInt(valuesMap.get("BuzzerEN")),
                     Integer.parseInt(valuesMap.get("BuzzerInterval")),
                     valuesMap.get("COMMENT"),
                     valuesMap.get("SensorType2"),
                     Integer.parseInt(valuesMap.get("BuzzerNumber")),
+                    Integer.parseInt(valuesMap.get("DepM")),
+                    Integer.parseInt(valuesMap.get("SetSal")),
+                    valuesMap.get("FilmNo"),
                     lander
             );
 
-            ProcessedFLNTUHead newHead = headRepository.save(flntuHead);
+            ProcessedDOHead newHead = headRepository.save(doHead);
 
-            List<FLNTU_CSV_Request> outputData = processData(reader);
+            List<DO_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
 
                 return new ResponseEntity<>("Could not generate Data from File", HttpStatus.BAD_REQUEST);
             }
 
-            for (FLNTU_CSV_Request inputDataPoint : outputData) {
-                ProcessedFLNTUData newData = new ProcessedFLNTUData (
+            for (DO_CSV_Request inputDataPoint : outputData) {
+                ProcessedDOData newData = new ProcessedDOData(
                         inputDataPoint,
                         newHead
                 );
 
                 repository.save(newData);
-
             }
 
-            clearFLNTUCache();
-
+            clearDOCache();
             dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
@@ -531,12 +526,12 @@ public class ProcessedFLNTUController {
         }
     }
 
-    private List<FLNTU_CSV_Request> processData(BufferedReader reader) {
-        List<FLNTU_CSV_Request> dataList;
+    private List<DO_CSV_Request> processData(BufferedReader reader) {
+        List<DO_CSV_Request> dataList;
 
         try {
-            CsvToBean<FLNTU_CSV_Request> csvToBean = new CsvToBeanBuilder<FLNTU_CSV_Request>(reader)
-                    .withType(FLNTU_CSV_Request.class)
+            CsvToBean<DO_CSV_Request> csvToBean = new CsvToBeanBuilder<DO_CSV_Request>(reader)
+                    .withType(DO_CSV_Request.class)
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
 
@@ -549,14 +544,14 @@ public class ProcessedFLNTUController {
         }
     }
 
-    @CacheEvict(value = {"FLNTUCount", "FLNTUCount-Headless"}, allEntries = true)
-    private void clearFLNTUCache() {
+    @CacheEvict(value = {"DOCache", "DOCache-Headless"}, allEntries = true)
+    private void clearDOCache() {
 
     }
 
     @PutMapping("/update/header/{id}")
-    public ResponseEntity<String> updateFLNTUHeader(@PathVariable("id") Long id, @RequestBody UpdateFLNTUHeaderRequest updates) {
-        ProcessedFLNTUHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity<String> updateDOHeader(@PathVariable("id") Long id, @RequestBody UpdateDOHeaderRequest updates) {
+        ProcessedDOHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getSondeName() != null) {
             selHead.setSondeName(updates.getSondeName());
@@ -576,8 +571,8 @@ public class ProcessedFLNTUController {
         if (updates.getPreHeat() != null) {
             selHead.setPreHeat(updates.getPreHeat());
         }
-        if (updates.getMeasMode() != null) {
-            selHead.setMeasMode(updates.getMeasMode());
+        if (updates.getMeasModel() != null) {
+            selHead.setMeasModel(updates.getMeasModel());
         }
         if (updates.getBurstTime() != null) {
             selHead.setBurstTime(updates.getBurstTime());
@@ -588,9 +583,6 @@ public class ProcessedFLNTUController {
         if (updates.getIntervalData() != null) {
             selHead.setIntervalData(updates.getIntervalData());
         }
-        if (updates.getWiperInterval() != null) {
-            selHead.setWiperInterval(updates.getWiperInterval());
-        }
         if (updates.getSampleCnt() != null) {
             selHead.setSampleCnt(updates.getSampleCnt());
         }
@@ -600,11 +592,8 @@ public class ProcessedFLNTUController {
         if (updates.getEndTime() != null) {
             selHead.setEndTime(updates.getEndTime());
         }
-        if (updates.getCHLA() != null) {
-            selHead.setCHLA(updates.getCHLA());
-        }
-        if (updates.getCHLB() != null) {
-            selHead.setCHLB(updates.getCHLB());
+        if (updates.getDepAdiRho() != null) {
+            selHead.setDepAdiRho(updates.getDepAdiRho());
         }
         if (updates.getCoefDate() != null) {
             selHead.setCoefDate(updates.getCoefDate());
@@ -618,23 +607,29 @@ public class ProcessedFLNTUController {
         if (updates.getCh3() != null) {
             selHead.setCh3(updates.getCh3());
         }
-        if (updates.getCh4() != null) {
-            selHead.setCh4(updates.getCh4());
-        }
         if (updates.getBuzzerEN() != null) {
             selHead.setBuzzerEN(updates.getBuzzerEN());
         }
         if (updates.getBuzzerInterval() != null) {
             selHead.setBuzzerInterval(updates.getBuzzerInterval());
         }
-        if (updates.getComment() != null) {
-            selHead.setComment(updates.getComment());
+        if (updates.getCOMMENT() != null) {
+            selHead.setCOMMENT(updates.getCOMMENT());
         }
         if (updates.getSensorType2() != null) {
             selHead.setSensorType2(updates.getSensorType2());
         }
         if (updates.getBuzzerNumber() != null) {
             selHead.setBuzzerNumber(updates.getBuzzerNumber());
+        }
+        if (updates.getDepM() != null) {
+            selHead.setDepM(updates.getDepM());
+        }
+        if (updates.getSetSal() != null) {
+            selHead.setSetSal(updates.getSetSal());
+        }
+        if (updates.getFilmNo() != null) {
+            selHead.setFilmNo(updates.getFilmNo());
         }
         if (updates.getLanderID() != null) {
             selHead.setLanderID(updates.getLanderID());
@@ -649,8 +644,8 @@ public class ProcessedFLNTUController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<String> updateFLNTUDataByID(@PathVariable("id") Long id, @RequestBody UpdateFLNTUDataRequest updates) {
-        ProcessedFLNTUData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity<String> updateDODataByID(@PathVariable("id") Long id, @RequestBody UpdateDODataRequest updates) {
+        ProcessedDOData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (updates.getDate() != null) {
             selData.setDate(updates.getDate());
@@ -658,17 +653,20 @@ public class ProcessedFLNTUController {
         if (updates.getTempDegC() != null) {
             selData.setTempDegC(updates.getTempDegC());
         }
-        if (updates.getChlFluPPB() != null) {
-            selData.setChlFluPPB(updates.getChlFluPPB());
+        if (updates.getDO() != null) {
+            selData.setDO(updates.getDO());
         }
-        if (updates.getChlAUgL() != null) {
-            selData.setChlAUgL(updates.getChlAUgL());
-        }
-        if (updates.getTurbMFTU() != null) {
-            selData.setTurbMFTU(updates.getTurbMFTU());
+        if (updates.getWeissDoMgL() != null) {
+            selData.setWeissDoMgL(updates.getWeissDoMgL());
         }
         if (updates.getBattV() != null) {
             selData.setBattV(updates.getBattV());
+        }
+        if (updates.getGGDOMgL() != null) {
+            selData.setGGDOMgL(updates.getGGDOMgL());
+        }
+        if (updates.getBKDOMgL() != null) {
+            selData.setBKDOMgL(updates.getBKDOMgL());
         }
         if (updates.getAligned() != null) {
             selData.setAligned(updates.getAligned());
@@ -679,12 +677,12 @@ public class ProcessedFLNTUController {
 
         repository.save(selData);
 
-        return new ResponseEntity<>("Updated", HttpStatus.OK);
+        return new ResponseEntity<>("Updated Data", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/header/{id}")
     public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Long id) {
-        ProcessedFLNTUHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ProcessedDOHead selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.deleteAll(selHead.getData());
 
@@ -701,7 +699,7 @@ public class ProcessedFLNTUController {
 
     @DeleteMapping("/delete/data/{id}")
     public ResponseEntity<String> deleteDataByID(@PathVariable("id") Long id) {
-        ProcessedFLNTUData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ProcessedDOData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.delete(selData);
 

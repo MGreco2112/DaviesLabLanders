@@ -1,4 +1,4 @@
-package com.davies.lab.lander.Controllers;
+package com.davies.lab.lander.Controllers.Frontend;
 
 import com.davies.lab.lander.FormattedModels.ResponseBody.*;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Cache.*;
