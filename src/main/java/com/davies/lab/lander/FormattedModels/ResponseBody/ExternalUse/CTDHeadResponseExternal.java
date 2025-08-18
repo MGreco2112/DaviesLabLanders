@@ -1,13 +1,11 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import com.davies.lab.lander.Models.ProcessedCTDHead;
+import com.davies.lab.lander.Models.Headers.ProcessedCTDHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CTDHeadResponseExternal {
     private Long HeadID;

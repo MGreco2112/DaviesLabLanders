@@ -1,11 +1,10 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import com.davies.lab.lander.Models.ProcessedDOHead;
+import com.davies.lab.lander.Models.Headers.ProcessedDOHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public class DOHeadResponseExternal {
     private Long HeadID;

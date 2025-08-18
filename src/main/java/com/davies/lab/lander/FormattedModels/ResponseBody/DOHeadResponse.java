@@ -1,17 +1,12 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.davies.lab.lander.Models.ProcessedDOData;
-import com.davies.lab.lander.Models.ProcessedDOHead;
+import com.davies.lab.lander.Models.Data.ProcessedDOData;
+import com.davies.lab.lander.Models.Headers.ProcessedDOHead;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class DOHeadResponse {
     private Long HeadID;

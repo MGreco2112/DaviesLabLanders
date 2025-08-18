@@ -1,5 +1,7 @@
 package com.davies.lab.lander.Models;
 
+import com.davies.lab.lander.Models.Headers.*;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -21,6 +23,14 @@ public class Lander {
     private ProcessedAlbexCTDHeader AlbexHead;
     @OneToOne(mappedBy = "LanderID")
     private ProcessedADCPHead ADCPHead;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedBatteryHeader BatteryHead;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedBeaconHeader BeaconHead;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedCameraHeader CameraHead;
+    @OneToOne(mappedBy = "LanderID")
+    private ProcessedSedimentTrapHeader SedimentTrapHead;
 
     public Lander() {
     }
@@ -117,5 +127,37 @@ public class Lander {
 
     public void setADCPHead(ProcessedADCPHead ADCPHead) {
         this.ADCPHead = ADCPHead;
+    }
+
+    public ProcessedBatteryHeader getBatteryHead() {
+        return BatteryHead;
+    }
+
+    public void setBatteryHead(ProcessedBatteryHeader batteryHead) {
+        BatteryHead = batteryHead;
+    }
+
+    public ProcessedBeaconHeader getBeaconHead() {
+        return BeaconHead;
+    }
+
+    public void setBeaconHead(ProcessedBeaconHeader beaconHead) {
+        BeaconHead = beaconHead;
+    }
+
+    public ProcessedCameraHeader getCameraHead() {
+        return CameraHead;
+    }
+
+    public void setCameraHead(ProcessedCameraHeader cameraHead) {
+        CameraHead = cameraHead;
+    }
+
+    public ProcessedSedimentTrapHeader getSedimentTrapHead() {
+        return SedimentTrapHead;
+    }
+
+    public void setSedimentTrapHead(ProcessedSedimentTrapHeader sedimentTrapHead) {
+        SedimentTrapHead = sedimentTrapHead;
     }
 }

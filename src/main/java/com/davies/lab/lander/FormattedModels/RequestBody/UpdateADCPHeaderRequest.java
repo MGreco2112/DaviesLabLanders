@@ -1,6 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.davies.lab.lander.Models.ProcessedADCPData;
+import com.davies.lab.lander.Models.Data.ProcessedADCPData;
 
 import java.util.Set;
 

@@ -1,7 +1,7 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.davies.lab.lander.Models.AlignedCTDData;
-import com.davies.lab.lander.Models.ProcessedCTDHead;
+import com.davies.lab.lander.Models.Data.Aligned.AlignedCTDData;
+import com.davies.lab.lander.Models.Headers.ProcessedCTDHead;
 
 import java.time.LocalDateTime;
 

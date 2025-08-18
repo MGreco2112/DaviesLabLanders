@@ -1,11 +1,10 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import com.davies.lab.lander.Models.ProcessedFLNTUHead;
+import com.davies.lab.lander.Models.Headers.ProcessedFLNTUHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public class FLNTUHeadResponseExternal {
     private Long HeadID;

@@ -1,12 +1,10 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import com.davies.lab.lander.Models.ProcessedFLNTUData;
+import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class FLNTUDataResponseExternal {
     private Long ID;

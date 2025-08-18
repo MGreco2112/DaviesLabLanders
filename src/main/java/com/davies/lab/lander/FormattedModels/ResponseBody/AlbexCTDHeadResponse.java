@@ -1,15 +1,11 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
-import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
+import com.davies.lab.lander.Models.Data.ProcessedAlbexCTDData;
+import com.davies.lab.lander.Models.Headers.ProcessedAlbexCTDHeader;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AlbexCTDHeadResponse {
     private Long HeadID;

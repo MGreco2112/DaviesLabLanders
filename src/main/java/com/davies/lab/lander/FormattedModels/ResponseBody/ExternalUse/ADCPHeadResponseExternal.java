@@ -1,12 +1,9 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import com.davies.lab.lander.FormattedModels.ResponseBody.ADCPHeadResponse;
-import com.davies.lab.lander.Models.ProcessedADCPHead;
+import com.davies.lab.lander.Models.Headers.ProcessedADCPHead;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ADCPHeadResponseExternal {
     private Long HeadID;

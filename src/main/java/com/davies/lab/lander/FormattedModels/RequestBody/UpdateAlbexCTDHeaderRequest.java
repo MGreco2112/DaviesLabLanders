@@ -1,6 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.davies.lab.lander.Models.ProcessedAlbexCTDData;
+import com.davies.lab.lander.Models.Data.ProcessedAlbexCTDData;
 
 import java.util.Set;
 

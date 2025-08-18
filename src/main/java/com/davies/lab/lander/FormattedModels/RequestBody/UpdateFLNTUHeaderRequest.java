@@ -1,12 +1,11 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
 import com.davies.lab.lander.Models.Lander;
-import com.davies.lab.lander.Models.ProcessedFLNTUData;
+import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public class UpdateFLNTUHeaderRequest {
     private String SondeName;

@@ -1,8 +1,6 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.davies.lab.lander.HelperClasses.StringFormatting;
-import com.davies.lab.lander.Models.ProcessedADCPData;
-import com.davies.lab.lander.Models.ProcessedADCPHead;
+import com.davies.lab.lander.Models.Data.ProcessedADCPData;
 
 import java.time.LocalDateTime;
 

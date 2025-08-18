@@ -1,6 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
 import com.davies.lab.lander.Models.*;
+import com.davies.lab.lander.Models.Headers.*;
 
 import java.time.LocalDateTime;
 

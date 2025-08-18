@@ -1,6 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
+import com.davies.lab.lander.Models.Headers.ProcessedAlbexCTDHeader;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,6 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.davies.lab.lander.Models.ProcessedFLNTUData;
+import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
 
 import java.time.LocalDateTime;
 

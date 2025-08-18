@@ -1,13 +1,10 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import com.davies.lab.lander.Models.ProcessedADCPData;
+import com.davies.lab.lander.Models.Data.ProcessedADCPData;
 
-import javax.persistence.SecondaryTable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ADCPDataResponseExternal {
     private Long ID;

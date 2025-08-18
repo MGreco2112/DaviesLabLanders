@@ -1,6 +1,6 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.davies.lab.lander.Models.ProcessedFLNTUHead;
+import com.davies.lab.lander.Models.Headers.ProcessedFLNTUHead;
 
 import java.time.LocalDateTime;
 

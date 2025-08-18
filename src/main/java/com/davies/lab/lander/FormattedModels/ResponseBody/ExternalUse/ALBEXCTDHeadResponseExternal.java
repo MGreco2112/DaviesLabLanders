@@ -1,11 +1,9 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
-import com.davies.lab.lander.Models.ProcessedAlbexCTDHeader;
+import com.davies.lab.lander.Models.Headers.ProcessedAlbexCTDHeader;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ALBEXCTDHeadResponseExternal {
     private Long HeadID;

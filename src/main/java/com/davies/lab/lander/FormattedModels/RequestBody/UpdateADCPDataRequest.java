@@ -1,9 +1,8 @@
 package com.davies.lab.lander.FormattedModels.RequestBody;
 
-import com.davies.lab.lander.Models.AlignedADCPData;
-import com.davies.lab.lander.Models.ProcessedADCPHead;
+import com.davies.lab.lander.Models.Data.Aligned.AlignedADCPData;
+import com.davies.lab.lander.Models.Headers.ProcessedADCPHead;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UpdateADCPDataRequest {

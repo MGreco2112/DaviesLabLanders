@@ -1,7 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody;
 
-import com.davies.lab.lander.Models.ProcessedCTDData;
-import com.davies.lab.lander.Models.ProcessedCTDHead;
+import com.davies.lab.lander.Models.Data.ProcessedCTDData;
+import com.davies.lab.lander.Models.Headers.ProcessedCTDHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
