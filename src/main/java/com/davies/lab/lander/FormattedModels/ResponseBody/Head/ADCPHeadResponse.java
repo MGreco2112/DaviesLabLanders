@@ -1,4 +1,4 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody;
+package com.davies.lab.lander.FormattedModels.ResponseBody.Head;
 
 import com.davies.lab.lander.Models.Data.ProcessedADCPData;
 import com.davies.lab.lander.Models.Headers.ProcessedADCPHead;

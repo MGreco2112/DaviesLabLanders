@@ -1,7 +1,7 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.UpdateLanderRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LatestLandersResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;

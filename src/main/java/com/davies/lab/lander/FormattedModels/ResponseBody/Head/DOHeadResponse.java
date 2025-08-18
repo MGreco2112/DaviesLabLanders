@@ -1,14 +1,14 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody;
+package com.davies.lab.lander.FormattedModels.ResponseBody.Head;
 
-import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
-import com.davies.lab.lander.Models.Headers.ProcessedFLNTUHead;
+import com.davies.lab.lander.Models.Data.ProcessedDOData;
+import com.davies.lab.lander.Models.Headers.ProcessedDOHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FLNTUHeadResponse {
+public class DOHeadResponse {
     private Long HeadID;
     private String SondeName;
     private String SondeNo;
@@ -16,59 +16,30 @@ public class FLNTUHeadResponse {
     private Integer Channel;
     private Integer DelayTime;
     private Integer PreHeat;
-    private Integer MeasMode;
+    private Integer MeasModel;
     private Integer BurstTime;
     private Integer BurstCnt;
     private Integer IntervalData;
-    private Integer WiperInterval;
     private Integer SampleCnt;
     private LocalDateTime StartTime, EndTime;
-    private Integer CHLA, CHLB;
+    private Double DepAdiRho;
     private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
-    private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
-    private String Comment;
+    private String COMMENT;
     private String SensorType2;
     private Integer BuzzerNumber;
+    private Integer DepM;
+    private Integer SetSal;
+    private String FilmNo;
     private String LanderID;
     private Integer dataPointCount;
-    private List<FLNTUDataResponse> data = new ArrayList<>();
+    private List<DODataResponse> data = new ArrayList<>();
 
-    public FLNTUHeadResponse(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
-        SondeName = sondeName;
-        SondeNo = sondeNo;
-        SensorType = sensorType;
-        Channel = channel;
-        DelayTime = delayTime;
-        PreHeat = preHeat;
-        MeasMode = measMode;
-        BurstTime = burstTime;
-        BurstCnt = burstCnt;
-        IntervalData = intervalData;
-        WiperInterval = wiperInterval;
-        SampleCnt = sampleCnt;
-        StartTime = startTime;
-        EndTime = endTime;
-        this.CHLA = CHLA;
-        this.CHLB = CHLB;
-        CoefDate = coefDate;
-        Ch1 = ch1;
-        Ch2 = ch2;
-        Ch3 = ch3;
-        Ch4 = ch4;
-        BuzzerEN = buzzerEN;
-        BuzzerInterval = buzzerInterval;
-        Comment = comment;
-        SensorType2 = sensorType2;
-        BuzzerNumber = buzzerNumber;
-        LanderID = landerID;
-    }
-
-    public FLNTUHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
+    public DOHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -76,30 +47,30 @@ public class FLNTUHeadResponse {
         Channel = channel;
         DelayTime = delayTime;
         PreHeat = preHeat;
-        MeasMode = measMode;
+        MeasModel = measModel;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
         IntervalData = intervalData;
-        WiperInterval = wiperInterval;
         SampleCnt = sampleCnt;
         StartTime = startTime;
         EndTime = endTime;
-        this.CHLA = CHLA;
-        this.CHLB = CHLB;
+        DepAdiRho = depAdiRho;
         CoefDate = coefDate;
         Ch1 = ch1;
         Ch2 = ch2;
         Ch3 = ch3;
-        Ch4 = ch4;
         BuzzerEN = buzzerEN;
         BuzzerInterval = buzzerInterval;
-        Comment = comment;
+        this.COMMENT = COMMENT;
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
+        DepM = depM;
+        SetSal = setSal;
+        FilmNo = filmNo;
         LanderID = landerID;
     }
 
-    public FLNTUHeadResponse(ProcessedFLNTUHead head) {
+    public DOHeadResponse(ProcessedDOHead head) {
         HeadID = head.getHeadID();
         SondeName = head.getSondeName();
         SondeNo = head.getSondeNo();
@@ -107,41 +78,40 @@ public class FLNTUHeadResponse {
         Channel = head.getChannel();
         DelayTime = head.getDelayTime();
         PreHeat = head.getPreHeat();
-        MeasMode = head.getMeasMode();
+        MeasModel = head.getMeasModel();
         BurstTime = head.getBurstTime();
         BurstCnt = head.getBurstCnt();
         IntervalData = head.getIntervalData();
-        WiperInterval = head.getWiperInterval();
         SampleCnt = head.getSampleCnt();
         StartTime = head.getStartTime();
         EndTime = head.getEndTime();
-        CHLA = head.getCHLA();
-        CHLB = head.getCHLB();
+        DepAdiRho = head.getDepAdiRho();
         CoefDate = head.getCoefDate();
         Ch1 = head.getCh1();
         Ch2 = head.getCh2();
         Ch3 = head.getCh3();
-        Ch4 = head.getCh4();
         BuzzerEN = head.getBuzzerEN();
         BuzzerInterval = head.getBuzzerInterval();
-        Comment = head.getComment();
+        COMMENT = head.getCOMMENT();
         SensorType2 = head.getSensorType2();
         BuzzerNumber = head.getBuzzerNumber();
+        DepM = head.getDepM();
+        SetSal = head.getSetSal();
+        FilmNo = head.getFilmNo();
         LanderID = head.getLanderID().getASDBLanderID();
     }
 
-    public void createFLNTUDataResponse(ProcessedFLNTUData selData) {
-        FLNTUDataResponse newData = new FLNTUDataResponse(
-                selData.getID(),
-                selData.getDate()
+    public void createDODataResponse(ProcessedDOData dataPoint) {
+        DODataResponse temp = new DODataResponse(
+                dataPoint.getID(),
+                dataPoint.getDate()
         );
 
-        data.add(newData);
+        data.add(temp);
     }
 
-    public void createFullDataResponse(ProcessedFLNTUData dataPoint) {
-        FLNTUDataResponse temp = new FLNTUDataResponse(dataPoint);
-
+    public void createFullDataResponse(ProcessedDOData dataPoint) {
+        DODataResponse temp = new DODataResponse(dataPoint);
         data.add(temp);
     }
 
@@ -201,12 +171,12 @@ public class FLNTUHeadResponse {
         PreHeat = preHeat;
     }
 
-    public Integer getMeasMode() {
-        return MeasMode;
+    public Integer getMeasModel() {
+        return MeasModel;
     }
 
-    public void setMeasMode(Integer measMode) {
-        MeasMode = measMode;
+    public void setMeasModel(Integer measModel) {
+        MeasModel = measModel;
     }
 
     public Integer getBurstTime() {
@@ -233,14 +203,6 @@ public class FLNTUHeadResponse {
         IntervalData = intervalData;
     }
 
-    public Integer getWiperInterval() {
-        return WiperInterval;
-    }
-
-    public void setWiperInterval(Integer wiperInterval) {
-        WiperInterval = wiperInterval;
-    }
-
     public Integer getSampleCnt() {
         return SampleCnt;
     }
@@ -265,20 +227,12 @@ public class FLNTUHeadResponse {
         EndTime = endTime;
     }
 
-    public Integer getCHLA() {
-        return CHLA;
+    public Double getDepAdiRho() {
+        return DepAdiRho;
     }
 
-    public void setCHLA(Integer CHLA) {
-        this.CHLA = CHLA;
-    }
-
-    public Integer getCHLB() {
-        return CHLB;
-    }
-
-    public void setCHLB(Integer CHLB) {
-        this.CHLB = CHLB;
+    public void setDepAdiRho(Double depAdiRho) {
+        DepAdiRho = depAdiRho;
     }
 
     public Date getCoefDate() {
@@ -313,14 +267,6 @@ public class FLNTUHeadResponse {
         Ch3 = ch3;
     }
 
-    public Double getCh4() {
-        return Ch4;
-    }
-
-    public void setCh4(Double ch4) {
-        Ch4 = ch4;
-    }
-
     public Integer getBuzzerEN() {
         return BuzzerEN;
     }
@@ -337,12 +283,12 @@ public class FLNTUHeadResponse {
         BuzzerInterval = buzzerInterval;
     }
 
-    public String getComment() {
-        return Comment;
+    public String getCOMMENT() {
+        return COMMENT;
     }
 
-    public void setComment(String comment) {
-        Comment = comment;
+    public void setCOMMENT(String COMMENT) {
+        this.COMMENT = COMMENT;
     }
 
     public String getSensorType2() {
@@ -361,6 +307,30 @@ public class FLNTUHeadResponse {
         BuzzerNumber = buzzerNumber;
     }
 
+    public Integer getDepM() {
+        return DepM;
+    }
+
+    public void setDepM(Integer depM) {
+        DepM = depM;
+    }
+
+    public Integer getSetSal() {
+        return SetSal;
+    }
+
+    public void setSetSal(Integer setSal) {
+        SetSal = setSal;
+    }
+
+    public String getFilmNo() {
+        return FilmNo;
+    }
+
+    public void setFilmNo(String filmNo) {
+        FilmNo = filmNo;
+    }
+
     public String getLanderID() {
         return LanderID;
     }
@@ -377,37 +347,40 @@ public class FLNTUHeadResponse {
         this.dataPointCount = dataPointCount;
     }
 
-    public List<FLNTUDataResponse> getData() {
+    public List<DODataResponse> getData() {
         return data;
     }
 
-    public void setData(List<FLNTUDataResponse> data) {
+    public void setData(List<DODataResponse> data) {
         this.data = data;
     }
 
-    private class FLNTUDataResponse {
+    private class DODataResponse {
         private Long ID;
-        private LocalDateTime date;
+        private LocalDateTime Date;
         private Double TempDegC;
-        private Double ChlFluPPB;
-        private Double ChlAUgL;
-        private Double TurbMFTU;
+        private Double DO;
+        private Double WeissDoMgL;
         private Double BattV;
+        private Double GGDOMgL;
+        private Double BKDOMgL;
         private Boolean isAligned;
         private Long HeadID;
 
-        public FLNTUDataResponse(Long ID, LocalDateTime date) {
+        public DODataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
-            this.date = date;
+            Date = date;
         }
 
-        public FLNTUDataResponse(ProcessedFLNTUData data) {
+        public DODataResponse(ProcessedDOData data) {
             ID = data.getID();
-            date = data.getDate();
+            Date = data.getDate();
             TempDegC = data.getTempDegC();
-            ChlAUgL = data.getChlAUgL();
-            TurbMFTU = data.getTurbMFTU();
+            DO = data.getDO();
+            WeissDoMgL = data.getWeissDoMgL();
             BattV = data.getBattV();
+            GGDOMgL = data.getGGDOMgL();
+            BKDOMgL = data.getBKDOMgL();
             isAligned = data.getAligned();
             HeadID = data.getHeadID().getHeadID();
         }
@@ -421,11 +394,11 @@ public class FLNTUHeadResponse {
         }
 
         public LocalDateTime getDate() {
-            return date;
+            return Date;
         }
 
         public void setDate(LocalDateTime date) {
-            this.date = date;
+            Date = date;
         }
 
         public Double getTempDegC() {
@@ -436,28 +409,20 @@ public class FLNTUHeadResponse {
             TempDegC = tempDegC;
         }
 
-        public Double getChlFluPPB() {
-            return ChlFluPPB;
+        public Double getDO() {
+            return DO;
         }
 
-        public void setChlFluPPB(Double chlFluPPB) {
-            ChlFluPPB = chlFluPPB;
+        public void setDO(Double DO) {
+            this.DO = DO;
         }
 
-        public Double getChlAUgL() {
-            return ChlAUgL;
+        public Double getWeissDoMgL() {
+            return WeissDoMgL;
         }
 
-        public void setChlAUgL(Double chlAUgL) {
-            ChlAUgL = chlAUgL;
-        }
-
-        public Double getTurbMFTU() {
-            return TurbMFTU;
-        }
-
-        public void setTurbMFTU(Double turbMFTU) {
-            TurbMFTU = turbMFTU;
+        public void setWeissDoMgL(Double weissDoMgL) {
+            WeissDoMgL = weissDoMgL;
         }
 
         public Double getBattV() {
@@ -466,6 +431,22 @@ public class FLNTUHeadResponse {
 
         public void setBattV(Double battV) {
             BattV = battV;
+        }
+
+        public Double getGGDOMgL() {
+            return GGDOMgL;
+        }
+
+        public void setGGDOMgL(Double GGDOMgL) {
+            this.GGDOMgL = GGDOMgL;
+        }
+
+        public Double getBKDOMgL() {
+            return BKDOMgL;
+        }
+
+        public void setBKDOMgL(Double BKDOMgL) {
+            this.BKDOMgL = BKDOMgL;
         }
 
         public Boolean getAligned() {

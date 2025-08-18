@@ -1,13 +1,13 @@
-package com.davies.lab.lander.FormattedModels.RequestBody;
+package com.davies.lab.lander.FormattedModels.RequestBody.Updates;
 
 import com.davies.lab.lander.Models.Lander;
-import com.davies.lab.lander.Models.Data.ProcessedCTDData;
+import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UpdateCTDHeaderRequest {
+public class UpdateFLNTUHeaderRequest {
     private String SondeName;
     private String SondeNo;
     private String SensorType;
@@ -18,14 +18,10 @@ public class UpdateCTDHeaderRequest {
     private Integer BurstTime;
     private Integer BurstCnt;
     private Integer IntervalData;
+    private Integer WiperInterval;
     private Integer SampleCnt;
-    private LocalDateTime StartTime;
-    private LocalDateTime EndTime;
-    private Double DepAdiRho;
-    private Integer ECA;
-    private Integer ECB;
-    private Integer ECDeg;
-    private Double ECCoef;
+    private LocalDateTime StartTime, EndTime;
+    private Integer CHLA, CHLB;
     private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
@@ -33,18 +29,16 @@ public class UpdateCTDHeaderRequest {
     private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
-    private String COMMENT;
+    private String Comment;
     private String SensorType2;
     private Integer BuzzerNumber;
-    private Integer DepM;
-    private Integer CondDepB;
     private Lander LanderID;
-    private List<ProcessedCTDData> data;
+    private List<ProcessedFLNTUData> data;
 
-    public UpdateCTDHeaderRequest() {
+    public UpdateFLNTUHeaderRequest() {
     }
 
-    public UpdateCTDHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, List<ProcessedCTDData> data) {
+    public UpdateFLNTUHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, List<ProcessedFLNTUData> data) {
         SondeName = sondeName;
         SondeNo = sondeNo;
         SensorType = sensorType;
@@ -55,14 +49,12 @@ public class UpdateCTDHeaderRequest {
         BurstTime = burstTime;
         BurstCnt = burstCnt;
         IntervalData = intervalData;
+        WiperInterval = wiperInterval;
         SampleCnt = sampleCnt;
         StartTime = startTime;
         EndTime = endTime;
-        DepAdiRho = depAdiRho;
-        this.ECA = ECA;
-        this.ECB = ECB;
-        this.ECDeg = ECDeg;
-        this.ECCoef = ECCoef;
+        this.CHLA = CHLA;
+        this.CHLB = CHLB;
         CoefDate = coefDate;
         Ch1 = ch1;
         Ch2 = ch2;
@@ -70,11 +62,9 @@ public class UpdateCTDHeaderRequest {
         Ch4 = ch4;
         BuzzerEN = buzzerEN;
         BuzzerInterval = buzzerInterval;
-        this.COMMENT = COMMENT;
+        Comment = comment;
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
-        DepM = depM;
-        CondDepB = condDepB;
         LanderID = landerID;
         this.data = data;
     }
@@ -159,6 +149,14 @@ public class UpdateCTDHeaderRequest {
         IntervalData = intervalData;
     }
 
+    public Integer getWiperInterval() {
+        return WiperInterval;
+    }
+
+    public void setWiperInterval(Integer wiperInterval) {
+        WiperInterval = wiperInterval;
+    }
+
     public Integer getSampleCnt() {
         return SampleCnt;
     }
@@ -183,44 +181,20 @@ public class UpdateCTDHeaderRequest {
         EndTime = endTime;
     }
 
-    public Double getDepAdiRho() {
-        return DepAdiRho;
+    public Integer getCHLA() {
+        return CHLA;
     }
 
-    public void setDepAdiRho(Double depAdiRho) {
-        DepAdiRho = depAdiRho;
+    public void setCHLA(Integer CHLA) {
+        this.CHLA = CHLA;
     }
 
-    public Integer getECA() {
-        return ECA;
+    public Integer getCHLB() {
+        return CHLB;
     }
 
-    public void setECA(Integer ECA) {
-        this.ECA = ECA;
-    }
-
-    public Integer getECB() {
-        return ECB;
-    }
-
-    public void setECB(Integer ECB) {
-        this.ECB = ECB;
-    }
-
-    public Integer getECDeg() {
-        return ECDeg;
-    }
-
-    public void setECDeg(Integer ECDeg) {
-        this.ECDeg = ECDeg;
-    }
-
-    public Double getECCoef() {
-        return ECCoef;
-    }
-
-    public void setECCoef(Double ECCoef) {
-        this.ECCoef = ECCoef;
+    public void setCHLB(Integer CHLB) {
+        this.CHLB = CHLB;
     }
 
     public Date getCoefDate() {
@@ -279,12 +253,12 @@ public class UpdateCTDHeaderRequest {
         BuzzerInterval = buzzerInterval;
     }
 
-    public String getCOMMENT() {
-        return COMMENT;
+    public String getComment() {
+        return Comment;
     }
 
-    public void setCOMMENT(String COMMENT) {
-        this.COMMENT = COMMENT;
+    public void setComment(String comment) {
+        Comment = comment;
     }
 
     public String getSensorType2() {
@@ -303,22 +277,6 @@ public class UpdateCTDHeaderRequest {
         BuzzerNumber = buzzerNumber;
     }
 
-    public Integer getDepM() {
-        return DepM;
-    }
-
-    public void setDepM(Integer depM) {
-        DepM = depM;
-    }
-
-    public Integer getCondDepB() {
-        return CondDepB;
-    }
-
-    public void setCondDepB(Integer condDepB) {
-        CondDepB = condDepB;
-    }
-
     public Lander getLanderID() {
         return LanderID;
     }
@@ -327,11 +285,11 @@ public class UpdateCTDHeaderRequest {
         LanderID = landerID;
     }
 
-    public List<ProcessedCTDData> getData() {
+    public List<ProcessedFLNTUData> getData() {
         return data;
     }
 
-    public void setData(List<ProcessedCTDData> data) {
+    public void setData(List<ProcessedFLNTUData> data) {
         this.data = data;
     }
 }

@@ -1,14 +1,14 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody;
+package com.davies.lab.lander.FormattedModels.ResponseBody.Head;
 
-import com.davies.lab.lander.Models.Data.ProcessedDOData;
-import com.davies.lab.lander.Models.Headers.ProcessedDOHead;
+import com.davies.lab.lander.Models.Data.ProcessedCTDData;
+import com.davies.lab.lander.Models.Headers.ProcessedCTDHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DOHeadResponse {
+public class CTDHeadResponse {
     private Long HeadID;
     private String SondeName;
     private String SondeNo;
@@ -16,30 +16,36 @@ public class DOHeadResponse {
     private Integer Channel;
     private Integer DelayTime;
     private Integer PreHeat;
-    private Integer MeasModel;
+    private Integer MeasMode;
     private Integer BurstTime;
     private Integer BurstCnt;
     private Integer IntervalData;
     private Integer SampleCnt;
-    private LocalDateTime StartTime, EndTime;
+    private LocalDateTime StartTime;
+    private LocalDateTime EndTime;
     private Double DepAdiRho;
+    private Integer ECA;
+    private Integer ECB;
+    private Integer ECDeg;
+    private Double ECCoef;
     private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
+    private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
     private String COMMENT;
     private String SensorType2;
     private Integer BuzzerNumber;
     private Integer DepM;
-    private Integer SetSal;
-    private String FilmNo;
+    private Integer CondDepB;
     private String LanderID;
     private Integer dataPointCount;
-    private List<DODataResponse> data = new ArrayList<>();
+    private Integer alignedDataPointCount;
+    private List<CTDDataResponse> data = new ArrayList<>();
 
-    public DOHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, String landerID) {
+    public CTDHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -47,7 +53,7 @@ public class DOHeadResponse {
         Channel = channel;
         DelayTime = delayTime;
         PreHeat = preHeat;
-        MeasModel = measModel;
+        MeasMode = measMode;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
         IntervalData = intervalData;
@@ -55,30 +61,34 @@ public class DOHeadResponse {
         StartTime = startTime;
         EndTime = endTime;
         DepAdiRho = depAdiRho;
+        this.ECA = ECA;
+        this.ECB = ECB;
+        this.ECDeg = ECDeg;
+        this.ECCoef = ECCoef;
         CoefDate = coefDate;
         Ch1 = ch1;
         Ch2 = ch2;
         Ch3 = ch3;
+        Ch4 = ch4;
         BuzzerEN = buzzerEN;
         BuzzerInterval = buzzerInterval;
         this.COMMENT = COMMENT;
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
         DepM = depM;
-        SetSal = setSal;
-        FilmNo = filmNo;
+        CondDepB = condDepB;
         LanderID = landerID;
     }
 
-    public DOHeadResponse(ProcessedDOHead head) {
+    public CTDHeadResponse(ProcessedCTDHead head) {
         HeadID = head.getHeadID();
         SondeName = head.getSondeName();
-        SondeNo = head.getSondeNo();
+        SondeNo = getSondeNo();
         SensorType = head.getSensorType();
         Channel = head.getChannel();
         DelayTime = head.getDelayTime();
         PreHeat = head.getPreHeat();
-        MeasModel = head.getMeasModel();
+        MeasMode = head.getMeasMode();
         BurstTime = head.getBurstTime();
         BurstCnt = head.getBurstCnt();
         IntervalData = head.getIntervalData();
@@ -86,33 +96,33 @@ public class DOHeadResponse {
         StartTime = head.getStartTime();
         EndTime = head.getEndTime();
         DepAdiRho = head.getDepAdiRho();
+        this.ECA = head.getECA();
+        this.ECB = head.getECB();
+        this.ECDeg = head.getECDeg();
+        this.ECCoef = head.getECCoef();
         CoefDate = head.getCoefDate();
         Ch1 = head.getCh1();
         Ch2 = head.getCh2();
         Ch3 = head.getCh3();
+        Ch4 = head.getCh4();
         BuzzerEN = head.getBuzzerEN();
         BuzzerInterval = head.getBuzzerInterval();
-        COMMENT = head.getCOMMENT();
+        this.COMMENT = head.getCOMMENT();
         SensorType2 = head.getSensorType2();
         BuzzerNumber = head.getBuzzerNumber();
         DepM = head.getDepM();
-        SetSal = head.getSetSal();
-        FilmNo = head.getFilmNo();
+        CondDepB = head.getCondDepB();
         LanderID = head.getLanderID().getASDBLanderID();
     }
 
-    public void createDODataResponse(ProcessedDOData dataPoint) {
-        DODataResponse temp = new DODataResponse(
-                dataPoint.getID(),
-                dataPoint.getDate()
-        );
-
-        data.add(temp);
+    public void createDataResponse(ProcessedCTDData CTDData) {
+        CTDDataResponse res = new CTDDataResponse(CTDData.getID(), CTDData.getDate());
+        data.add(res);
     }
 
-    public void createFullDataResponse(ProcessedDOData dataPoint) {
-        DODataResponse temp = new DODataResponse(dataPoint);
-        data.add(temp);
+    public void createFullDataResponse(ProcessedCTDData dataPoint) {
+        CTDDataResponse res = new CTDDataResponse(dataPoint);
+        data.add(res);
     }
 
     public Long getHeadID() {
@@ -171,12 +181,12 @@ public class DOHeadResponse {
         PreHeat = preHeat;
     }
 
-    public Integer getMeasModel() {
-        return MeasModel;
+    public Integer getMeasMode() {
+        return MeasMode;
     }
 
-    public void setMeasModel(Integer measModel) {
-        MeasModel = measModel;
+    public void setMeasMode(Integer measMode) {
+        MeasMode = measMode;
     }
 
     public Integer getBurstTime() {
@@ -235,6 +245,38 @@ public class DOHeadResponse {
         DepAdiRho = depAdiRho;
     }
 
+    public Integer getECA() {
+        return ECA;
+    }
+
+    public void setECA(Integer ECA) {
+        this.ECA = ECA;
+    }
+
+    public Integer getECB() {
+        return ECB;
+    }
+
+    public void setECB(Integer ECB) {
+        this.ECB = ECB;
+    }
+
+    public Integer getECDeg() {
+        return ECDeg;
+    }
+
+    public void setECDeg(Integer ECDeg) {
+        this.ECDeg = ECDeg;
+    }
+
+    public Double getECCoef() {
+        return ECCoef;
+    }
+
+    public void setECCoef(Double ECCoef) {
+        this.ECCoef = ECCoef;
+    }
+
     public Date getCoefDate() {
         return CoefDate;
     }
@@ -265,6 +307,14 @@ public class DOHeadResponse {
 
     public void setCh3(Double ch3) {
         Ch3 = ch3;
+    }
+
+    public Double getCh4() {
+        return Ch4;
+    }
+
+    public void setCh4(Double ch4) {
+        Ch4 = ch4;
     }
 
     public Integer getBuzzerEN() {
@@ -315,20 +365,12 @@ public class DOHeadResponse {
         DepM = depM;
     }
 
-    public Integer getSetSal() {
-        return SetSal;
+    public Integer getCondDepB() {
+        return CondDepB;
     }
 
-    public void setSetSal(Integer setSal) {
-        SetSal = setSal;
-    }
-
-    public String getFilmNo() {
-        return FilmNo;
-    }
-
-    public void setFilmNo(String filmNo) {
-        FilmNo = filmNo;
+    public void setCondDepB(Integer condDepB) {
+        CondDepB = condDepB;
     }
 
     public String getLanderID() {
@@ -347,40 +389,47 @@ public class DOHeadResponse {
         this.dataPointCount = dataPointCount;
     }
 
-    public List<DODataResponse> getData() {
+    public Integer getAlignedDataPointCount() {
+        return alignedDataPointCount;
+    }
+
+    public void setAlignedDataPointCount(Integer alignedDataPointCount) {
+        this.alignedDataPointCount = alignedDataPointCount;
+    }
+
+    public List<CTDDataResponse> getData() {
         return data;
     }
 
-    public void setData(List<DODataResponse> data) {
+    public void setData(List<CTDDataResponse> data) {
         this.data = data;
     }
 
-    private class DODataResponse {
+    private class CTDDataResponse {
         private Long ID;
         private LocalDateTime Date;
         private Double TempDegC;
-        private Double DO;
-        private Double WeissDoMgL;
+        private Double Sal;
+        private Double CondMsCm;
+        private Double Ec25UsCm;
         private Double BattV;
-        private Double GGDOMgL;
-        private Double BKDOMgL;
         private Boolean isAligned;
         private Long HeadID;
 
-        public DODataResponse(Long ID, LocalDateTime date) {
+
+        public CTDDataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
             Date = date;
         }
 
-        public DODataResponse(ProcessedDOData data) {
+        public CTDDataResponse(ProcessedCTDData data) {
             ID = data.getID();
             Date = data.getDate();
             TempDegC = data.getTempDegC();
-            DO = data.getDO();
-            WeissDoMgL = data.getWeissDoMgL();
+            Sal = data.getSal();
+            CondMsCm = data.getCondMsCm();
+            Ec25UsCm = data.getEc25UsCm();
             BattV = data.getBattV();
-            GGDOMgL = data.getGGDOMgL();
-            BKDOMgL = data.getBKDOMgL();
             isAligned = data.getAligned();
             HeadID = data.getHeadID().getHeadID();
         }
@@ -409,20 +458,28 @@ public class DOHeadResponse {
             TempDegC = tempDegC;
         }
 
-        public Double getDO() {
-            return DO;
+        public Double getSal() {
+            return Sal;
         }
 
-        public void setDO(Double DO) {
-            this.DO = DO;
+        public void setSal(Double sal) {
+            Sal = sal;
         }
 
-        public Double getWeissDoMgL() {
-            return WeissDoMgL;
+        public Double getCondMsCm() {
+            return CondMsCm;
         }
 
-        public void setWeissDoMgL(Double weissDoMgL) {
-            WeissDoMgL = weissDoMgL;
+        public void setCondMsCm(Double condMsCm) {
+            CondMsCm = condMsCm;
+        }
+
+        public Double getEc25UsCm() {
+            return Ec25UsCm;
+        }
+
+        public void setEc25UsCm(Double ec25UsCm) {
+            Ec25UsCm = ec25UsCm;
         }
 
         public Double getBattV() {
@@ -431,22 +488,6 @@ public class DOHeadResponse {
 
         public void setBattV(Double battV) {
             BattV = battV;
-        }
-
-        public Double getGGDOMgL() {
-            return GGDOMgL;
-        }
-
-        public void setGGDOMgL(Double GGDOMgL) {
-            this.GGDOMgL = GGDOMgL;
-        }
-
-        public Double getBKDOMgL() {
-            return BKDOMgL;
-        }
-
-        public void setBKDOMgL(Double BKDOMgL) {
-            this.BKDOMgL = BKDOMgL;
         }
 
         public Boolean getAligned() {

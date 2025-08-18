@@ -1,34 +1,49 @@
-package com.davies.lab.lander.FormattedModels.RequestBody;
+package com.davies.lab.lander.FormattedModels.ResponseBody.Data;
 
-import com.davies.lab.lander.Models.Data.Aligned.AlignedCTDData;
-import com.davies.lab.lander.Models.Headers.ProcessedCTDHead;
+import com.davies.lab.lander.Models.Data.ProcessedCTDData;
 
 import java.time.LocalDateTime;
 
-public class UpdateCTDDataRequest {
+public class CTDDataResponse {
+    private Long ID;
     private LocalDateTime Date;
     private Double TempDegC;
     private Double Sal;
     private Double CondMsCm;
     private Double Ec25UsCm;
     private Double BattV;
-    private Boolean isAligned;
-    private AlignedCTDData alignedData;
-    private ProcessedCTDHead HeadID;
+    private Boolean isAligned = false;
+    private Long HeadID;
 
-    public UpdateCTDDataRequest() {
-    }
-
-    public UpdateCTDDataRequest(LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Boolean isAligned, AlignedCTDData alignedData, ProcessedCTDHead headID) {
+    public CTDDataResponse(Long ID, LocalDateTime date, Double tempDegC, Double sal, Double condMsCm, Double ec25UsCm, Double battV, Long headID) {
+        this.ID = ID;
         Date = date;
         TempDegC = tempDegC;
         Sal = sal;
         CondMsCm = condMsCm;
         Ec25UsCm = ec25UsCm;
         BattV = battV;
-        this.isAligned = isAligned;
-        this.alignedData = alignedData;
         HeadID = headID;
+    }
+
+    public CTDDataResponse(ProcessedCTDData processedData) {
+        this.ID = processedData.getID();
+        Date = processedData.getDate();
+        TempDegC = processedData.getTempDegC();
+        Sal = processedData.getSal();
+        CondMsCm = processedData.getCondMsCm();
+        Ec25UsCm = processedData.getEc25UsCm();
+        BattV = processedData.getBattV();
+        this.isAligned = processedData.getAligned();
+        HeadID = processedData.getHeadID().getHeadID();
+    }
+
+    public Long getID() {
+        return ID;
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
     }
 
     public LocalDateTime getDate() {
@@ -83,23 +98,15 @@ public class UpdateCTDDataRequest {
         return isAligned;
     }
 
-    public void setAligned(Boolean algned) {
-        isAligned = algned;
+    public void setAligned(Boolean aligned) {
+        isAligned = aligned;
     }
 
-    public AlignedCTDData getAlignedData() {
-        return alignedData;
-    }
-
-    public void setAlignedData(AlignedCTDData alignedData) {
-        this.alignedData = alignedData;
-    }
-
-    public ProcessedCTDHead getHeadID() {
+    public Long getHeadID() {
         return HeadID;
     }
 
-    public void setHeadID(ProcessedCTDHead headID) {
+    public void setHeadID(Long headID) {
         HeadID = headID;
     }
 }

@@ -1,7 +1,7 @@
 package com.davies.lab.lander.Controllers.Frontend;
 
-import com.davies.lab.lander.FormattedModels.ResponseBody.*;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Cache.*;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Head.*;
 import com.davies.lab.lander.Models.Data.*;
 import com.davies.lab.lander.Models.Headers.*;
 import com.davies.lab.lander.Repositories.*;

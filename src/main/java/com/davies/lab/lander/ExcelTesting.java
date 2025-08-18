@@ -1,6 +1,6 @@
 package com.davies.lab.lander;
 
-import com.davies.lab.lander.FormattedModels.ResponseBody.CTDHeadResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Head.CTDHeadResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 
 import java.io.File;

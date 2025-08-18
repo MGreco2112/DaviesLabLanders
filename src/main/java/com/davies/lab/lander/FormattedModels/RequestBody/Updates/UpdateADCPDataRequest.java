@@ -1,4 +1,4 @@
-package com.davies.lab.lander.FormattedModels.RequestBody;
+package com.davies.lab.lander.FormattedModels.RequestBody.Updates;
 
 import com.davies.lab.lander.Models.Data.Aligned.AlignedADCPData;
 import com.davies.lab.lander.Models.Headers.ProcessedADCPHead;

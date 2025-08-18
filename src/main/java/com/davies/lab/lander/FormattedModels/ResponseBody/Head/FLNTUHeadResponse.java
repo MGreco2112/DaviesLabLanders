@@ -1,14 +1,14 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody;
+package com.davies.lab.lander.FormattedModels.ResponseBody.Head;
 
-import com.davies.lab.lander.Models.Data.ProcessedCTDData;
-import com.davies.lab.lander.Models.Headers.ProcessedCTDHead;
+import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
+import com.davies.lab.lander.Models.Headers.ProcessedFLNTUHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CTDHeadResponse {
+public class FLNTUHeadResponse {
     private Long HeadID;
     private String SondeName;
     private String SondeNo;
@@ -20,14 +20,10 @@ public class CTDHeadResponse {
     private Integer BurstTime;
     private Integer BurstCnt;
     private Integer IntervalData;
+    private Integer WiperInterval;
     private Integer SampleCnt;
-    private LocalDateTime StartTime;
-    private LocalDateTime EndTime;
-    private Double DepAdiRho;
-    private Integer ECA;
-    private Integer ECB;
-    private Integer ECDeg;
-    private Double ECCoef;
+    private LocalDateTime StartTime, EndTime;
+    private Integer CHLA, CHLB;
     private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
@@ -35,17 +31,44 @@ public class CTDHeadResponse {
     private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
-    private String COMMENT;
+    private String Comment;
     private String SensorType2;
     private Integer BuzzerNumber;
-    private Integer DepM;
-    private Integer CondDepB;
     private String LanderID;
     private Integer dataPointCount;
-    private Integer alignedDataPointCount;
-    private List<CTDDataResponse> data = new ArrayList<>();
+    private List<FLNTUDataResponse> data = new ArrayList<>();
 
-    public CTDHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, String landerID) {
+    public FLNTUHeadResponse(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
+        SondeName = sondeName;
+        SondeNo = sondeNo;
+        SensorType = sensorType;
+        Channel = channel;
+        DelayTime = delayTime;
+        PreHeat = preHeat;
+        MeasMode = measMode;
+        BurstTime = burstTime;
+        BurstCnt = burstCnt;
+        IntervalData = intervalData;
+        WiperInterval = wiperInterval;
+        SampleCnt = sampleCnt;
+        StartTime = startTime;
+        EndTime = endTime;
+        this.CHLA = CHLA;
+        this.CHLB = CHLB;
+        CoefDate = coefDate;
+        Ch1 = ch1;
+        Ch2 = ch2;
+        Ch3 = ch3;
+        Ch4 = ch4;
+        BuzzerEN = buzzerEN;
+        BuzzerInterval = buzzerInterval;
+        Comment = comment;
+        SensorType2 = sensorType2;
+        BuzzerNumber = buzzerNumber;
+        LanderID = landerID;
+    }
+
+    public FLNTUHeadResponse(Long headID, String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, String landerID) {
         HeadID = headID;
         SondeName = sondeName;
         SondeNo = sondeNo;
@@ -57,14 +80,12 @@ public class CTDHeadResponse {
         BurstTime = burstTime;
         BurstCnt = burstCnt;
         IntervalData = intervalData;
+        WiperInterval = wiperInterval;
         SampleCnt = sampleCnt;
         StartTime = startTime;
         EndTime = endTime;
-        DepAdiRho = depAdiRho;
-        this.ECA = ECA;
-        this.ECB = ECB;
-        this.ECDeg = ECDeg;
-        this.ECCoef = ECCoef;
+        this.CHLA = CHLA;
+        this.CHLB = CHLB;
         CoefDate = coefDate;
         Ch1 = ch1;
         Ch2 = ch2;
@@ -72,18 +93,16 @@ public class CTDHeadResponse {
         Ch4 = ch4;
         BuzzerEN = buzzerEN;
         BuzzerInterval = buzzerInterval;
-        this.COMMENT = COMMENT;
+        Comment = comment;
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
-        DepM = depM;
-        CondDepB = condDepB;
         LanderID = landerID;
     }
 
-    public CTDHeadResponse(ProcessedCTDHead head) {
+    public FLNTUHeadResponse(ProcessedFLNTUHead head) {
         HeadID = head.getHeadID();
         SondeName = head.getSondeName();
-        SondeNo = getSondeNo();
+        SondeNo = head.getSondeNo();
         SensorType = head.getSensorType();
         Channel = head.getChannel();
         DelayTime = head.getDelayTime();
@@ -92,14 +111,12 @@ public class CTDHeadResponse {
         BurstTime = head.getBurstTime();
         BurstCnt = head.getBurstCnt();
         IntervalData = head.getIntervalData();
+        WiperInterval = head.getWiperInterval();
         SampleCnt = head.getSampleCnt();
         StartTime = head.getStartTime();
         EndTime = head.getEndTime();
-        DepAdiRho = head.getDepAdiRho();
-        this.ECA = head.getECA();
-        this.ECB = head.getECB();
-        this.ECDeg = head.getECDeg();
-        this.ECCoef = head.getECCoef();
+        CHLA = head.getCHLA();
+        CHLB = head.getCHLB();
         CoefDate = head.getCoefDate();
         Ch1 = head.getCh1();
         Ch2 = head.getCh2();
@@ -107,22 +124,25 @@ public class CTDHeadResponse {
         Ch4 = head.getCh4();
         BuzzerEN = head.getBuzzerEN();
         BuzzerInterval = head.getBuzzerInterval();
-        this.COMMENT = head.getCOMMENT();
+        Comment = head.getComment();
         SensorType2 = head.getSensorType2();
         BuzzerNumber = head.getBuzzerNumber();
-        DepM = head.getDepM();
-        CondDepB = head.getCondDepB();
         LanderID = head.getLanderID().getASDBLanderID();
     }
 
-    public void createDataResponse(ProcessedCTDData CTDData) {
-        CTDDataResponse res = new CTDDataResponse(CTDData.getID(), CTDData.getDate());
-        data.add(res);
+    public void createFLNTUDataResponse(ProcessedFLNTUData selData) {
+        FLNTUDataResponse newData = new FLNTUDataResponse(
+                selData.getID(),
+                selData.getDate()
+        );
+
+        data.add(newData);
     }
 
-    public void createFullDataResponse(ProcessedCTDData dataPoint) {
-        CTDDataResponse res = new CTDDataResponse(dataPoint);
-        data.add(res);
+    public void createFullDataResponse(ProcessedFLNTUData dataPoint) {
+        FLNTUDataResponse temp = new FLNTUDataResponse(dataPoint);
+
+        data.add(temp);
     }
 
     public Long getHeadID() {
@@ -213,6 +233,14 @@ public class CTDHeadResponse {
         IntervalData = intervalData;
     }
 
+    public Integer getWiperInterval() {
+        return WiperInterval;
+    }
+
+    public void setWiperInterval(Integer wiperInterval) {
+        WiperInterval = wiperInterval;
+    }
+
     public Integer getSampleCnt() {
         return SampleCnt;
     }
@@ -237,44 +265,20 @@ public class CTDHeadResponse {
         EndTime = endTime;
     }
 
-    public Double getDepAdiRho() {
-        return DepAdiRho;
+    public Integer getCHLA() {
+        return CHLA;
     }
 
-    public void setDepAdiRho(Double depAdiRho) {
-        DepAdiRho = depAdiRho;
+    public void setCHLA(Integer CHLA) {
+        this.CHLA = CHLA;
     }
 
-    public Integer getECA() {
-        return ECA;
+    public Integer getCHLB() {
+        return CHLB;
     }
 
-    public void setECA(Integer ECA) {
-        this.ECA = ECA;
-    }
-
-    public Integer getECB() {
-        return ECB;
-    }
-
-    public void setECB(Integer ECB) {
-        this.ECB = ECB;
-    }
-
-    public Integer getECDeg() {
-        return ECDeg;
-    }
-
-    public void setECDeg(Integer ECDeg) {
-        this.ECDeg = ECDeg;
-    }
-
-    public Double getECCoef() {
-        return ECCoef;
-    }
-
-    public void setECCoef(Double ECCoef) {
-        this.ECCoef = ECCoef;
+    public void setCHLB(Integer CHLB) {
+        this.CHLB = CHLB;
     }
 
     public Date getCoefDate() {
@@ -333,12 +337,12 @@ public class CTDHeadResponse {
         BuzzerInterval = buzzerInterval;
     }
 
-    public String getCOMMENT() {
-        return COMMENT;
+    public String getComment() {
+        return Comment;
     }
 
-    public void setCOMMENT(String COMMENT) {
-        this.COMMENT = COMMENT;
+    public void setComment(String comment) {
+        Comment = comment;
     }
 
     public String getSensorType2() {
@@ -357,22 +361,6 @@ public class CTDHeadResponse {
         BuzzerNumber = buzzerNumber;
     }
 
-    public Integer getDepM() {
-        return DepM;
-    }
-
-    public void setDepM(Integer depM) {
-        DepM = depM;
-    }
-
-    public Integer getCondDepB() {
-        return CondDepB;
-    }
-
-    public void setCondDepB(Integer condDepB) {
-        CondDepB = condDepB;
-    }
-
     public String getLanderID() {
         return LanderID;
     }
@@ -389,46 +377,36 @@ public class CTDHeadResponse {
         this.dataPointCount = dataPointCount;
     }
 
-    public Integer getAlignedDataPointCount() {
-        return alignedDataPointCount;
-    }
-
-    public void setAlignedDataPointCount(Integer alignedDataPointCount) {
-        this.alignedDataPointCount = alignedDataPointCount;
-    }
-
-    public List<CTDDataResponse> getData() {
+    public List<FLNTUDataResponse> getData() {
         return data;
     }
 
-    public void setData(List<CTDDataResponse> data) {
+    public void setData(List<FLNTUDataResponse> data) {
         this.data = data;
     }
 
-    private class CTDDataResponse {
+    private class FLNTUDataResponse {
         private Long ID;
-        private LocalDateTime Date;
+        private LocalDateTime date;
         private Double TempDegC;
-        private Double Sal;
-        private Double CondMsCm;
-        private Double Ec25UsCm;
+        private Double ChlFluPPB;
+        private Double ChlAUgL;
+        private Double TurbMFTU;
         private Double BattV;
         private Boolean isAligned;
         private Long HeadID;
 
-
-        public CTDDataResponse(Long ID, LocalDateTime date) {
+        public FLNTUDataResponse(Long ID, LocalDateTime date) {
             this.ID = ID;
-            Date = date;
+            this.date = date;
         }
 
-        public CTDDataResponse(ProcessedCTDData data) {
+        public FLNTUDataResponse(ProcessedFLNTUData data) {
             ID = data.getID();
-            Date = data.getDate();
+            date = data.getDate();
             TempDegC = data.getTempDegC();
-            Sal = data.getSal();
-            CondMsCm = data.getCondMsCm();
-            Ec25UsCm = data.getEc25UsCm();
+            ChlAUgL = data.getChlAUgL();
+            TurbMFTU = data.getTurbMFTU();
             BattV = data.getBattV();
             isAligned = data.getAligned();
             HeadID = data.getHeadID().getHeadID();
@@ -443,11 +421,11 @@ public class CTDHeadResponse {
         }
 
         public LocalDateTime getDate() {
-            return Date;
+            return date;
         }
 
         public void setDate(LocalDateTime date) {
-            Date = date;
+            this.date = date;
         }
 
         public Double getTempDegC() {
@@ -458,28 +436,28 @@ public class CTDHeadResponse {
             TempDegC = tempDegC;
         }
 
-        public Double getSal() {
-            return Sal;
+        public Double getChlFluPPB() {
+            return ChlFluPPB;
         }
 
-        public void setSal(Double sal) {
-            Sal = sal;
+        public void setChlFluPPB(Double chlFluPPB) {
+            ChlFluPPB = chlFluPPB;
         }
 
-        public Double getCondMsCm() {
-            return CondMsCm;
+        public Double getChlAUgL() {
+            return ChlAUgL;
         }
 
-        public void setCondMsCm(Double condMsCm) {
-            CondMsCm = condMsCm;
+        public void setChlAUgL(Double chlAUgL) {
+            ChlAUgL = chlAUgL;
         }
 
-        public Double getEc25UsCm() {
-            return Ec25UsCm;
+        public Double getTurbMFTU() {
+            return TurbMFTU;
         }
 
-        public void setEc25UsCm(Double ec25UsCm) {
-            Ec25UsCm = ec25UsCm;
+        public void setTurbMFTU(Double turbMFTU) {
+            TurbMFTU = turbMFTU;
         }
 
         public Double getBattV() {

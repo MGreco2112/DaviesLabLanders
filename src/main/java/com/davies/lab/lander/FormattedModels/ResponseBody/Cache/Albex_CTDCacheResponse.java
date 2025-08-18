@@ -1,6 +1,6 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.Cache;
 
-import com.davies.lab.lander.FormattedModels.ResponseBody.AlbexCTDHeadResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Head.AlbexCTDHeadResponse;
 
 import java.util.Date;
 import java.util.HashMap;

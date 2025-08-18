@@ -1,4 +1,4 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody;
+package com.davies.lab.lander.FormattedModels.ResponseBody.Data;
 
 public class DataProgressResponse {
     private boolean isPercentage;

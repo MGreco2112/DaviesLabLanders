@@ -1,70 +1,71 @@
-package com.davies.lab.lander.FormattedModels.RequestBody;
+package com.davies.lab.lander.FormattedModels.RequestBody.Updates;
 
 import com.davies.lab.lander.Models.Lander;
-import com.davies.lab.lander.Models.Data.ProcessedFLNTUData;
+import com.davies.lab.lander.Models.Data.ProcessedDOData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UpdateFLNTUHeaderRequest {
+public class UpdateDOHeaderRequest {
     private String SondeName;
     private String SondeNo;
     private String SensorType;
     private Integer Channel;
     private Integer DelayTime;
     private Integer PreHeat;
-    private Integer MeasMode;
+    private Integer MeasModel;
     private Integer BurstTime;
     private Integer BurstCnt;
     private Integer IntervalData;
-    private Integer WiperInterval;
     private Integer SampleCnt;
     private LocalDateTime StartTime, EndTime;
-    private Integer CHLA, CHLB;
+    private Double DepAdiRho;
     private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
-    private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
-    private String Comment;
+    private String COMMENT;
     private String SensorType2;
     private Integer BuzzerNumber;
+    private Integer DepM;
+    private Integer SetSal;
+    private String FilmNo;
     private Lander LanderID;
-    private List<ProcessedFLNTUData> data;
+    private List<ProcessedDOData> data;
 
-    public UpdateFLNTUHeaderRequest() {
+    public UpdateDOHeaderRequest() {
     }
 
-    public UpdateFLNTUHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer wiperInterval, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Integer CHLA, Integer CHLB, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String comment, String sensorType2, Integer buzzerNumber, Lander landerID, List<ProcessedFLNTUData> data) {
+    public UpdateDOHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, List<ProcessedDOData> data) {
         SondeName = sondeName;
         SondeNo = sondeNo;
         SensorType = sensorType;
         Channel = channel;
         DelayTime = delayTime;
         PreHeat = preHeat;
-        MeasMode = measMode;
+        MeasModel = measModel;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
         IntervalData = intervalData;
-        WiperInterval = wiperInterval;
         SampleCnt = sampleCnt;
         StartTime = startTime;
         EndTime = endTime;
-        this.CHLA = CHLA;
-        this.CHLB = CHLB;
+        DepAdiRho = depAdiRho;
         CoefDate = coefDate;
         Ch1 = ch1;
         Ch2 = ch2;
         Ch3 = ch3;
-        Ch4 = ch4;
         BuzzerEN = buzzerEN;
         BuzzerInterval = buzzerInterval;
-        Comment = comment;
+        this.COMMENT = COMMENT;
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
+        DepM = depM;
+        SetSal = setSal;
+        FilmNo = filmNo;
         LanderID = landerID;
         this.data = data;
     }
@@ -117,12 +118,12 @@ public class UpdateFLNTUHeaderRequest {
         PreHeat = preHeat;
     }
 
-    public Integer getMeasMode() {
-        return MeasMode;
+    public Integer getMeasModel() {
+        return MeasModel;
     }
 
-    public void setMeasMode(Integer measMode) {
-        MeasMode = measMode;
+    public void setMeasModel(Integer measModel) {
+        MeasModel = measModel;
     }
 
     public Integer getBurstTime() {
@@ -149,14 +150,6 @@ public class UpdateFLNTUHeaderRequest {
         IntervalData = intervalData;
     }
 
-    public Integer getWiperInterval() {
-        return WiperInterval;
-    }
-
-    public void setWiperInterval(Integer wiperInterval) {
-        WiperInterval = wiperInterval;
-    }
-
     public Integer getSampleCnt() {
         return SampleCnt;
     }
@@ -181,20 +174,12 @@ public class UpdateFLNTUHeaderRequest {
         EndTime = endTime;
     }
 
-    public Integer getCHLA() {
-        return CHLA;
+    public Double getDepAdiRho() {
+        return DepAdiRho;
     }
 
-    public void setCHLA(Integer CHLA) {
-        this.CHLA = CHLA;
-    }
-
-    public Integer getCHLB() {
-        return CHLB;
-    }
-
-    public void setCHLB(Integer CHLB) {
-        this.CHLB = CHLB;
+    public void setDepAdiRho(Double depAdiRho) {
+        DepAdiRho = depAdiRho;
     }
 
     public Date getCoefDate() {
@@ -229,14 +214,6 @@ public class UpdateFLNTUHeaderRequest {
         Ch3 = ch3;
     }
 
-    public Double getCh4() {
-        return Ch4;
-    }
-
-    public void setCh4(Double ch4) {
-        Ch4 = ch4;
-    }
-
     public Integer getBuzzerEN() {
         return BuzzerEN;
     }
@@ -253,12 +230,12 @@ public class UpdateFLNTUHeaderRequest {
         BuzzerInterval = buzzerInterval;
     }
 
-    public String getComment() {
-        return Comment;
+    public String getCOMMENT() {
+        return COMMENT;
     }
 
-    public void setComment(String comment) {
-        Comment = comment;
+    public void setCOMMENT(String COMMENT) {
+        this.COMMENT = COMMENT;
     }
 
     public String getSensorType2() {
@@ -277,6 +254,30 @@ public class UpdateFLNTUHeaderRequest {
         BuzzerNumber = buzzerNumber;
     }
 
+    public Integer getDepM() {
+        return DepM;
+    }
+
+    public void setDepM(Integer depM) {
+        DepM = depM;
+    }
+
+    public Integer getSetSal() {
+        return SetSal;
+    }
+
+    public void setSetSal(Integer setSal) {
+        SetSal = setSal;
+    }
+
+    public String getFilmNo() {
+        return FilmNo;
+    }
+
+    public void setFilmNo(String filmNo) {
+        FilmNo = filmNo;
+    }
+
     public Lander getLanderID() {
         return LanderID;
     }
@@ -285,11 +286,11 @@ public class UpdateFLNTUHeaderRequest {
         LanderID = landerID;
     }
 
-    public List<ProcessedFLNTUData> getData() {
+    public List<ProcessedDOData> getData() {
         return data;
     }
 
-    public void setData(List<ProcessedFLNTUData> data) {
+    public void setData(List<ProcessedDOData> data) {
         this.data = data;
     }
 }

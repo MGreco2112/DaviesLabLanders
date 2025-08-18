@@ -1,4 +1,4 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody;
+package com.davies.lab.lander.FormattedModels.ResponseBody.Data;
 
 import com.davies.lab.lander.Models.Data.ProcessedAlbexCTDData;
 

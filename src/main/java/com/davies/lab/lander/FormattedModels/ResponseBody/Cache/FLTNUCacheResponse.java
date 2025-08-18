@@ -1,6 +1,6 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.Cache;
 
-import com.davies.lab.lander.FormattedModels.ResponseBody.FLNTUHeadResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Head.FLNTUHeadResponse;
 
 import java.util.Date;
 import java.util.HashMap;
