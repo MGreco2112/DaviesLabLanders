@@ -10,6 +10,7 @@ public class ProcessedBeaconData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
 
+    @ManyToOne
     @JoinColumn(name = "Head_ID", referencedColumnName = "HeadID")
     private ProcessedBeaconHeader HeadID;
 
