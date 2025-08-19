@@ -118,7 +118,11 @@ public class ProcessedSedimentTrapController {
 
         headRepository.save(selHead);
 
-        headRepository.delete(selHead);
+        try {
+            headRepository.delete(selHead);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
 
         dashboardController.evictMyCache();
 
@@ -129,7 +133,11 @@ public class ProcessedSedimentTrapController {
     public ResponseEntity<String> deleteDataById(@PathVariable("id") Long id) {
         ProcessedSedimentTrapData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        repository.delete(selData);
+        try {
+            repository.delete(selData);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
 
         dashboardController.evictMyCache();
 

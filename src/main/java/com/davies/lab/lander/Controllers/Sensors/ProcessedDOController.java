@@ -692,7 +692,11 @@ public class ProcessedDOController {
 
         headRepository.save(selHead);
 
-        headRepository.delete(selHead);
+        try {
+            headRepository.delete(selHead);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
 
         dashboardController.evictMyCache();
 
@@ -703,7 +707,11 @@ public class ProcessedDOController {
     public ResponseEntity<String> deleteDataByID(@PathVariable("id") Long id) {
         ProcessedDOData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        repository.delete(selData);
+        try {
+            repository.delete(selData);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
 
         dashboardController.evictMyCache();
 

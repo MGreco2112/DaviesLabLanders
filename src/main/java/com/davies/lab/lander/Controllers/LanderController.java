@@ -448,7 +448,11 @@ public class LanderController {
 
         }
 
-        repository.delete(selLander);
+        try {
+            repository.delete(selLander);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
 
         dashboardController.evictMyCache();
 

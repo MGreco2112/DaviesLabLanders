@@ -380,7 +380,11 @@ public class ProcessedAlbexCTDController {
 
         headerRepository.save(selHead);
 
-        headerRepository.delete(selHead);
+        try {
+            headerRepository.delete(selHead);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
 
         dashboardController.evictMyCache();
 
@@ -391,7 +395,11 @@ public class ProcessedAlbexCTDController {
     public ResponseEntity<String> deleteDataByID(@PathVariable("id") Long id) {
         ProcessedAlbexCTDData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        repository.delete(selData);
+        try {
+            repository.delete(selData);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
 
         dashboardController.evictMyCache();
 
