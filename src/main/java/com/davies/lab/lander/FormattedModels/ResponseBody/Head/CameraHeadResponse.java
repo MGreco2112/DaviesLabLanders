@@ -28,6 +28,38 @@ public class CameraHeadResponse {
         data.add(temp);
     }
 
+    public Long getHeadID() {
+        return HeadID;
+    }
+
+    public void setHeadID(Long headID) {
+        HeadID = headID;
+    }
+
+    public String getLanderID() {
+        return LanderID;
+    }
+
+    public void setLanderID(String landerID) {
+        LanderID = landerID;
+    }
+
+    public Integer getDataPointCount() {
+        return dataPointCount;
+    }
+
+    public void setDataPointCount(Integer dataPointCount) {
+        this.dataPointCount = dataPointCount;
+    }
+
+    public List<CameraDataResponse> getData() {
+        return data;
+    }
+
+    public void setData(List<CameraDataResponse> data) {
+        this.data = data;
+    }
+
     private class CameraDataResponse {
         private Long ID;
         private Long HeadID;
