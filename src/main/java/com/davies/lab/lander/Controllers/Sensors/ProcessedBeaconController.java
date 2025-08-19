@@ -139,6 +139,8 @@ public class ProcessedBeaconController {
 
         headRepository.delete(selHead);
 
+        dashboardController.evictMyCache();
+
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
     }
 
@@ -147,6 +149,8 @@ public class ProcessedBeaconController {
         ProcessedBeaconData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.delete(selData);
+
+        dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
     }

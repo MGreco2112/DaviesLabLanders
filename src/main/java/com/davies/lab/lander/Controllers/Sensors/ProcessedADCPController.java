@@ -424,6 +424,8 @@ public class ProcessedADCPController {
             updateADCPDataByID(req.getRawID(), newRequest);
         }
 
+        dashboardController.evictMyCache();
+
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
 
@@ -441,6 +443,8 @@ public class ProcessedADCPController {
 
         headRepository.delete(selHead);
 
+        dashboardController.evictMyCache();
+
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
     }
 
@@ -449,6 +453,8 @@ public class ProcessedADCPController {
         ProcessedADCPData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.delete(selData);
+
+        dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
     }

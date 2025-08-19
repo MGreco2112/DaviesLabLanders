@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Controllers;
 
+import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
@@ -66,6 +67,9 @@ public class LanderController {
     private ProcessedSedimentTrapHeadRepository sedimentTrapHeadRepository;
     @Autowired
     private ProcessedSedimentTrapDataRepository sedimentTrapDataRepository;
+
+    @Autowired
+    private DashboardController dashboardController;
 
     @GetMapping("/all")
     public List<LanderResponse> findAllLanders() {
@@ -321,77 +325,132 @@ public class LanderController {
 
         if (selLander.getCTDHead() != null) {
             Optional<ProcessedCTDHead> ctdHead = ctdHeadRepository.findById(selLander.getCTDHead().getHeadID());
-            selLander.setCTDHead(null);
-            repository.save(selLander);
-            ctdDataRepository.deleteAll(ctdHead.get().getData());
-            ctdHeadRepository.delete(ctdHead.get());
+
+            try {
+                selLander.setCTDHead(null);
+                repository.save(selLander);
+                ctdDataRepository.deleteAll(ctdHead.get().getData());
+                ctdHeadRepository.delete(ctdHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
         }
 
         if (selLander.getDOHead() != null) {
             Optional<ProcessedDOHead> doHead =  doHeadRepository.findById(selLander.getDOHead().getHeadID());
-            selLander.setDOHead(null);
-            repository.save(selLander);
-            doDataRepository.deleteAll(doHead.get().getData());
-            doHeadRepository.delete(doHead.get());
+
+            try {
+                selLander.setDOHead(null);
+                repository.save(selLander);
+                doDataRepository.deleteAll(doHead.get().getData());
+                doHeadRepository.delete(doHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         if (selLander.getFLNTUHead() != null) {
             Optional<ProcessedFLNTUHead> flntuHead = flntuHeadRepository.findById(selLander.getFLNTUHead().getHeadID());
-            selLander.setFLNTUHead(null);
-            repository.save(selLander);
-            flntuDataRepository.deleteAll(flntuHead.get().getData());
-            flntuHeadRepository.delete(flntuHead.get());
+
+            try {
+                selLander.setFLNTUHead(null);
+                repository.save(selLander);
+                flntuDataRepository.deleteAll(flntuHead.get().getData());
+                flntuHeadRepository.delete(flntuHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         if (selLander.getAlbexHead() != null) {
             Optional<ProcessedAlbexCTDHeader> albexCTDHead = albexCTDHeadRepository.findById(selLander.getAlbexHead().getHeadID());
-            selLander.setAlbexHead(null);
-            repository.save(selLander);
-            albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
-            albexCTDHeadRepository.delete(albexCTDHead.get());
+
+            try {
+                selLander.setAlbexHead(null);
+                repository.save(selLander);
+                albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
+                albexCTDHeadRepository.delete(albexCTDHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         if (selLander.getADCPHead() != null) {
             Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.findById(selLander.getADCPHead().getHeadID());
-            selLander.setADCPHead(null);
-            repository.save(selLander);
-            adcpDataRepository.deleteAll(adcpHead.get().getData());
-            adcpHeadRepository.delete(adcpHead.get());
+
+            try {
+                selLander.setADCPHead(null);
+                repository.save(selLander);
+                adcpDataRepository.deleteAll(adcpHead.get().getData());
+                adcpHeadRepository.delete(adcpHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         if (selLander.getBatteryHead() != null) {
             Optional<ProcessedBatteryHeader> batteryHead = batteryHeadRepository.findById(selLander.getBatteryHead().getHeadID());
-            selLander.setBatteryHead(null);
-            repository.save(selLander);
-            batteryDataRepository.deleteAll(batteryHead.get().getData());
-            batteryHeadRepository.delete(batteryHead.get());
+
+            try {
+                selLander.setBatteryHead(null);
+                repository.save(selLander);
+                batteryDataRepository.deleteAll(batteryHead.get().getData());
+                batteryHeadRepository.delete(batteryHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         if (selLander.getBeaconHead() != null) {
             Optional<ProcessedBeaconHeader> beaconHead = beaconHeadRepository.findById(selLander.getBeaconHead().getHeadID());
-            selLander.setBeaconHead(null);
-            repository.save(selLander);
-            beaconDataRepository.deleteAll(beaconHead.get().getData());
-            beaconHeadRepository.save(beaconHead.get());
+
+            try {
+                selLander.setBeaconHead(null);
+                repository.save(selLander);
+                beaconDataRepository.deleteAll(beaconHead.get().getData());
+                beaconHeadRepository.save(beaconHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         if (selLander.getCameraHead() != null) {
             Optional<ProcessedCameraHeader> cameraHead = cameraHeadRepository.findById(selLander.getCameraHead().getHeadID());
-            selLander.setCameraHead(null);
-            repository.save(selLander);
-            cameraDataRepository.deleteAll(cameraHead.get().getData());
-            cameraHeadRepository.delete(cameraHead.get());
+
+            try {
+                selLander.setCameraHead(null);
+                repository.save(selLander);
+                cameraDataRepository.deleteAll(cameraHead.get().getData());
+                cameraHeadRepository.delete(cameraHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         if (selLander.getSedimentTrapHead() != null) {
             Optional<ProcessedSedimentTrapHeader> sedimentTrapHead = sedimentTrapHeadRepository.findById(selLander.getSedimentTrapHead().getHeadID());
-            selLander.setSedimentTrapHead(null);
-            repository.save(selLander);
-            sedimentTrapDataRepository.deleteAll(sedimentTrapHead.get().getData());
-            sedimentTrapHeadRepository.delete(sedimentTrapHead.get());
+
+            try {
+                selLander.setSedimentTrapHead(null);
+                repository.save(selLander);
+                sedimentTrapDataRepository.deleteAll(sedimentTrapHead.get().getData());
+                sedimentTrapHeadRepository.delete(sedimentTrapHead.get());
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+
         }
 
         repository.delete(selLander);
+
+        dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Lander", HttpStatus.OK);
     }
