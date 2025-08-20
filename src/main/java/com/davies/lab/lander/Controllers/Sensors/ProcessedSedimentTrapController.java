@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.SedimentTrapDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.SedimentTrapHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedSedimentTrapData;
@@ -105,6 +107,34 @@ public class ProcessedSedimentTrapController {
     }
 
     //TODO: Create POST/PUT routes one entity details are identified
+    @PutMapping("/update/header/{id}")
+    public ResponseEntity<String> updateSedimentTrapHeader(@PathVariable("id") Long id, @RequestBody UpdateSedimentTrapHeaderRequest updates) {
+        ProcessedSedimentTrapHeader selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getLanderID() != null) {
+            selHead.setLanderID(updates.getLanderID());
+        }
+        if (updates.getData() != null) {
+            selHead.setData(updates.getData());
+        }
+
+        headRepository.save(selHead);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<String> updateSedimentTrapDataById(@PathVariable("id") Long id, @RequestBody UpdateSedimentTrapDataRequest updates) {
+        ProcessedSedimentTrapData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getHeadID() != null) {
+            selData.setHeadID(updates.getHeadID());
+        }
+
+        repository.save(selData);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
 
     @DeleteMapping("/delete/header/{id}")
     public ResponseEntity<String> deleteHeaderById(@PathVariable("id") Long id) {

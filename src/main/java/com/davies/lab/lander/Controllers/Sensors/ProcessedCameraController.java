@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateCameraDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateCameraHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.CameraDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.CameraHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedCameraData;
@@ -126,6 +128,34 @@ public class ProcessedCameraController {
     }
 
     //TODO: Add POST/PUT mappings after model is defined
+    @PutMapping("/update/header/{id}")
+    public ResponseEntity<String> updateCameraHeader(@PathVariable("id") Long id, @RequestBody UpdateCameraHeaderRequest updates) {
+        ProcessedCameraHeader selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getLanderID() != null) {
+            selHead.setLanderID(updates.getLanderID());
+        }
+        if (updates.getData() != null) {
+            selHead.setData(updates.getData());
+        }
+
+        headRepository.save(selHead);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<String> updateCameraDataById(@PathVariable("id") Long id, @RequestBody UpdateCameraDataRequest updates) {
+        ProcessedCameraData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getHeadID() != null) {
+            selData.setHeadID(updates.getHeadID());
+        }
+
+        repository.save(selData);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
 
     @DeleteMapping("/delete/header/{id}")
     public ResponseEntity<String> deleteHeaderById(@PathVariable("id") Long id) {

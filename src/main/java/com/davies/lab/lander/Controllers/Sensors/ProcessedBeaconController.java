@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BeaconDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.BeaconHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedBeaconData;
@@ -124,6 +126,34 @@ public class ProcessedBeaconController {
     }
 
     //TODO: Create POST/PUT routes once parent entities are fully updated
+    @PutMapping("/update/header/{id}")
+    public ResponseEntity<String> updateBeaconHeader(@PathVariable("id") Long id, @RequestBody UpdateBeaconHeaderRequest updates) {
+        ProcessedBeaconHeader selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getLanderID() != null) {
+            selHead.setLanderID(updates.getLanderID());
+        }
+        if (updates.getData() != null) {
+            selHead.setData(updates.getData());
+        }
+
+        headRepository.save(selHead);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<String> updateBeaconDataByID(@PathVariable("id") Long id, @RequestBody UpdateBeaconDataRequest updates) {
+        ProcessedBeaconData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getHeadID() != null) {
+            selData.setHeadID(updates.getHeadID());
+        }
+
+        repository.save(selData);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
 
     @DeleteMapping("/delete/header/{id}")
     public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Long id) {

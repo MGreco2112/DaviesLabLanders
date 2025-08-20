@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBatteryDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBatteryRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BatteryDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.BatteryHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedBatteryData;
@@ -125,6 +127,36 @@ public class ProcessedBatteryController {
     }
 
 //    TODO: Update with POST/PUT Routes once Entity is better defined
+    @PutMapping("/update/header/{id}")
+    public ResponseEntity<String> updateBatteryHeader(@PathVariable("id") Long id, @RequestBody UpdateBatteryRequest updates) {
+        ProcessedBatteryHeader selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        //TODO: Update with new fields once they're created
+
+        if (updates.getLanderID() != null) {
+            selHead.setLanderID(updates.getLanderID());
+        }
+        if (updates.getData() != null) {
+            selHead.setData(updates.getData());
+        }
+
+        headRepository.save(selHead);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<String> updateCTDDataByID(@PathVariable("id") Long id, @RequestBody UpdateBatteryDataRequest updates) {
+        ProcessedBatteryData selData = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (updates.getHeadID() != null) {
+            selData.setHeadID(updates.getHeadID());
+        }
+
+        repository.save(selData);
+
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
 
     @DeleteMapping("/delete/header/{id}")
     public ResponseEntity<String> deleteHeaderByID(@PathVariable("id") Long id) {
