@@ -10,13 +10,11 @@ import com.davies.lab.lander.Repositories.Header.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -65,6 +63,29 @@ public class FrontendCacheController {
         return new ResponseEntity<>(new CTDCacheResponse(res), HttpStatus.OK);
     }
 
+    @GetMapping("/ctd/headers/{id}")
+    public ResponseEntity<CTDCacheResponse> getCTDHeadById(@PathVariable("id") Long id) {
+        Optional<ProcessedCTDHead> head = ctdHeadRepository.findById(id);
+        List<ProcessedCTDData> data = ctdDataRepository.findDataByHeadId(id);
+        List<CTDHeadResponse> res = new ArrayList<>();
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        CTDHeadResponse headResponse = new CTDHeadResponse(head.get());
+
+        for (ProcessedCTDData dataPoint : data) {
+            headResponse.createFullDataResponse(dataPoint);
+        }
+
+        res.add(
+                headResponse
+        );
+
+        return new ResponseEntity<>(new CTDCacheResponse(res), HttpStatus.OK);
+    }
+
     @GetMapping("/do/headers")
     public ResponseEntity<DOCacheResponse> getDOHeaders() {
         List<ProcessedDOHead> heads = doHeadRepository.findAll();
@@ -81,6 +102,29 @@ public class FrontendCacheController {
 
             res.add(temp);
         }
+
+        return new ResponseEntity<>(new DOCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/do/headers/{id}")
+    public ResponseEntity<DOCacheResponse> getDOHeaderById(@PathVariable("id") Long id) {
+        Optional<ProcessedDOHead> head = doHeadRepository.findById(id);
+        List<ProcessedDOData> data = doDataRepository.findDoDataByHeadId(id);
+        List<DOHeadResponse> res = new ArrayList<>();
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        DOHeadResponse headResponse = new DOHeadResponse(head.get());
+
+        for (ProcessedDOData dataPoint : data) {
+            headResponse.createFullDataResponse(dataPoint);
+        }
+
+        res.add(
+                headResponse
+        );
 
         return new ResponseEntity<>(new DOCacheResponse(res), HttpStatus.OK);
     }
@@ -105,6 +149,29 @@ public class FrontendCacheController {
         return new ResponseEntity<>(new FLTNUCacheResponse(res), HttpStatus.OK);
     }
 
+    @GetMapping("/flntu/headers/{id}")
+    public ResponseEntity<FLTNUCacheResponse> getFLNTUHeadById(@PathVariable("id") Long id) {
+        Optional<ProcessedFLNTUHead> head = flntuHeadRepository.findById(id);
+        List<ProcessedFLNTUData> data = flntuDataRepository.findDataFromHeadId(id);
+        List<FLNTUHeadResponse> res = new ArrayList<>();
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        FLNTUHeadResponse headResponse = new FLNTUHeadResponse(head.get());
+
+        for (ProcessedFLNTUData dataPoint : data) {
+            headResponse.createFullDataResponse(dataPoint);
+        }
+
+        res.add(
+                headResponse
+        );
+
+        return new ResponseEntity<>(new FLTNUCacheResponse(res), HttpStatus.OK);
+    }
+
     @GetMapping("/albex_ctd/headers")
     public ResponseEntity<Albex_CTDCacheResponse> getAlbexHeaders() {
         List<ProcessedAlbexCTDHeader> heads = albexHeaderRepository.findAll();
@@ -125,6 +192,29 @@ public class FrontendCacheController {
         return new ResponseEntity<>(new Albex_CTDCacheResponse(res), HttpStatus.OK);
     }
 
+    @GetMapping("/albex_ctd/headeres/{id}")
+    public ResponseEntity<Albex_CTDCacheResponse> getAlbexHeaderById(@PathVariable("id") Long id) {
+        Optional<ProcessedAlbexCTDHeader> head = albexHeaderRepository.findById(id);
+        List<ProcessedAlbexCTDData> data = albexDataRepository.findDataByHeadId(id);
+        List<AlbexCTDHeadResponse> res = new ArrayList<>();
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        AlbexCTDHeadResponse headResponse = new AlbexCTDHeadResponse(head.get());
+
+        for (ProcessedAlbexCTDData dataPoint : data) {
+            headResponse.createFullDataResponse(dataPoint);
+        }
+
+        res.add(
+                headResponse
+        );
+
+        return new ResponseEntity<>(new Albex_CTDCacheResponse(res), HttpStatus.OK);
+    }
+
     @GetMapping("/adcp/headers")
     public ResponseEntity<ADCPCacheResponse> getADCPHeaders() {
         List<ProcessedADCPHead> heads = adcpHeadRepository.findAll();
@@ -141,6 +231,29 @@ public class FrontendCacheController {
 
             res.add(temp);
         }
+
+        return new ResponseEntity<>(new ADCPCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/adcp/headers/{id}")
+    public ResponseEntity<ADCPCacheResponse> getADCPHeaderById(@PathVariable("id") Long id) {
+        Optional<ProcessedADCPHead> head = adcpHeadRepository.findById(id);
+        List<ProcessedADCPData> data = adcpDataRepository.findDataByHeadId(id);
+        List<ADCPHeadResponse> res = new ArrayList<>();
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+
+        ADCPHeadResponse headResponse = new ADCPHeadResponse(head.get());
+
+        for (ProcessedADCPData dataPoint : data) {
+            headResponse.createFullDataResponse(dataPoint);
+        }
+
+        res.add(
+                headResponse
+        );
 
         return new ResponseEntity<>(new ADCPCacheResponse(res), HttpStatus.OK);
     }
