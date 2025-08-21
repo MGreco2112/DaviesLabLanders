@@ -47,6 +47,8 @@ public class ProcessedDOController {
     private ProcessedDOHeadRepository headRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     //Head Routes
     @GetMapping("/headers")
@@ -335,6 +337,7 @@ public class ProcessedDOController {
 
         clearDOCache();
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -415,6 +418,7 @@ public class ProcessedDOController {
 
             clearDOCache();
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
@@ -517,6 +521,7 @@ public class ProcessedDOController {
 
             clearDOCache();
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {

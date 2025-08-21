@@ -53,6 +53,8 @@ public class ProcessedCTDController {
     private AlignedCTDDataRepository alignedRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     //Head Routes
     @GetMapping("/headers")
@@ -345,6 +347,7 @@ public class ProcessedCTDController {
 
         clearCTDCache();
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
        return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -429,6 +432,7 @@ public class ProcessedCTDController {
 
             clearCTDCache();
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
@@ -533,6 +537,7 @@ public class ProcessedCTDController {
 
             clearCTDCache();
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {

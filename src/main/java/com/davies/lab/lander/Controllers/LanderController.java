@@ -1,16 +1,13 @@
 package com.davies.lab.lander.Controllers;
 
-import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateLanderRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.UpdateLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LatestLandersResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.*;
-import com.davies.lab.lander.Models.Headers.*;
 import com.davies.lab.lander.Repositories.*;
-import com.davies.lab.lander.Repositories.Data.*;
-import com.davies.lab.lander.Repositories.Header.*;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -51,27 +48,9 @@ public class LanderController {
     private ProcessedADCPDataRepository adcpDataRepository;
     @Autowired
     private ProcessedADCPHeadRepository adcpHeadRepository;
-    @Autowired
-    private ProcessedBatteryHeadRepository batteryHeadRepository;
-    @Autowired
-    private ProcessedBatteryDataRepository batteryDataRepository;
-    @Autowired
-    private ProcessedBeaconHeadRepository beaconHeadRepository;
-    @Autowired
-    private ProcessedBeaconDataRepository beaconDataRepository;
-    @Autowired
-    private ProcessedCameraHeadRepository cameraHeadRepository;
-    @Autowired
-    private ProcessedCameraDataRepository cameraDataRepository;
-    @Autowired
-    private ProcessedSedimentTrapHeadRepository sedimentTrapHeadRepository;
-    @Autowired
-    private ProcessedSedimentTrapDataRepository sedimentTrapDataRepository;
-
-    @Autowired
-    private DashboardController dashboardController;
 
     @GetMapping("/all")
+    @Cacheable("landers-cache")
     public List<LanderResponse> findAllLanders() {
          List<Lander> landerList = repository.findAll();
          List<LanderResponse> resList = new ArrayList<>();
@@ -97,26 +76,6 @@ public class LanderController {
                  LocalDateTime startTime = adcpDataRepository.findDeploymentDateByHeadID(lander.getADCPHead().getHeadID());
                  LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.getADCPHead().getHeadID());
                  res.createADCPHeadResponse(lander.getADCPHead(), startTime, endTime);
-             }
-
-             if (lander.getBatteryHead() != null) {
-//                 TODO: update with header values once parent model is updated
-                res.createBatteryHeadResponse(lander.getBatteryHead(), null, null);
-             }
-
-             if (lander.getBeaconHead() != null) {
-//                 TODO: update with header values once parent model is updated
-                 res.createBeaconHeadResponse(lander.getBeaconHead(), null, null);
-             }
-
-             if (lander.getCameraHead() != null) {
-//                 TODO: update with header values once parent model is updated
-                 res.createCameraHeadResponse(lander.getCameraHead(), null, null);
-             }
-
-             if (lander.getSedimentTrapHead() != null) {
-//                 TODO: update with header values once parent model is updated
-                 res.createSedimentTrapHeadResponse(lander.getSedimentTrapHead(), null, null);
              }
 
              if (lander.getDeploymentDateAndTime() != null) {
@@ -161,26 +120,6 @@ public class LanderController {
             LocalDateTime startTime = adcpDataRepository.findDeploymentDateByHeadID(lander.get().getADCPHead().getHeadID());
             LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.get().getADCPHead().getHeadID());
             res.createADCPHeadResponse(lander.get().getADCPHead(), startTime, endTime);
-        }
-
-        if (lander.get().getBatteryHead() != null) {
-//                 TODO: update with header values once parent model is updated
-            res.createBatteryHeadResponse(lander.get().getBatteryHead(), null, null);
-        }
-
-        if (lander.get().getBeaconHead() != null) {
-//                 TODO: update with header values once parent model is updated
-            res.createBeaconHeadResponse(lander.get().getBeaconHead(), null, null);
-        }
-
-        if (lander.get().getCameraHead() != null) {
-//                 TODO: update with header values once parent model is updated
-            res.createCameraHeadResponse(lander.get().getCameraHead(), null, null);
-        }
-
-        if (lander.get().getSedimentTrapHead() != null) {
-//                 TODO: update with header values once parent model is updated
-            res.createSedimentTrapHeadResponse(lander.get().getSedimentTrapHead(), null, null);
         }
 
         if (lander.get().getDeploymentDateAndTime() != null) {
@@ -254,6 +193,11 @@ public class LanderController {
         System.out.println("Cleared Cache");
     }
 
+    @CacheEvict(value = "landers-cache", allEntries = true)
+    public void evictLandersCache() {
+
+    }
+
     @PostMapping("/new_lander")
     public ResponseEntity<String> postNewLander(@RequestBody NewLanderRequest newLander) {
         Lander lander = new Lander(
@@ -300,18 +244,6 @@ public class LanderController {
         if (updates.getADCPHead() != null) {
             selLander.setADCPHead(updates.getADCPHead());
         }
-        if (updates.getBatteryHead() != null) {
-            selLander.setBatteryHead(updates.getBatteryHead());
-        }
-        if (updates.getBeaconHead() != null) {
-            selLander.setBeaconHead(updates.getBeaconHead());
-        }
-        if (updates.getCameraHead() != null) {
-            selLander.setCameraHead(updates.getCameraHead());
-        }
-        if (updates.getSedimentTrapHead() != null) {
-            selLander.setSedimentTrapHead(updates.getSedimentTrapHead());
-        }
 
         repository.save(selLander);
 
@@ -325,136 +257,45 @@ public class LanderController {
 
         if (selLander.getCTDHead() != null) {
             Optional<ProcessedCTDHead> ctdHead = ctdHeadRepository.findById(selLander.getCTDHead().getHeadID());
-
-            try {
-                selLander.setCTDHead(null);
-                repository.save(selLander);
-                ctdDataRepository.deleteAll(ctdHead.get().getData());
-                ctdHeadRepository.delete(ctdHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
+            selLander.setCTDHead(null);
+            repository.save(selLander);
+            ctdDataRepository.deleteAll(ctdHead.get().getData());
+            ctdHeadRepository.delete(ctdHead.get());
         }
 
         if (selLander.getDOHead() != null) {
             Optional<ProcessedDOHead> doHead =  doHeadRepository.findById(selLander.getDOHead().getHeadID());
-
-            try {
-                selLander.setDOHead(null);
-                repository.save(selLander);
-                doDataRepository.deleteAll(doHead.get().getData());
-                doHeadRepository.delete(doHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
+            selLander.setDOHead(null);
+            repository.save(selLander);
+            doDataRepository.deleteAll(doHead.get().getData());
+            doHeadRepository.delete(doHead.get());
         }
 
         if (selLander.getFLNTUHead() != null) {
             Optional<ProcessedFLNTUHead> flntuHead = flntuHeadRepository.findById(selLander.getFLNTUHead().getHeadID());
-
-            try {
-                selLander.setFLNTUHead(null);
-                repository.save(selLander);
-                flntuDataRepository.deleteAll(flntuHead.get().getData());
-                flntuHeadRepository.delete(flntuHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
+            selLander.setFLNTUHead(null);
+            repository.save(selLander);
+            flntuDataRepository.deleteAll(flntuHead.get().getData());
+            flntuHeadRepository.delete(flntuHead.get());
         }
 
         if (selLander.getAlbexHead() != null) {
             Optional<ProcessedAlbexCTDHeader> albexCTDHead = albexCTDHeadRepository.findById(selLander.getAlbexHead().getHeadID());
-
-            try {
-                selLander.setAlbexHead(null);
-                repository.save(selLander);
-                albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
-                albexCTDHeadRepository.delete(albexCTDHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
+            selLander.setAlbexHead(null);
+            repository.save(selLander);
+            albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
+            albexCTDHeadRepository.delete(albexCTDHead.get());
         }
 
         if (selLander.getADCPHead() != null) {
             Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.findById(selLander.getADCPHead().getHeadID());
-
-            try {
-                selLander.setADCPHead(null);
-                repository.save(selLander);
-                adcpDataRepository.deleteAll(adcpHead.get().getData());
-                adcpHeadRepository.delete(adcpHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
+            selLander.setADCPHead(null);
+            repository.save(selLander);
+            adcpDataRepository.deleteAll(adcpHead.get().getData());
+            adcpHeadRepository.delete(adcpHead.get());
         }
 
-        if (selLander.getBatteryHead() != null) {
-            Optional<ProcessedBatteryHeader> batteryHead = batteryHeadRepository.findById(selLander.getBatteryHead().getHeadID());
-
-            try {
-                selLander.setBatteryHead(null);
-                repository.save(selLander);
-                batteryDataRepository.deleteAll(batteryHead.get().getData());
-                batteryHeadRepository.delete(batteryHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
-        }
-
-        if (selLander.getBeaconHead() != null) {
-            Optional<ProcessedBeaconHeader> beaconHead = beaconHeadRepository.findById(selLander.getBeaconHead().getHeadID());
-
-            try {
-                selLander.setBeaconHead(null);
-                repository.save(selLander);
-                beaconDataRepository.deleteAll(beaconHead.get().getData());
-                beaconHeadRepository.save(beaconHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
-        }
-
-        if (selLander.getCameraHead() != null) {
-            Optional<ProcessedCameraHeader> cameraHead = cameraHeadRepository.findById(selLander.getCameraHead().getHeadID());
-
-            try {
-                selLander.setCameraHead(null);
-                repository.save(selLander);
-                cameraDataRepository.deleteAll(cameraHead.get().getData());
-                cameraHeadRepository.delete(cameraHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
-        }
-
-        if (selLander.getSedimentTrapHead() != null) {
-            Optional<ProcessedSedimentTrapHeader> sedimentTrapHead = sedimentTrapHeadRepository.findById(selLander.getSedimentTrapHead().getHeadID());
-
-            try {
-                selLander.setSedimentTrapHead(null);
-                repository.save(selLander);
-                sedimentTrapDataRepository.deleteAll(sedimentTrapHead.get().getData());
-                sedimentTrapHeadRepository.delete(sedimentTrapHead.get());
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-            }
-
-        }
-
-        try {
-            repository.delete(selLander);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-        }
-
-        dashboardController.evictMyCache();
+        repository.delete(selLander);
 
         return new ResponseEntity<>("Deleted Lander", HttpStatus.OK);
     }
