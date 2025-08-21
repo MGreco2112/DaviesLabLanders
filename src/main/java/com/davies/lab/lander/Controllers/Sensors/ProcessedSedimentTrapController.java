@@ -7,18 +7,23 @@ import com.davies.lab.lander.FormattedModels.ResponseBody.Data.SedimentTrapDataR
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.SedimentTrapHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedSedimentTrapData;
 import com.davies.lab.lander.Models.Headers.ProcessedSedimentTrapHeader;
+import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.Data.ProcessedSedimentTrapDataRepository;
 import com.davies.lab.lander.Repositories.Header.ProcessedSedimentTrapHeadRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
+import org.apache.coyote.Response;
+import org.checkerframework.common.util.report.qual.ReportUnqualified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.Buffer;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -107,6 +112,159 @@ public class ProcessedSedimentTrapController {
     }
 
     //TODO: Create POST/PUT routes one entity details are identified
+    @PostMapping("/upload_csv/data/{landerId}")
+    public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String landerID) {
+
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+        ProcessedSedimentTrapHeader savedHead;
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
+        }
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getSedimentTrapHead() != null) {
+            savedHead = headRepository.findById(selLander.get().getSedimentTrapHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+        } else {
+            ProcessedSedimentTrapHeader dummyHead = new ProcessedSedimentTrapHeader();
+            dummyHead.setLanderID(selLander.get());
+
+            savedHead = headRepository.save(dummyHead);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            //TODO: Create the CSVToBean setu for SedimentTrap CSV files
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        //TODO: process rawData into ProcessedSedimentTrapData
+        dashboardController.evictMyCache();
+
+        return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/upload_csv/header/{landerID}")
+    public ResponseEntity<String> uploadedProcessedHeader(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerID") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
+        }
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getSedimentTrapHead() == null) {
+            ProcessedSedimentTrapHeader newHead = new ProcessedSedimentTrapHeader();
+            newHead.setLanderID(selLander.get());
+            ProcessedSedimentTrapHeader savedHead = headRepository.save(newHead);
+            selLander.get().setSedimentTrapHead(savedHead);
+            landerRepository.save(selLander.get());
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            String temp = "";
+            List<String> output = new ArrayList<>();
+            Map<String, String> valuesMap = new HashMap<>();
+
+            while (!Objects.equals(temp, "[Item]")) {
+                temp = reader.readLine();
+
+                if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
+                    output.add(temp);
+                }
+            }
+
+            for (String datapoint : output) {
+                String[] hold = datapoint.split("=");
+
+                valuesMap.put(hold[0], hold[1].stripTrailing());
+            }
+
+            UpdateSedimentTrapHeaderRequest updates = new UpdateSedimentTrapHeaderRequest(
+                    /*
+                    Insert captured and parsed values from valuesMap into completed constructor
+                    */
+            );
+
+            updateSedimentTrapHeader(selLander.get().getSedimentTrapHead().getHeadID(), updates);
+
+            dashboardController.evictMyCache();
+
+            return new ResponseEntity<>("Posted", HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/upload_csv/combined/{lander_id}")
+    public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>("Lander not found", HttpStatus.BAD_REQUEST);
+        }
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getSedimentTrapHead() != null) {
+            return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            String temp = "";
+            List<String> output = new ArrayList<>();
+            Map<String, String> valuesMap = new HashMap<>();
+
+            while (!Objects.equals(temp, "[Item]")) {
+                temp = reader.readLine();
+
+                if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
+                    output.add(temp);
+                }
+            }
+
+            for (String datapoint : output) {
+                String[] hold = datapoint.split("=");
+
+                valuesMap.put(hold[0], hold[1].stripTrailing());
+            }
+
+            ProcessedSedimentTrapHeader sedimentTrapHead = new ProcessedSedimentTrapHeader(
+                    /*
+                    Insert parsed values from the valuesMap once the constructor is built
+                    */
+            );
+
+            sedimentTrapHead.setLanderID(selLander.get());
+
+            //handle parsing csv data, attach to Header
+
+            dashboardController.evictMyCache();
+
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //create private method processData for parshing the csv data
+
+    //create private void method clearSedimentTrapCache using the cacheEvict annotation
+
     @PutMapping("/update/header/{id}")
     public ResponseEntity<String> updateSedimentTrapHeader(@PathVariable("id") Long id, @RequestBody UpdateSedimentTrapHeaderRequest updates) {
         ProcessedSedimentTrapHeader selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
