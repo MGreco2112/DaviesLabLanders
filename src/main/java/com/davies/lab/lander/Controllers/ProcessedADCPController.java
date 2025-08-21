@@ -50,6 +50,8 @@ public class ProcessedADCPController {
     private AlignedADCPDataRepository alignedRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     @GetMapping("/headers")
     public List<ADCPHeadResponse> findAllHeads() {
@@ -311,6 +313,7 @@ public class ProcessedADCPController {
 
         clearADCPCache();
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }

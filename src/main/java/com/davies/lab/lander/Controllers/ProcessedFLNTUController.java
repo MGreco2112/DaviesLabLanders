@@ -46,6 +46,8 @@ public class ProcessedFLNTUController {
     private ProcessedFLNTUHeadRepository headRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     //Header Routes
     @GetMapping("/headers")
@@ -335,6 +337,7 @@ public class ProcessedFLNTUController {
 
         clearFLNTUCache();
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
@@ -419,6 +422,7 @@ public class ProcessedFLNTUController {
 
             clearFLNTUCache();
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
@@ -522,6 +526,7 @@ public class ProcessedFLNTUController {
             clearFLNTUCache();
 
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {

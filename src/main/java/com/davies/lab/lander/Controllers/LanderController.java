@@ -7,6 +7,7 @@ import com.davies.lab.lander.FormattedModels.ResponseBody.LatestLandersResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.*;
 import com.davies.lab.lander.Repositories.*;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -49,6 +50,7 @@ public class LanderController {
     private ProcessedADCPHeadRepository adcpHeadRepository;
 
     @GetMapping("/all")
+    @Cacheable("landers-cache")
     public List<LanderResponse> findAllLanders() {
          List<Lander> landerList = repository.findAll();
          List<LanderResponse> resList = new ArrayList<>();
@@ -189,6 +191,11 @@ public class LanderController {
     @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
     public void evictMyCache() {
         System.out.println("Cleared Cache");
+    }
+
+    @CacheEvict(value = "landers-cache", allEntries = true)
+    public void evictLandersCache() {
+
     }
 
     @PostMapping("/new_lander")

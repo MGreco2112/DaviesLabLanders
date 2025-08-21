@@ -47,6 +47,8 @@ public class ProcessedAlbexCTDController {
     private ProcessedAlbexCTDHeaderRepository headerRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     @GetMapping("/headers")
     public List<AlbexCTDHeadResponse> findAllHeads() {
@@ -298,6 +300,7 @@ public class ProcessedAlbexCTDController {
 
         clearAlbexCache();
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Posted!", HttpStatus.OK);
     }
