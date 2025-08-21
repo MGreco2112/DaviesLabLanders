@@ -1,6 +1,7 @@
 package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BeaconDataResponse;
@@ -34,6 +35,8 @@ public class ProcessedBeaconController {
     private ProcessedBeaconHeadRepository headRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     //Head Routes
     @GetMapping("/headers")
@@ -161,6 +164,7 @@ public class ProcessedBeaconController {
         }
 
         //TODO: process rawData into ProcessedBatteryData
+        landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
@@ -213,6 +217,7 @@ public class ProcessedBeaconController {
 
             updateBeaconHeader(selLander.get().getBeaconHead().getHeadID(), updates);
 
+            landerController.evictLandersCache();
             dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
@@ -268,6 +273,7 @@ public class ProcessedBeaconController {
 
             //handle parsing csv data, attach to Header
 
+            landerController.evictLandersCache();
             dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
@@ -329,6 +335,7 @@ public class ProcessedBeaconController {
             System.out.println(e.getLocalizedMessage());
         }
 
+        landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
@@ -344,6 +351,7 @@ public class ProcessedBeaconController {
             System.out.println(e.getLocalizedMessage());
         }
 
+        landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);

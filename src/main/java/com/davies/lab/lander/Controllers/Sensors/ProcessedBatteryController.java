@@ -1,6 +1,7 @@
 package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBatteryDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBatteryHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BatteryDataResponse;
@@ -34,6 +35,8 @@ public class ProcessedBatteryController {
     private ProcessedBatteryHeadRepository headRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     //Head Routes
     public List<BatteryHeadResponse> findAllHeads() {
@@ -163,6 +166,7 @@ public class ProcessedBatteryController {
 
         //TODO: process rawData into ProcessedBatteryData
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
     }
@@ -215,6 +219,7 @@ public class ProcessedBatteryController {
             updateBatteryHeader(selLander.get().getBatteryHead().getHeadID(), updates);
 
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
         } catch (Exception e) {
@@ -270,6 +275,7 @@ public class ProcessedBatteryController {
             //handle parsing csv data, attach to Header
 
             dashboardController.evictMyCache();
+            landerController.evictLandersCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
@@ -333,6 +339,7 @@ public class ProcessedBatteryController {
         }
 
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
     }
@@ -347,6 +354,7 @@ public class ProcessedBatteryController {
             System.out.println(e.getLocalizedMessage());
         }
 
+        landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);

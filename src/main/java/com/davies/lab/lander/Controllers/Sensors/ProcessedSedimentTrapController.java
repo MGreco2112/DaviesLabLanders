@@ -1,6 +1,7 @@
 package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
+import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.SedimentTrapDataResponse;
@@ -37,6 +38,8 @@ public class ProcessedSedimentTrapController {
     private ProcessedSedimentTrapHeadRepository headRepository;
     @Autowired
     private DashboardController dashboardController;
+    @Autowired
+    private LanderController landerController;
 
     //HeadRoutes
     @GetMapping("/headers")
@@ -144,6 +147,7 @@ public class ProcessedSedimentTrapController {
         }
 
         //TODO: process rawData into ProcessedSedimentTrapData
+        landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
@@ -196,6 +200,7 @@ public class ProcessedSedimentTrapController {
 
             updateSedimentTrapHeader(selLander.get().getSedimentTrapHead().getHeadID(), updates);
 
+            landerController.evictLandersCache();
             dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Posted", HttpStatus.OK);
@@ -251,6 +256,7 @@ public class ProcessedSedimentTrapController {
 
             //handle parsing csv data, attach to Header
 
+            landerController.evictLandersCache();
             dashboardController.evictMyCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
@@ -312,6 +318,7 @@ public class ProcessedSedimentTrapController {
             System.out.println(e.getLocalizedMessage());
         }
 
+        landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
@@ -327,6 +334,7 @@ public class ProcessedSedimentTrapController {
             System.out.println(e.getLocalizedMessage());
         }
 
+        landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
