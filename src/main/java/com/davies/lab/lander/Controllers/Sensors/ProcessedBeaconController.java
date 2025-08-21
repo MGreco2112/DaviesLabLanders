@@ -7,6 +7,7 @@ import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BeaconDataRespons
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.BeaconHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedBeaconData;
 import com.davies.lab.lander.Models.Headers.ProcessedBeaconHeader;
+import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.Data.ProcessedBeaconDataRepository;
 import com.davies.lab.lander.Repositories.Header.ProcessedBeaconHeadRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
@@ -14,11 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -126,6 +128,160 @@ public class ProcessedBeaconController {
     }
 
     //TODO: Create POST/PUT routes once parent entities are fully updated
+    @PostMapping("/upload_csv/data/{landerId}")
+    public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
+
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+        ProcessedBeaconHeader savedHead;
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
+        }
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getBeaconHead() != null) {
+            savedHead = headRepository.findById(selLander.get().getBeaconHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+        } else {
+            ProcessedBeaconHeader dummyHead = new ProcessedBeaconHeader();
+            dummyHead.setLanderID(selLander.get());
+
+            savedHead = headRepository.save(dummyHead);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))){
+            //TODO create the CSVToBean setup for Battery CSV files
+
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        //TODO: process rawData into ProcessedBatteryData
+        dashboardController.evictMyCache();
+
+        return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/upload_csv/header/{landerID}")
+    public ResponseEntity<String> uploadProcessedHeader(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerID") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>("Unable to locate Lander", HttpStatus.BAD_REQUEST);
+        }
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getBeaconHead() != null) {
+            ProcessedBeaconHeader newHead =  new ProcessedBeaconHeader();
+            newHead.setLanderID(selLander.get());
+            ProcessedBeaconHeader savedHead = headRepository.save(newHead);
+            selLander.get().setBeaconHead(savedHead);
+            landerRepository.save(selLander.get());
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            String temp = "";
+            List<String> output = new ArrayList<>();
+            Map<String, String> valuesMap = new HashMap<>();
+
+            while (!Objects.equals(temp, "[Item]")) {
+                temp = reader.readLine();
+
+                if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
+                    output.add(temp);
+                }
+            }
+
+            for (String datapoint : output) {
+                String[] hold = datapoint.split("=");
+
+                valuesMap.put(hold[0], hold[1].stripTrailing());
+            }
+
+            UpdateBeaconHeaderRequest updates =  new UpdateBeaconHeaderRequest(
+                    /*
+                    Insert captured and parsed values from valuesMap into completed constructor
+                    */
+            );
+
+            updateBeaconHeader(selLander.get().getBeaconHead().getHeadID(), updates);
+
+            dashboardController.evictMyCache();
+
+            return new ResponseEntity<>("Posted", HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/upload_csv/combined/{lander_id}")
+    public ResponseEntity<String> processCompleteCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("lander_id") String landerID) {
+        Optional<Lander> selLander = landerRepository.findById(landerID);
+
+        if (selLander.isEmpty()) {
+            return new ResponseEntity<>("Lander not Found", HttpStatus.BAD_REQUEST);
+        }
+
+        if (processedFile.isEmpty()) {
+            return new ResponseEntity<>("Missing Uploaded CSV in Request", HttpStatus.BAD_REQUEST);
+        }
+
+        if (selLander.get().getBeaconHead() != null) {
+            return new ResponseEntity<>("Header already present", HttpStatus.BAD_REQUEST);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
+            String temp = "";
+            List<String> output = new ArrayList<>();
+            Map<String, String> valuesMap = new HashMap<>();
+
+            while (!Objects.equals(temp, "[Item]")) {
+                temp = reader.readLine();
+
+                if (temp.charAt(0) != '/' && temp.charAt(0) != '[') {
+                    output.add(temp);
+                }
+            }
+
+            for (String datapoint : output) {
+                String[] hold = datapoint.split("=");
+
+                valuesMap.put(hold[0], hold[1].stripTrailing());
+            }
+
+            ProcessedBeaconHeader beaconHead = new ProcessedBeaconHeader(
+                    /*
+                    Insert parsed values from valuesMap once the constructor is built
+                    */
+            );
+
+            beaconHead.setLanderID(selLander.get());
+
+            //handle parsing csv data, attach to Header
+
+            dashboardController.evictMyCache();
+
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //create private method processData for parsing the csv data
+
+    //create private void method clearBeaconCache using the evictCache annotation
+
     @PutMapping("/update/header/{id}")
     public ResponseEntity<String> updateBeaconHeader(@PathVariable("id") Long id, @RequestBody UpdateBeaconHeaderRequest updates) {
         ProcessedBeaconHeader selHead = headRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
