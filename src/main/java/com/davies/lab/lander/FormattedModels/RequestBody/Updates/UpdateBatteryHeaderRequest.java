@@ -5,14 +5,14 @@ import com.davies.lab.lander.Models.Lander;
 
 import java.util.List;
 
-public class UpdateBatteryRequest {
+public class UpdateBatteryHeaderRequest {
     private Lander LanderID;
     private List<ProcessedBatteryData> data;
 
-    public UpdateBatteryRequest() {
+    public UpdateBatteryHeaderRequest() {
     }
 
-    public UpdateBatteryRequest(Lander landerID, List<ProcessedBatteryData> data) {
+    public UpdateBatteryHeaderRequest(Lander landerID, List<ProcessedBatteryData> data) {
         LanderID = landerID;
         this.data = data;
     }
