@@ -292,6 +292,8 @@ public class ProcessedCameraController {
 
             cameraHead.setLanderID(selLander.get());
 
+            ProcessedCameraHeader savedHead = headRepository.save(cameraHead);
+
             List<Camera_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
@@ -301,7 +303,7 @@ public class ProcessedCameraController {
             for (Camera_CSV_Request inputDataPoint : outputData) {
                 ProcessedCameraData newData = new ProcessedCameraData(
                         inputDataPoint,
-                        cameraHead
+                        savedHead
                 );
 
                 repository.save(newData);

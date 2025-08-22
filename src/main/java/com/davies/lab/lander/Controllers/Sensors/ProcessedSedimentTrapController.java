@@ -254,6 +254,8 @@ public class ProcessedSedimentTrapController {
 
             sedimentTrapHead.setLanderID(selLander.get());
 
+            ProcessedSedimentTrapHeader savedHead = headRepository.save(sedimentTrapHead);
+
             //handle parsing csv data, attach to Header
 
             landerController.evictLandersCache();

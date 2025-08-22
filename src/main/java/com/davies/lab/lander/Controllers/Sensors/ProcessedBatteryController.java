@@ -293,6 +293,10 @@ public class ProcessedBatteryController {
                     */
             );
 
+            batteryHead.setLanderID(selLander.get());
+
+            ProcessedBatteryHeader savedHead = headRepository.save(batteryHead);
+
             List<Battery_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
@@ -302,15 +306,11 @@ public class ProcessedBatteryController {
             for (Battery_CSV_Request inputDataPoint : outputData) {
                 ProcessedBatteryData newData = new ProcessedBatteryData(
                         inputDataPoint,
-                        batteryHead
+                        savedHead
                 );
 
                 repository.save(newData);
             }
-
-            batteryHead.setLanderID(selLander.get());
-
-            //handle parsing csv data, attach to Header
 
             dashboardController.evictMyCache();
             landerController.evictLandersCache();

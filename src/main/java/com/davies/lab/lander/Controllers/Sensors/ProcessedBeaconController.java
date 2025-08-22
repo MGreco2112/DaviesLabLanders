@@ -291,6 +291,8 @@ public class ProcessedBeaconController {
 
             beaconHead.setLanderID(selLander.get());
 
+            ProcessedBeaconHeader savedHead = headRepository.save(beaconHead);
+
             List<Beacon_CSV_Request> outputData = processData(reader);
 
             if (outputData == null) {
@@ -300,7 +302,7 @@ public class ProcessedBeaconController {
             for (Beacon_CSV_Request inputDataPoint : outputData) {
                 ProcessedBeaconData newData = new ProcessedBeaconData(
                         inputDataPoint,
-                        beaconHead
+                        savedHead
                 );
 
                 repository.save(newData);
