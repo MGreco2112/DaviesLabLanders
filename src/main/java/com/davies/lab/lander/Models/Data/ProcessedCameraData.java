@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models.Data;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Camera_CSV_Request;
 import com.davies.lab.lander.Models.Headers.ProcessedCameraHeader;
 
 import javax.persistence.*;
@@ -15,6 +16,11 @@ public class ProcessedCameraData {
     private ProcessedCameraHeader HeadID;
 
     public ProcessedCameraData() {
+    }
+
+    public ProcessedCameraData(Camera_CSV_Request request, ProcessedCameraHeader head) {
+//        TODO: Update with full CSV request once built
+        HeadID = head;
     }
 
     public Long getID() {
