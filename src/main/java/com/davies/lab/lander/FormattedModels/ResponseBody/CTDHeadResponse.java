@@ -83,7 +83,7 @@ public class CTDHeadResponse {
     public CTDHeadResponse(ProcessedCTDHead head) {
         HeadID = head.getHeadID();
         SondeName = head.getSondeName();
-        SondeNo = getSondeNo();
+        SondeNo = head.getSondeNo();
         SensorType = head.getSensorType();
         Channel = head.getChannel();
         DelayTime = head.getDelayTime();
