@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models.Data;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Beacon_CSV_Request;
 import com.davies.lab.lander.Models.Headers.ProcessedBeaconHeader;
 
 import javax.persistence.*;
@@ -15,6 +16,11 @@ public class ProcessedBeaconData {
     private ProcessedBeaconHeader HeadID;
 
     public ProcessedBeaconData() {
+    }
+
+    public ProcessedBeaconData(Beacon_CSV_Request request, ProcessedBeaconHeader head) {
+//        TODO: build out Request elements once CSV comes around
+        HeadID = head;
     }
 
     public Long getID() {

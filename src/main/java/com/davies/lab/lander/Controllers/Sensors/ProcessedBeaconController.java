@@ -2,6 +2,8 @@ package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Battery_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Beacon_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BeaconDataResponse;
@@ -12,6 +14,8 @@ import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.Data.ProcessedBeaconDataRepository;
 import com.davies.lab.lander.Repositories.Header.ProcessedBeaconHeadRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -135,6 +139,7 @@ public class ProcessedBeaconController {
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
 
         Optional<Lander> selLander = landerRepository.findById(landerID);
+        List<Beacon_CSV_Request> rawData;
         ProcessedBeaconHeader savedHead;
 
         if (selLander.isEmpty()) {
@@ -155,15 +160,30 @@ public class ProcessedBeaconController {
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))){
-            //TODO create the CSVToBean setup for Battery CSV files
-
+            rawData = processData(reader);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        //TODO: process rawData into ProcessedBatteryData
+        if (rawData == null) {
+            return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            for (Beacon_CSV_Request dataElement : rawData) {
+                repository.save(new ProcessedBeaconData(
+                        dataElement,
+                        savedHead
+                ));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
@@ -271,7 +291,20 @@ public class ProcessedBeaconController {
 
             beaconHead.setLanderID(selLander.get());
 
-            //handle parsing csv data, attach to Header
+            List<Beacon_CSV_Request> outputData = processData(reader);
+
+            if (outputData == null) {
+                return new ResponseEntity<>("Bad Data", HttpStatus.BAD_REQUEST);
+            }
+
+            for (Beacon_CSV_Request inputDataPoint : outputData) {
+                ProcessedBeaconData newData = new ProcessedBeaconData(
+                        inputDataPoint,
+                        beaconHead
+                );
+
+                repository.save(newData);
+            }
 
             landerController.evictLandersCache();
             dashboardController.evictMyCache();
@@ -284,7 +317,23 @@ public class ProcessedBeaconController {
         }
     }
 
-    //create private method processData for parsing the csv data
+    private List<Beacon_CSV_Request> processData(BufferedReader reader) {
+        List<Beacon_CSV_Request> dataList;
+
+        try {
+            CsvToBean<Beacon_CSV_Request> csvToBean = new CsvToBeanBuilder<Beacon_CSV_Request>(reader)
+                    .withType(Beacon_CSV_Request.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            dataList = csvToBean.parse();
+
+            return dataList;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
 
     //create private void method clearBeaconCache using the evictCache annotation
 
