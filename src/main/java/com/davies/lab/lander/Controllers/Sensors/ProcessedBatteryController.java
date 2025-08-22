@@ -2,6 +2,7 @@ package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Battery_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBatteryDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBatteryHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BatteryDataResponse;
@@ -12,7 +13,10 @@ import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.Data.ProcessedBatteryDataRepository;
 import com.davies.lab.lander.Repositories.Header.ProcessedBatteryHeadRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -131,11 +135,13 @@ public class ProcessedBatteryController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+//    TODO: create methods for progress bar uploads once entity is defined
 //    TODO: Update POST/PUT Routes once Entity is better defined
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String landerID) {
 
         Optional<Lander> selLander = landerRepository.findById(landerID);
+        List<Battery_CSV_Request> rawData;
         ProcessedBatteryHeader savedHead;
 
         if (selLander.isEmpty()) {
@@ -157,7 +163,24 @@ public class ProcessedBatteryController {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))){
             //TODO create the CSVToBean setup for Battery CSV files
+            rawData = processData(reader);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
 
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        if (rawData == null) {
+            return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            for (Battery_CSV_Request dataElement : rawData) {
+                repository.save(new ProcessedBatteryData(
+                        dataElement,
+                        savedHead
+                ));
+            }
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
 
@@ -270,6 +293,21 @@ public class ProcessedBatteryController {
                     */
             );
 
+            List<Battery_CSV_Request> outputData = processData(reader);
+
+            if (outputData == null) {
+                return new ResponseEntity<>("Bad Data", HttpStatus.BAD_REQUEST);
+            }
+
+            for (Battery_CSV_Request inputDataPoint : outputData) {
+                ProcessedBatteryData newData = new ProcessedBatteryData(
+                        inputDataPoint,
+                        batteryHead
+                );
+
+                repository.save(newData);
+            }
+
             batteryHead.setLanderID(selLander.get());
 
             //handle parsing csv data, attach to Header
@@ -285,7 +323,23 @@ public class ProcessedBatteryController {
         }
     }
 
-    //create private method processData for parsing the csv data
+    private List<Battery_CSV_Request> processData(BufferedReader reader) {
+        List<Battery_CSV_Request> dataList;
+
+        try {
+            CsvToBean<Battery_CSV_Request> csvToBean = new CsvToBeanBuilder<Battery_CSV_Request>(reader)
+                    .withType(Battery_CSV_Request.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            dataList = csvToBean.parse();
+
+            return dataList;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
 
     //create private void method clearBatteryCache using the cacheEvict annotation
 

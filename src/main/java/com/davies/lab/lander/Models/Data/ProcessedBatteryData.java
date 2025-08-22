@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models.Data;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Battery_CSV_Request;
 import com.davies.lab.lander.Models.Headers.ProcessedBatteryHeader;
 
 import javax.persistence.*;
@@ -15,6 +16,12 @@ public class ProcessedBatteryData {
     private ProcessedBatteryHeader HeadID;
 
     public ProcessedBatteryData() {
+    }
+
+    public ProcessedBatteryData(Battery_CSV_Request request, ProcessedBatteryHeader head) {
+//        TODO: deal with request once it's defined
+
+        HeadID = head;
     }
 
     public Long getId() {
