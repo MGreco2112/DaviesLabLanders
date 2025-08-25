@@ -154,6 +154,20 @@ public class ExternalConnectionController {
             selLander.setAdcpHead(newADCPHead);
         }
 
+        Optional<ProcessedBatteryHeader> batteryHead = batteryHeadRepository.getBatteryHeadByLanderId(selLander.getASDBLanderID());
+
+        if (batteryHead.isPresent()) {
+            BatteryHeadResponseExternal newBatteryHead = new BatteryHeadResponseExternal(batteryHead.get());
+
+            List<BatteryDataResponseExternal> batteryDataList = BatteryDataResponseExternal.createDataResponse(batteryDataRepository.findDataByHeadId(batteryHead.get().getHeadID()));
+
+            newBatteryHead.setData(batteryDataList);
+
+            selLander.setBatteryHead(newBatteryHead);
+        }
+
+//        TODO: update the method with Beacon, Camera, and SedimentTrap heads
+
         return new ResponseEntity<>(selLander, HttpStatus.OK);
     }
 
