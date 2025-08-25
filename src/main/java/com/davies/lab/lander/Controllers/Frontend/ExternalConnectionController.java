@@ -41,6 +41,22 @@ public class ExternalConnectionController {
     private ProcessedADCPHeadRepository adcpHeadRepository;
     @Autowired
     private ProcessedADCPDataRepository adcpDataRepository;
+    @Autowired
+    private ProcessedBatteryHeadRepository batteryHeadRepository;
+    @Autowired
+    private ProcessedBatteryDataRepository batteryDataRepository;
+    @Autowired
+    private ProcessedBeaconHeadRepository beaconHeadRepository;
+    @Autowired
+    private ProcessedBeaconDataRepository beaconDataRepository;
+    @Autowired
+    private ProcessedCameraHeadRepository cameraHeadRepository;
+    @Autowired
+    private ProcessedCameraDataRepository cameraDataRepository;
+    @Autowired
+    private ProcessedSedimentTrapHeadRepository sedimentTrapHeadRepository;
+    @Autowired
+    private ProcessedSedimentTrapDataRepository sedimentTrapDataRepository;
 
     @GetMapping("/online")
     public ResponseEntity<APIOnlineResponse> checkOnlineStatus() {

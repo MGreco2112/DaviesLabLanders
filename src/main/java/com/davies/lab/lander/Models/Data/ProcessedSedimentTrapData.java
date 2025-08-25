@@ -1,5 +1,6 @@
 package com.davies.lab.lander.Models.Data;
 
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.SedimentTrap_CSV_Request;
 import com.davies.lab.lander.Models.Headers.ProcessedSedimentTrapHeader;
 
 import javax.persistence.*;
@@ -15,6 +16,11 @@ public class ProcessedSedimentTrapData {
     private ProcessedSedimentTrapHeader HeadID;
 
     public ProcessedSedimentTrapData() {
+    }
+
+    public ProcessedSedimentTrapData(SedimentTrap_CSV_Request request, ProcessedSedimentTrapHeader head) {
+//        TODO: update constructor with new fields once the CSV file is created
+        HeadID = head;
     }
 
     public Long getID() {

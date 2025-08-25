@@ -162,7 +162,6 @@ public class ProcessedBatteryController {
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))){
-            //TODO create the CSVToBean setup for Battery CSV files
             rawData = processData(reader);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());

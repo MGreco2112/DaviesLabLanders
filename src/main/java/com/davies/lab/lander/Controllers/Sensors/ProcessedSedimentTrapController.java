@@ -2,6 +2,7 @@ package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
+import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.SedimentTrap_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.SedimentTrapDataResponse;
@@ -12,6 +13,8 @@ import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.Data.ProcessedSedimentTrapDataRepository;
 import com.davies.lab.lander.Repositories.Header.ProcessedSedimentTrapHeadRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.apache.coyote.Response;
 import org.checkerframework.common.util.report.qual.ReportUnqualified;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +122,7 @@ public class ProcessedSedimentTrapController {
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String landerID) {
 
         Optional<Lander> selLander = landerRepository.findById(landerID);
+        List<SedimentTrap_CSV_Request> rawData;
         ProcessedSedimentTrapHeader savedHead;
 
         if (selLander.isEmpty()) {
@@ -139,14 +143,30 @@ public class ProcessedSedimentTrapController {
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(processedFile.getInputStream()))) {
-            //TODO: Create the CSVToBean setu for SedimentTrap CSV files
+            rawData = processData(reader);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
 
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        //TODO: process rawData into ProcessedSedimentTrapData
+        if (rawData == null) {
+            return new ResponseEntity<>("Unable to format Data", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            for (SedimentTrap_CSV_Request dataElement : rawData) {
+                repository.save(new ProcessedSedimentTrapData(
+                        dataElement,
+                         savedHead
+                ));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+        }
+
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
 
@@ -256,7 +276,20 @@ public class ProcessedSedimentTrapController {
 
             ProcessedSedimentTrapHeader savedHead = headRepository.save(sedimentTrapHead);
 
-            //handle parsing csv data, attach to Header
+            List<SedimentTrap_CSV_Request> outputData = processData(reader);
+
+            if (outputData == null) {
+                return new ResponseEntity<>("Bad Data", HttpStatus.BAD_REQUEST);
+            }
+
+            for (SedimentTrap_CSV_Request inputDataPoint : outputData) {
+                ProcessedSedimentTrapData newData = new ProcessedSedimentTrapData(
+                        inputDataPoint,
+                        savedHead
+                );
+
+                repository.save(newData);
+            }
 
             landerController.evictLandersCache();
             dashboardController.evictMyCache();
@@ -269,7 +302,23 @@ public class ProcessedSedimentTrapController {
         }
     }
 
-    //create private method processData for parshing the csv data
+    private List<SedimentTrap_CSV_Request> processData(BufferedReader reader) {
+        List<SedimentTrap_CSV_Request> dataList;
+
+        try {
+            CsvToBean<SedimentTrap_CSV_Request> csvToBean = new CsvToBeanBuilder<SedimentTrap_CSV_Request>(reader)
+                    .withType(SedimentTrap_CSV_Request.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            dataList = csvToBean.parse();
+
+            return dataList;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
 
     //create private void method clearSedimentTrapCache using the cacheEvict annotation
 
