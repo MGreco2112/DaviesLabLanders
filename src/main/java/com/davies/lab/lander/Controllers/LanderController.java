@@ -1,12 +1,16 @@
 package com.davies.lab.lander.Controllers;
 
 import com.davies.lab.lander.FormattedModels.RequestBody.NewLanderRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.UpdateLanderRequest;
+
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateLanderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LanderResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.LatestLandersResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.*;
+import com.davies.lab.lander.Models.Headers.*;
 import com.davies.lab.lander.Repositories.*;
+import com.davies.lab.lander.Repositories.Data.*;
+import com.davies.lab.lander.Repositories.Header.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -49,6 +53,22 @@ public class LanderController {
     private ProcessedADCPDataRepository adcpDataRepository;
     @Autowired
     private ProcessedADCPHeadRepository adcpHeadRepository;
+    @Autowired
+    private ProcessedBatteryHeadRepository batteryHeadRepository;
+    @Autowired
+    private ProcessedBatteryDataRepository batteryDataRepository;
+    @Autowired
+    private ProcessedBeaconHeadRepository beaconHeadRepository;
+    @Autowired
+    private ProcessedBeaconDataRepository beaconDataRepository;
+    @Autowired
+    private ProcessedCameraHeadRepository cameraHeadRepository;
+    @Autowired
+    private ProcessedCameraDataRepository cameraDataRepository;
+    @Autowired
+    private ProcessedSedimentTrapHeadRepository sedimentTrapHeadRepository;
+    @Autowired
+    private ProcessedSedimentTrapDataRepository sedimentTrapDataRepository;
 
     @GetMapping("/all")
     @Cacheable("landers-cache")
@@ -292,8 +312,56 @@ public class LanderController {
             Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.findById(selLander.getADCPHead().getHeadID());
             selLander.setADCPHead(null);
             repository.save(selLander);
-            adcpDataRepository.deleteAll(adcpHead.get().getData());
-            adcpHeadRepository.delete(adcpHead.get());
+
+            if (adcpHead.isPresent()) {
+                adcpDataRepository.deleteAll(adcpHead.get().getData());
+                adcpHeadRepository.delete(adcpHead.get());
+            }
+        }
+
+        if (selLander.getBatteryHead() != null) {
+            Optional<ProcessedBatteryHeader> batteryHead = batteryHeadRepository.findById(selLander.getBatteryHead().getHeadID());
+            selLander.setBatteryHead(null);
+            repository.save(selLander);
+
+            if (batteryHead.isPresent()) {
+                batteryDataRepository.deleteAll(batteryHead.get().getData());
+                batteryHeadRepository.delete(batteryHead.get());
+            }
+        }
+
+        if (selLander.getBeaconHead() != null) {
+            Optional<ProcessedBeaconHeader> beaconHead = beaconHeadRepository.findById(selLander.getBeaconHead().getHeadID());
+            selLander.setBeaconHead(null);
+            repository.save(selLander);
+
+            if (beaconHead.isPresent()) {
+                beaconDataRepository.deleteAll(beaconHead.get().getData());
+                beaconHeadRepository.delete(beaconHead.get());
+            }
+        }
+
+        if (selLander.getCameraHead() != null) {
+            Optional<ProcessedCameraHeader> cameraHead = cameraHeadRepository.findById(selLander.getCameraHead().getHeadID());
+            selLander.setCameraHead(null);
+            repository.save(selLander);
+
+            if (cameraHead.isPresent()) {
+                cameraDataRepository.deleteAll(cameraHead.get().getData());
+                cameraHeadRepository.delete(cameraHead.get());
+            }
+        }
+
+
+        if (selLander.getSedimentTrapHead() != null) {
+            Optional<ProcessedSedimentTrapHeader> sedTrapHead = sedimentTrapHeadRepository.findById(selLander.getSedimentTrapHead().getHeadID());
+            selLander.setSedimentTrapHead(null);
+            repository.save(selLander);
+
+            if (sedTrapHead.isPresent()) {
+                sedimentTrapDataRepository.deleteAll(sedTrapHead.get().getData());
+                sedimentTrapHeadRepository.delete(sedTrapHead.get());
+            }
         }
 
         repository.delete(selLander);
