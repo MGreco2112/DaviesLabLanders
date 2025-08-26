@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProcessedCameraHeadRepository extends JpaRepository<ProcessedCameraHeader, Long> {
-    @Query(value = "SELECT * FROM processedcamerahead WHERE lander_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_camera_header WHERE lander_id = :id", nativeQuery = true)
     Optional<ProcessedCameraHeader> getCameraHeadByLanderId(@Param("id") String landerID);
 }

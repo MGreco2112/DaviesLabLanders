@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProcessedBatteryHeadRepository extends JpaRepository<ProcessedBatteryHeader, Long> {
-    @Query(value = "SELECT * FROM processedbatteryhead WHERE lander_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_battery_header WHERE lander_id = :id", nativeQuery = true)
     Optional<ProcessedBatteryHeader> getBatteryHeadByLanderId(@Param("id") String landerID);
 }

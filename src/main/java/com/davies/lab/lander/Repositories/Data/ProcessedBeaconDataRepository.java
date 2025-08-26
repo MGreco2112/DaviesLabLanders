@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProcessedBeaconDataRepository extends JpaRepository<ProcessedBeaconData, Long> {
-    @Query(value = "SELECT * FROM processedbeacondata WHERE head_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_beacon_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedBeaconData> findDataByHeadId(@Param("id") Long id);
 }

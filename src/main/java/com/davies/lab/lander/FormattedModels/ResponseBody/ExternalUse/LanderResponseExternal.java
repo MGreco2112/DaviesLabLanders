@@ -13,6 +13,9 @@ public class LanderResponseExternal extends BasicLanderResponseExternal{
     private ALBEXCTDHeadResponseExternal albexHead;
     private ADCPHeadResponseExternal adcpHead;
     private BatteryHeadResponseExternal batteryHead;
+    private BeaconHeadResponseExternal beaconHead;
+    private CameraHeadResponseExternal cameraHead;
+    private SedimentTrapHeadResponseExternal sedimentTrapHead;
 
 
     public LanderResponseExternal (Lander lander) {
@@ -65,5 +68,29 @@ public class LanderResponseExternal extends BasicLanderResponseExternal{
 
     public void setBatteryHead(BatteryHeadResponseExternal batteryHead) {
         this.batteryHead = batteryHead;
+    }
+
+    public BeaconHeadResponseExternal getBeaconHead() {
+        return beaconHead;
+    }
+
+    public void setBeaconHead(BeaconHeadResponseExternal beaconHead) {
+        this.beaconHead = beaconHead;
+    }
+
+    public CameraHeadResponseExternal getCameraHead() {
+        return cameraHead;
+    }
+
+    public void setCameraHead(CameraHeadResponseExternal cameraHead) {
+        this.cameraHead = cameraHead;
+    }
+
+    public SedimentTrapHeadResponseExternal getSedimentTrapHead() {
+        return sedimentTrapHead;
+    }
+
+    public void setSedimentTrapHead(SedimentTrapHeadResponseExternal sedimentTrapHead) {
+        this.sedimentTrapHead = sedimentTrapHead;
     }
 }

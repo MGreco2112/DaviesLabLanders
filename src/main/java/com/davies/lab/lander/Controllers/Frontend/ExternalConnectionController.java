@@ -166,7 +166,42 @@ public class ExternalConnectionController {
             selLander.setBatteryHead(newBatteryHead);
         }
 
-//        TODO: update the method with Beacon, Camera, and SedimentTrap heads
+//        TODO: update the method with SedimentTrap heads
+        Optional<ProcessedBeaconHeader> beaconHead = beaconHeadRepository.getBeaconHeadByLanderId(selLander.getASDBLanderID());
+
+        if (beaconHead.isPresent()) {
+            BeaconHeadResponseExternal newBeaconHead = new BeaconHeadResponseExternal(beaconHead.get());
+
+            List<BeaconDataResponseExternal> beaconList = BeaconDataResponseExternal.createDataResponse(beaconDataRepository.findDataByHeadId(beaconHead.get().getHeadID()));
+
+            newBeaconHead.setData(beaconList);
+
+            selLander.setBeaconHead(newBeaconHead);
+        }
+
+        Optional<ProcessedCameraHeader> cameraHead = cameraHeadRepository.getCameraHeadByLanderId(selLander.getASDBLanderID());
+
+        if (cameraHead.isPresent()) {
+            CameraHeadResponseExternal newCameraHead = new CameraHeadResponseExternal(cameraHead.get());
+
+            List<CameraDataResponseExternal> cameraList = CameraDataResponseExternal.createDataResponse(cameraDataRepository.findDataByHeadId(cameraHead.get().getHeadID()));
+
+            newCameraHead.setData(cameraList);
+
+            selLander.setCameraHead(newCameraHead);
+        }
+
+        Optional<ProcessedSedimentTrapHeader> sedimentTrapHead = sedimentTrapHeadRepository.getSedimentTrapHeadByLanderId(selLander.getASDBLanderID());
+
+        if (sedimentTrapHead.isPresent()) {
+            SedimentTrapHeadResponseExternal newSedimentTrapHead = new SedimentTrapHeadResponseExternal(sedimentTrapHead.get());
+
+            List<SedimentTrapDataResponseExternal> sedimentTrapList = SedimentTrapDataResponseExternal.createDataResponse(sedimentTrapHead.get().getData());
+
+            newSedimentTrapHead.setData(sedimentTrapList);
+
+            selLander.setSedimentTrapHead(newSedimentTrapHead);
+        }
 
         return new ResponseEntity<>(selLander, HttpStatus.OK);
     }
@@ -274,6 +309,78 @@ public class ExternalConnectionController {
         for (ProcessedADCPData data : adcpDataRepository.findDataByHeadAndAlignedStatus(selHead.get().getHeadID(), true)) {
             newDataList.add(new ADCPDataResponseExternal(data));
         }
+
+        newHead.setData(newDataList);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
+    @GetMapping("/lander/id/{id}/battery")
+    public ResponseEntity<BatteryHeadResponseExternal> getBatteryByLanderId(@PathVariable("id") String id) {
+        Optional<ProcessedBatteryHeader> selHead = batteryHeadRepository.getBatteryHeadByLanderId(id);
+
+        if (selHead.isEmpty()) {
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        BatteryHeadResponseExternal newHead = new BatteryHeadResponseExternal(selHead.get());
+        List<BatteryDataResponseExternal> newDataList = new ArrayList<>();
+
+        for (ProcessedBatteryData data : batteryDataRepository.findDataByHeadId(selHead.get().getHeadID())) {
+            newDataList.add(new BatteryDataResponseExternal(data));
+        }
+
+        newHead.setData(newDataList);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
+    @GetMapping("/lander/id/{id}/beacon")
+    public ResponseEntity<BeaconHeadResponseExternal> getBeaconByLanderId(@PathVariable("id") String id) {
+        Optional<ProcessedBeaconHeader> selHead = beaconHeadRepository.getBeaconHeadByLanderId(id);
+
+        if (selHead.isEmpty()) {
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        BeaconHeadResponseExternal newHead = new BeaconHeadResponseExternal(selHead.get());
+        List<BeaconDataResponseExternal> newDataList = BeaconDataResponseExternal.createDataResponse(selHead.get().getData());
+
+        newHead.setData(newDataList);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
+    @GetMapping("/lander/id/{id}/camera")
+    public ResponseEntity<CameraHeadResponseExternal> getCameraByLanderId(@PathVariable("id") String id) {
+        Optional<ProcessedCameraHeader> selHead = cameraHeadRepository.getCameraHeadByLanderId(id);
+
+        if (selHead.isEmpty()) {
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        CameraHeadResponseExternal newHead = new CameraHeadResponseExternal(selHead.get());
+        List<CameraDataResponseExternal> newDataList = CameraDataResponseExternal.createDataResponse(selHead.get().getData());
+
+        newHead.setData(newDataList);
+
+        return new ResponseEntity<>(newHead, HttpStatus.OK);
+    }
+
+    @GetMapping("/lander/id/{id}/sediment_trap")
+    public ResponseEntity<SedimentTrapHeadResponseExternal> getSedimentTrapByLanderId(@PathVariable("id") String id) {
+        Optional<ProcessedSedimentTrapHeader> selHead = sedimentTrapHeadRepository.getSedimentTrapHeadByLanderId(id);
+
+        if (selHead.isEmpty()) {
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        SedimentTrapHeadResponseExternal newHead = new SedimentTrapHeadResponseExternal(selHead.get());
+        List<SedimentTrapDataResponseExternal> newDataList = SedimentTrapDataResponseExternal.createDataResponse(selHead.get().getData());
 
         newHead.setData(newDataList);
 

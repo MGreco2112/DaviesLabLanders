@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProcessedBatteryDataRepository extends JpaRepository<ProcessedBatteryData, Long> {
-    @Query(value = "SELECT * FROM processedbatterydata WHERE head_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_battery_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedBatteryData> findDataByHeadId(@Param("id") Long headId);
 }

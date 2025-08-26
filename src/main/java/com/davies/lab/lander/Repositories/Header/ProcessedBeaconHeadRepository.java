@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProcessedBeaconHeadRepository extends JpaRepository<ProcessedBeaconHeader, Long> {
-    @Query(value = "SELECT * FROM processedbeaconhead WHERE lander_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_beacon_header WHERE lander_id = :id", nativeQuery = true)
     Optional<ProcessedBeaconHeader> getBeaconHeadByLanderId(@Param("id") String landerID);
 }

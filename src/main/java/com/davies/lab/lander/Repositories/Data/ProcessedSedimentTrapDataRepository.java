@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProcessedSedimentTrapDataRepository extends JpaRepository<ProcessedSedimentTrapData, Long> {
-    @Query(value = "SELECT * FROM processedsedimenttrapdata WHERE head_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_sediment_trap_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedSedimentTrapData> findDataByHeadId(@Param("id") Long headId);
 }

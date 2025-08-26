@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProcessedCameraDataRepository extends JpaRepository<ProcessedCameraData, Long> {
-    @Query(value = "SELECT * FROM processedcameradata WHERE head_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_camera_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedCameraData> findDataByHeadId(@Param("id") Long id);
 }

@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProcessedSedimentTrapHeadRepository extends JpaRepository<ProcessedSedimentTrapHeader, Long> {
-    @Query(value = "SELECT * FROM processedsedimenttraphead WHERE lander_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM processed_sediment_trap_header WHERE lander_id = :id", nativeQuery = true)
     Optional<ProcessedSedimentTrapHeader> getSedimentTrapHeadByLanderId(@Param("id") String landerID);
 }
