@@ -7,13 +7,13 @@ import com.davies.lab.lander.FormattedModels.ResponseBody.LatestLandersResponse;
 import com.davies.lab.lander.HelperClasses.StringFormatting;
 import com.davies.lab.lander.Models.*;
 import com.davies.lab.lander.Repositories.*;
-import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +25,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/landers")
 @EnableCaching
+@EnableScheduling
 public class LanderController {
     @Autowired
     private LanderRepository repository;
