@@ -1,9 +1,7 @@
 package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Head.*;
 import com.davies.lab.lander.Models.Lander;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class LanderResponseExternal extends BasicLanderResponseExternal{
 

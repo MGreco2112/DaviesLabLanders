@@ -1,5 +1,6 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
+package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Head;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Data.BatteryDataResponseExternal;
 import com.davies.lab.lander.Models.Headers.ProcessedBatteryHeader;
 
 import java.util.List;

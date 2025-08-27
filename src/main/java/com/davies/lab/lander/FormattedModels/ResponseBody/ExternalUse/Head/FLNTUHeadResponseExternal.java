@@ -1,13 +1,13 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
+package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Head;
 
-import com.davies.lab.lander.Models.Headers.ProcessedCTDHead;
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Data.FLNTUDataResponseExternal;
+import com.davies.lab.lander.Models.Headers.ProcessedFLNTUHead;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-public class CTDHeadResponseExternal {
+public class FLNTUHeadResponseExternal {
     private Long HeadID;
     private String SondeName;
     private String SondeNo;
@@ -19,14 +19,10 @@ public class CTDHeadResponseExternal {
     private Integer BurstTime;
     private Integer BurstCnt;
     private Integer IntervalData;
+    private Integer WiperInterval;
     private Integer SampleCnt;
-    private LocalDateTime StartTime;
-    private LocalDateTime EndTime;
-    private Double DepAdiRho;
-    private Integer ECA;
-    private Integer ECB;
-    private Integer ECDeg;
-    private Double ECCoef;
+    private LocalDateTime StartTime, EndTime;
+    private Integer CHLA, CHLB;
     private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
@@ -34,18 +30,16 @@ public class CTDHeadResponseExternal {
     private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
-    private String COMMENT;
+    private String Comment;
     private String SensorType2;
     private Integer BuzzerNumber;
-    private Integer DepM;
-    private Integer CondDepB;
     private String LanderID;
-    private List<CTDDataResponseExternal> data = new ArrayList<>();
+    private List<FLNTUDataResponseExternal> data;
 
-    public CTDHeadResponseExternal() {
+    public FLNTUHeadResponseExternal() {
     }
 
-    public CTDHeadResponseExternal (ProcessedCTDHead head) {
+    public FLNTUHeadResponseExternal(ProcessedFLNTUHead head) {
         HeadID = head.getHeadID();
         SondeName = head.getSondeName();
         SondeNo = head.getSondeNo();
@@ -57,14 +51,12 @@ public class CTDHeadResponseExternal {
         BurstTime = head.getBurstTime();
         BurstCnt = head.getBurstCnt();
         IntervalData = head.getIntervalData();
+        WiperInterval = head.getWiperInterval();
         SampleCnt = head.getSampleCnt();
         StartTime = head.getStartTime();
         EndTime = head.getEndTime();
-        DepAdiRho = head.getDepAdiRho();
-        this.ECA = head.getECA();
-        this.ECB = head.getECB();
-        this.ECDeg = head.getECDeg();
-        this.ECCoef = head.getECCoef();
+        CHLA = head.getCHLA();
+        CHLB = head.getCHLB();
         CoefDate = head.getCoefDate();
         Ch1 = head.getCh1();
         Ch2 = head.getCh2();
@@ -72,16 +64,10 @@ public class CTDHeadResponseExternal {
         Ch4 = head.getCh4();
         BuzzerEN = head.getBuzzerEN();
         BuzzerInterval = head.getBuzzerInterval();
-        this.COMMENT = head.getCOMMENT();
+        Comment = head.getComment();
         SensorType2 = head.getSensorType2();
         BuzzerNumber = head.getBuzzerNumber();
-        DepM = head.getDepM();
-        CondDepB = head.getCondDepB();
         LanderID = head.getLanderID().getASDBLanderID();
-    }
-
-    public void addCTDData(CTDDataResponseExternal newData) {
-        data.add(newData);
     }
 
     public Long getHeadID() {
@@ -172,6 +158,14 @@ public class CTDHeadResponseExternal {
         IntervalData = intervalData;
     }
 
+    public Integer getWiperInterval() {
+        return WiperInterval;
+    }
+
+    public void setWiperInterval(Integer wiperInterval) {
+        WiperInterval = wiperInterval;
+    }
+
     public Integer getSampleCnt() {
         return SampleCnt;
     }
@@ -196,44 +190,20 @@ public class CTDHeadResponseExternal {
         EndTime = endTime;
     }
 
-    public Double getDepAdiRho() {
-        return DepAdiRho;
+    public Integer getCHLA() {
+        return CHLA;
     }
 
-    public void setDepAdiRho(Double depAdiRho) {
-        DepAdiRho = depAdiRho;
+    public void setCHLA(Integer CHLA) {
+        this.CHLA = CHLA;
     }
 
-    public Integer getECA() {
-        return ECA;
+    public Integer getCHLB() {
+        return CHLB;
     }
 
-    public void setECA(Integer ECA) {
-        this.ECA = ECA;
-    }
-
-    public Integer getECB() {
-        return ECB;
-    }
-
-    public void setECB(Integer ECB) {
-        this.ECB = ECB;
-    }
-
-    public Integer getECDeg() {
-        return ECDeg;
-    }
-
-    public void setECDeg(Integer ECDeg) {
-        this.ECDeg = ECDeg;
-    }
-
-    public Double getECCoef() {
-        return ECCoef;
-    }
-
-    public void setECCoef(Double ECCoef) {
-        this.ECCoef = ECCoef;
+    public void setCHLB(Integer CHLB) {
+        this.CHLB = CHLB;
     }
 
     public Date getCoefDate() {
@@ -292,12 +262,12 @@ public class CTDHeadResponseExternal {
         BuzzerInterval = buzzerInterval;
     }
 
-    public String getCOMMENT() {
-        return COMMENT;
+    public String getComment() {
+        return Comment;
     }
 
-    public void setCOMMENT(String COMMENT) {
-        this.COMMENT = COMMENT;
+    public void setComment(String comment) {
+        Comment = comment;
     }
 
     public String getSensorType2() {
@@ -316,22 +286,6 @@ public class CTDHeadResponseExternal {
         BuzzerNumber = buzzerNumber;
     }
 
-    public Integer getDepM() {
-        return DepM;
-    }
-
-    public void setDepM(Integer depM) {
-        DepM = depM;
-    }
-
-    public Integer getCondDepB() {
-        return CondDepB;
-    }
-
-    public void setCondDepB(Integer condDepB) {
-        CondDepB = condDepB;
-    }
-
     public String getLanderID() {
         return LanderID;
     }
@@ -340,11 +294,11 @@ public class CTDHeadResponseExternal {
         LanderID = landerID;
     }
 
-    public List<CTDDataResponseExternal> getData() {
+    public List<FLNTUDataResponseExternal> getData() {
         return data;
     }
 
-    public void setData(List<CTDDataResponseExternal> data) {
+    public void setData(List<FLNTUDataResponseExternal> data) {
         this.data = data;
     }
 }

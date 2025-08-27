@@ -1,5 +1,6 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
+package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Head;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Data.SedimentTrapDataResponseExternal;
 import com.davies.lab.lander.Models.Headers.ProcessedSedimentTrapHeader;
 
 import java.util.List;

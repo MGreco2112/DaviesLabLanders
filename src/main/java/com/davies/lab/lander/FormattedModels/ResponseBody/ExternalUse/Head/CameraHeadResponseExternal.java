@@ -1,5 +1,6 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
+package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Head;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Data.CameraDataResponseExternal;
 import com.davies.lab.lander.Models.Headers.ProcessedCameraHeader;
 
 import java.util.List;

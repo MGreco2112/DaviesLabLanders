@@ -1,6 +1,8 @@
 package com.davies.lab.lander.Controllers.Frontend;
 
 import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.*;
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Data.*;
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Head.*;
 import com.davies.lab.lander.Models.*;
 import com.davies.lab.lander.Models.Data.*;
 import com.davies.lab.lander.Models.Headers.*;

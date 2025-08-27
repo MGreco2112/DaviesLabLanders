@@ -1,5 +1,6 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
+package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Head;
 
+import com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Data.ADCPDataResponseExternal;
 import com.davies.lab.lander.Models.Headers.ProcessedADCPHead;
 
 import java.util.ArrayList;

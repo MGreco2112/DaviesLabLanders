@@ -1,4 +1,4 @@
-package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse;
+package com.davies.lab.lander.FormattedModels.ResponseBody.ExternalUse.Data;
 
 import com.davies.lab.lander.Models.Data.ProcessedAlbexCTDData;
 
