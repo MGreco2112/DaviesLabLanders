@@ -4,7 +4,7 @@ import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.AlbexCTD_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateAlbexCTDDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateAlbexCTDDataRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.AlbexCTDDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.AlbexCTDHeadResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.DataProgressResponse;
@@ -178,7 +178,7 @@ public class ProcessedAlbexCTDController {
         List<ProcessedAlbexCTDData> data = repository.findDataByHeadId(id);
         List<AlbexCTDDataResponse> res = new ArrayList<>();
 
-        if (data.size() == 0) {
+        if (data.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 

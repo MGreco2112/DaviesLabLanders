@@ -2,10 +2,9 @@ package com.davies.lab.lander.Controllers.Sensors;
 
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
-import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Battery_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Beacon_CSV_Request;
-import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconDataRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateBeaconHeaderRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateBeaconDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head.UpdateBeaconHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BeaconDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.BeaconHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedBeaconData;

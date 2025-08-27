@@ -1,4 +1,4 @@
-package com.davies.lab.lander.FormattedModels.RequestBody.Updates;
+package com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head;
 
 import com.davies.lab.lander.Models.Data.ProcessedBeaconData;
 import com.davies.lab.lander.Models.Lander;

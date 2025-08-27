@@ -6,7 +6,7 @@ import com.davies.lab.lander.FormattedModels.RequestBody.AlignedADCPRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.BulkADCPUploadRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.ADCP_CSV_Request;
 import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateADCPDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateADCPDataRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.ADCPDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.AlignedADCPDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.DataProgressResponse;

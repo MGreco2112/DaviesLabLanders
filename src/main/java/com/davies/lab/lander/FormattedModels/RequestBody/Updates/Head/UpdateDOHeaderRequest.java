@@ -1,57 +1,52 @@
-package com.davies.lab.lander.FormattedModels.RequestBody.Updates;
+package com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head;
 
 import com.davies.lab.lander.Models.Lander;
-import com.davies.lab.lander.Models.Data.ProcessedCTDData;
+import com.davies.lab.lander.Models.Data.ProcessedDOData;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UpdateCTDHeaderRequest {
+public class UpdateDOHeaderRequest {
     private String SondeName;
     private String SondeNo;
     private String SensorType;
     private Integer Channel;
     private Integer DelayTime;
     private Integer PreHeat;
-    private Integer MeasMode;
+    private Integer MeasModel;
     private Integer BurstTime;
     private Integer BurstCnt;
     private Integer IntervalData;
     private Integer SampleCnt;
-    private LocalDateTime StartTime;
-    private LocalDateTime EndTime;
+    private LocalDateTime StartTime, EndTime;
     private Double DepAdiRho;
-    private Integer ECA;
-    private Integer ECB;
-    private Integer ECDeg;
-    private Double ECCoef;
     private Date CoefDate;
     private Double Ch1;
     private Double Ch2;
     private Double Ch3;
-    private Double Ch4;
     private Integer BuzzerEN;
     private Integer BuzzerInterval;
     private String COMMENT;
     private String SensorType2;
     private Integer BuzzerNumber;
     private Integer DepM;
-    private Integer CondDepB;
+    private Integer SetSal;
+    private String FilmNo;
     private Lander LanderID;
-    private List<ProcessedCTDData> data;
+    private List<ProcessedDOData> data;
 
-    public UpdateCTDHeaderRequest() {
+    public UpdateDOHeaderRequest() {
     }
 
-    public UpdateCTDHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measMode, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Integer ECA, Integer ECB, Integer ECDeg, Double ECCoef, Date coefDate, Double ch1, Double ch2, Double ch3, Double ch4, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer condDepB, Lander landerID, List<ProcessedCTDData> data) {
+    public UpdateDOHeaderRequest(String sondeName, String sondeNo, String sensorType, Integer channel, Integer delayTime, Integer preHeat, Integer measModel, Integer burstTime, Integer burstCnt, Integer intervalData, Integer sampleCnt, LocalDateTime startTime, LocalDateTime endTime, Double depAdiRho, Date coefDate, Double ch1, Double ch2, Double ch3, Integer buzzerEN, Integer buzzerInterval, String COMMENT, String sensorType2, Integer buzzerNumber, Integer depM, Integer setSal, String filmNo, Lander landerID, List<ProcessedDOData> data) {
         SondeName = sondeName;
         SondeNo = sondeNo;
         SensorType = sensorType;
         Channel = channel;
         DelayTime = delayTime;
         PreHeat = preHeat;
-        MeasMode = measMode;
+        MeasModel = measModel;
         BurstTime = burstTime;
         BurstCnt = burstCnt;
         IntervalData = intervalData;
@@ -59,22 +54,18 @@ public class UpdateCTDHeaderRequest {
         StartTime = startTime;
         EndTime = endTime;
         DepAdiRho = depAdiRho;
-        this.ECA = ECA;
-        this.ECB = ECB;
-        this.ECDeg = ECDeg;
-        this.ECCoef = ECCoef;
         CoefDate = coefDate;
         Ch1 = ch1;
         Ch2 = ch2;
         Ch3 = ch3;
-        Ch4 = ch4;
         BuzzerEN = buzzerEN;
         BuzzerInterval = buzzerInterval;
         this.COMMENT = COMMENT;
         SensorType2 = sensorType2;
         BuzzerNumber = buzzerNumber;
         DepM = depM;
-        CondDepB = condDepB;
+        SetSal = setSal;
+        FilmNo = filmNo;
         LanderID = landerID;
         this.data = data;
     }
@@ -127,12 +118,12 @@ public class UpdateCTDHeaderRequest {
         PreHeat = preHeat;
     }
 
-    public Integer getMeasMode() {
-        return MeasMode;
+    public Integer getMeasModel() {
+        return MeasModel;
     }
 
-    public void setMeasMode(Integer measMode) {
-        MeasMode = measMode;
+    public void setMeasModel(Integer measModel) {
+        MeasModel = measModel;
     }
 
     public Integer getBurstTime() {
@@ -191,38 +182,6 @@ public class UpdateCTDHeaderRequest {
         DepAdiRho = depAdiRho;
     }
 
-    public Integer getECA() {
-        return ECA;
-    }
-
-    public void setECA(Integer ECA) {
-        this.ECA = ECA;
-    }
-
-    public Integer getECB() {
-        return ECB;
-    }
-
-    public void setECB(Integer ECB) {
-        this.ECB = ECB;
-    }
-
-    public Integer getECDeg() {
-        return ECDeg;
-    }
-
-    public void setECDeg(Integer ECDeg) {
-        this.ECDeg = ECDeg;
-    }
-
-    public Double getECCoef() {
-        return ECCoef;
-    }
-
-    public void setECCoef(Double ECCoef) {
-        this.ECCoef = ECCoef;
-    }
-
     public Date getCoefDate() {
         return CoefDate;
     }
@@ -253,14 +212,6 @@ public class UpdateCTDHeaderRequest {
 
     public void setCh3(Double ch3) {
         Ch3 = ch3;
-    }
-
-    public Double getCh4() {
-        return Ch4;
-    }
-
-    public void setCh4(Double ch4) {
-        Ch4 = ch4;
     }
 
     public Integer getBuzzerEN() {
@@ -311,12 +262,20 @@ public class UpdateCTDHeaderRequest {
         DepM = depM;
     }
 
-    public Integer getCondDepB() {
-        return CondDepB;
+    public Integer getSetSal() {
+        return SetSal;
     }
 
-    public void setCondDepB(Integer condDepB) {
-        CondDepB = condDepB;
+    public void setSetSal(Integer setSal) {
+        SetSal = setSal;
+    }
+
+    public String getFilmNo() {
+        return FilmNo;
+    }
+
+    public void setFilmNo(String filmNo) {
+        FilmNo = filmNo;
     }
 
     public Lander getLanderID() {
@@ -327,11 +286,11 @@ public class UpdateCTDHeaderRequest {
         LanderID = landerID;
     }
 
-    public List<ProcessedCTDData> getData() {
+    public List<ProcessedDOData> getData() {
         return data;
     }
 
-    public void setData(List<ProcessedCTDData> data) {
+    public void setData(List<ProcessedDOData> data) {
         this.data = data;
     }
 }

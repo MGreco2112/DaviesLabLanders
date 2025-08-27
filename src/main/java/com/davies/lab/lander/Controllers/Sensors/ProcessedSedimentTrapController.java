@@ -3,8 +3,8 @@ package com.davies.lab.lander.Controllers.Sensors;
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.SedimentTrap_CSV_Request;
-import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapDataRequest;
-import com.davies.lab.lander.FormattedModels.RequestBody.Updates.UpdateSedimentTrapHeaderRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateSedimentTrapDataRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head.UpdateSedimentTrapHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.SedimentTrapDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.SedimentTrapHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedSedimentTrapData;
@@ -15,8 +15,6 @@ import com.davies.lab.lander.Repositories.Header.ProcessedSedimentTrapHeadReposi
 import com.davies.lab.lander.Repositories.LanderRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import org.apache.coyote.Response;
-import org.checkerframework.common.util.report.qual.ReportUnqualified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 import java.util.*;
 
 @CrossOrigin
