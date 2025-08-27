@@ -280,32 +280,44 @@ public class LanderController {
             Optional<ProcessedCTDHead> ctdHead = ctdHeadRepository.findById(selLander.getCTDHead().getHeadID());
             selLander.setCTDHead(null);
             repository.save(selLander);
-            ctdDataRepository.deleteAll(ctdHead.get().getData());
-            ctdHeadRepository.delete(ctdHead.get());
+
+            if (ctdHead.isPresent()) {
+                ctdDataRepository.deleteAll(ctdHead.get().getData());
+                ctdHeadRepository.delete(ctdHead.get());
+            }
         }
 
         if (selLander.getDOHead() != null) {
             Optional<ProcessedDOHead> doHead =  doHeadRepository.findById(selLander.getDOHead().getHeadID());
             selLander.setDOHead(null);
             repository.save(selLander);
-            doDataRepository.deleteAll(doHead.get().getData());
-            doHeadRepository.delete(doHead.get());
+
+            if (doHead.isPresent()) {
+                doDataRepository.deleteAll(doHead.get().getData());
+                doHeadRepository.delete(doHead.get());
+            }
         }
 
         if (selLander.getFLNTUHead() != null) {
             Optional<ProcessedFLNTUHead> flntuHead = flntuHeadRepository.findById(selLander.getFLNTUHead().getHeadID());
             selLander.setFLNTUHead(null);
             repository.save(selLander);
-            flntuDataRepository.deleteAll(flntuHead.get().getData());
-            flntuHeadRepository.delete(flntuHead.get());
+
+            if (flntuHead.isPresent()) {
+                flntuDataRepository.deleteAll(flntuHead.get().getData());
+                flntuHeadRepository.delete(flntuHead.get());
+            }
         }
 
         if (selLander.getAlbexHead() != null) {
             Optional<ProcessedAlbexCTDHeader> albexCTDHead = albexCTDHeadRepository.findById(selLander.getAlbexHead().getHeadID());
             selLander.setAlbexHead(null);
             repository.save(selLander);
-            albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
-            albexCTDHeadRepository.delete(albexCTDHead.get());
+
+            if (albexCTDHead.isPresent()) {
+                albexCTDDataRepository.deleteAll(albexCTDHead.get().getData());
+                albexCTDHeadRepository.delete(albexCTDHead.get());
+            }
         }
 
         if (selLander.getADCPHead() != null) {
