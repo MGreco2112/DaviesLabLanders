@@ -12,4 +12,7 @@ import java.util.List;
 public interface ProcessedBatteryDataRepository extends JpaRepository<ProcessedBatteryData, Long> {
     @Query(value = "SELECT * FROM processed_battery_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedBatteryData> findDataByHeadId(@Param("id") Long headId);
+
+    @Query(value = "SELECT COUNT(*) FROM processed_battery_data", nativeQuery = true)
+    Integer findCountOfData();
 }

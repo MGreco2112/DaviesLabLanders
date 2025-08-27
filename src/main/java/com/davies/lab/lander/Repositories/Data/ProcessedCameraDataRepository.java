@@ -12,4 +12,7 @@ import java.util.List;
 public interface ProcessedCameraDataRepository extends JpaRepository<ProcessedCameraData, Long> {
     @Query(value = "SELECT * FROM processed_camera_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedCameraData> findDataByHeadId(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM processed_camera_data", nativeQuery = true)
+    Integer findCountOfData();
 }

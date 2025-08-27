@@ -12,4 +12,7 @@ import java.util.List;
 public interface ProcessedBeaconDataRepository extends JpaRepository<ProcessedBeaconData, Long> {
     @Query(value = "SELECT * FROM processed_beacon_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedBeaconData> findDataByHeadId(@Param("id") Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM processed_beacon_data", nativeQuery = true)
+    Integer findCountOfData();
 }

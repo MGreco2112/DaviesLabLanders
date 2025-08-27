@@ -94,7 +94,10 @@ public class DashboardController {
         int dataPointCount = 0;
 
         alignedDataPointCount += alignedCTDRepository.getAlignedCTDCount() + alignedADCPRepository.getAlignedCount();
-        dataPointCount += adcpDataRepository.getCountOfData() + albexDataRepository.getCountOfData() + ctdDataRepository.findCountOfData() + doDataRepository.findCountOfAllData() + flntuDataRepository.findCountOfAllData();
+        dataPointCount += adcpDataRepository.getCountOfData() + albexDataRepository.getCountOfData()
+                + ctdDataRepository.findCountOfData() + doDataRepository.findCountOfAllData() + flntuDataRepository.findCountOfAllData()
+                + batteryDataRepository.findCountOfData() + beaconDataRepository.findCountOfData() + cameraDataRepository.findCountOfData()
+                + sedimentTrapDataRepository.findCountOfData();
 
         return new DashboardResponse(landerCount, dataPointCount, alignedDataPointCount);
     }
@@ -129,6 +132,18 @@ public class DashboardController {
             }
             if (lander.getFLNTUHead() != null) {
                 totals += flntuHeadRepository.getFLNTUHeadsByLanderID(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getBatteryHead() != null) {
+                totals += batteryHeadRepository.getBatteryHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getBeaconHead() != null) {
+                totals += beaconHeadRepository.getBeaconHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getCameraHead() != null) {
+                totals += cameraHeadRepository.getCameraHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+            }
+            if (lander.getSedimentTrapHead() != null) {
+                totals += sedimentTrapHeadRepository.getSedimentTrapHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
             }
 
             pointsPerYear.put(landerDates.get(lander).getYear(), totals);

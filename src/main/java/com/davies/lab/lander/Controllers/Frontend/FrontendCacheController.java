@@ -42,6 +42,22 @@ public class FrontendCacheController {
     private ProcessedADCPHeadRepository adcpHeadRepository;
     @Autowired
     private ProcessedADCPDataRepository adcpDataRepository;
+    @Autowired
+    private ProcessedBatteryHeadRepository batteryHeadRepository;
+    @Autowired
+    private ProcessedBatteryDataRepository batteryDataRepository;
+    @Autowired
+    private ProcessedBeaconHeadRepository beaconHeadRepository;
+    @Autowired
+    private ProcessedBeaconDataRepository beaconDataRepository;
+    @Autowired
+    private ProcessedCameraHeadRepository cameraHeadRepository;
+    @Autowired
+    private ProcessedCameraDataRepository cameraDataRepository;
+    @Autowired
+    private ProcessedSedimentTrapHeadRepository sedimentTrapHeadRepository;
+    @Autowired
+    private ProcessedSedimentTrapDataRepository sedimentTrapDataRepository;
 
     @GetMapping("/ctd/headers")
     public ResponseEntity<CTDCacheResponse> getCTDHeaders() {
@@ -256,5 +272,157 @@ public class FrontendCacheController {
         );
 
         return new ResponseEntity<>(new ADCPCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/battery/headers")
+    public ResponseEntity<BatteryCacheResponse> getBatteryHeaders() {
+        List<ProcessedBatteryHeader> heads = batteryHeadRepository.findAll();
+        List<BatteryHeadResponse> res = new ArrayList<>();
+
+        for (ProcessedBatteryHeader head : heads) {
+            BatteryHeadResponse temp = new BatteryHeadResponse(head);
+
+            for (ProcessedBatteryData data : head.getData()) {
+                temp.createDataResponse(data);
+            }
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(new BatteryCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/battery/headers/{id}")
+    public ResponseEntity<BatteryCacheResponse> getBatteryHeadById(@PathVariable("id") Long id) {
+        Optional<ProcessedBatteryHeader> selHead = batteryHeadRepository.findById(id);
+        List<BatteryHeadResponse> res = new ArrayList<>();
+
+        if (selHead.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        BatteryHeadResponse temp = new BatteryHeadResponse(selHead.get());
+
+        for (ProcessedBatteryData dataPoint : selHead.get().getData()) {
+            temp.createDataResponse(dataPoint);
+        }
+
+        res.add(temp);
+
+        return new ResponseEntity<>(new BatteryCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/beacon/headers")
+    public ResponseEntity<BeaconCacheResponse> getBeaconHeaders() {
+        List<ProcessedBeaconHeader> heads = beaconHeadRepository.findAll();
+        List<BeaconHeadResponse> res = new ArrayList<>();
+
+        for (ProcessedBeaconHeader head : heads) {
+            BeaconHeadResponse temp = new BeaconHeadResponse(head);
+
+            for (ProcessedBeaconData data : head.getData()) {
+                temp.createDataResponse(data);
+            }
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(new BeaconCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/beacon/headers/{id}")
+    public ResponseEntity<BeaconCacheResponse> getBeaconHeaderById(@PathVariable("id") Long id) {
+        Optional<ProcessedBeaconHeader> selHead = beaconHeadRepository.findById(id);
+        List<BeaconHeadResponse> res = new ArrayList<>();
+
+        if (selHead.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        BeaconHeadResponse temp = new BeaconHeadResponse(selHead.get());
+
+        for (ProcessedBeaconData data : selHead.get().getData()) {
+            temp.createDataResponse(data);
+        }
+
+        res.add(temp);
+
+        return new ResponseEntity<>(new BeaconCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/camera/headers")
+    public ResponseEntity<CameraCacheResponse> getCameraHeaders() {
+        List<ProcessedCameraHeader> heads = cameraHeadRepository.findAll();
+        List<CameraHeadResponse> res = new ArrayList<>();
+
+        for (ProcessedCameraHeader head : heads) {
+            CameraHeadResponse temp = new CameraHeadResponse(head);
+
+            for (ProcessedCameraData data : head.getData()) {
+                temp.createDataResponse(data);
+            }
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(new CameraCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/camera/headers/{id}")
+    public ResponseEntity<CameraCacheResponse> getCameraHeaderById(@PathVariable("id") Long id) {
+        Optional<ProcessedCameraHeader> selHead = cameraHeadRepository.findById(id);
+        List<CameraHeadResponse> res = new ArrayList<>();
+
+        if (selHead.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        CameraHeadResponse temp = new CameraHeadResponse(selHead.get());
+
+        for (ProcessedCameraData data : selHead.get().getData()) {
+            temp.createDataResponse(data);
+        }
+
+        res.add(temp);
+
+        return new ResponseEntity<>(new CameraCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/sediment_trap/headers")
+    public ResponseEntity<SedimentTrapCacheResponse> getSedimentTrapHeads() {
+        List<ProcessedSedimentTrapHeader> heads = sedimentTrapHeadRepository.findAll();
+        List<SedimentTrapHeadResponse> res = new ArrayList<>();
+
+        for (ProcessedSedimentTrapHeader head : heads) {
+            SedimentTrapHeadResponse temp = new SedimentTrapHeadResponse(head);
+
+            for (ProcessedSedimentTrapData data : head.getData()) {
+                temp.createDataResponse(data);
+            }
+
+            res.add(temp);
+        }
+
+        return new ResponseEntity<>(new SedimentTrapCacheResponse(res), HttpStatus.OK);
+    }
+
+    @GetMapping("/sediment_trap/headers/{id}")
+    public ResponseEntity<SedimentTrapCacheResponse> getSedimentTrapHeadById(@PathVariable("id") Long id) {
+        Optional<ProcessedSedimentTrapHeader> selHead = sedimentTrapHeadRepository.findById(id);
+        List<SedimentTrapHeadResponse> res = new ArrayList<>();
+
+        if (selHead.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        SedimentTrapHeadResponse temp = new SedimentTrapHeadResponse(selHead.get());
+
+        for (ProcessedSedimentTrapData data : selHead.get().getData()) {
+            temp.createDataResponse(data);
+        }
+
+        res.add(temp);
+
+        return new ResponseEntity<>(new SedimentTrapCacheResponse(res), HttpStatus.OK);
     }
 }

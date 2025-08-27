@@ -12,4 +12,7 @@ import java.util.List;
 public interface ProcessedSedimentTrapDataRepository extends JpaRepository<ProcessedSedimentTrapData, Long> {
     @Query(value = "SELECT * FROM processed_sediment_trap_data WHERE head_id = :id", nativeQuery = true)
     List<ProcessedSedimentTrapData> findDataByHeadId(@Param("id") Long headId);
+
+    @Query(value = "SELECT COUNT(*) FROM processed_sediment_trap_data", nativeQuery = true)
+    Integer findCountOfData();
 }
