@@ -2,6 +2,8 @@ package com.davies.lab.lander.Controllers.Frontend;
 
 import com.davies.lab.lander.FormattedModels.ResponseBody.Dashboard.CompletedDashboard;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Dashboard.DashboardResponse;
+import com.davies.lab.lander.Models.Data.ProcessedADCPData;
+import com.davies.lab.lander.Models.Headers.*;
 import com.davies.lab.lander.Models.Lander;
 import com.davies.lab.lander.Repositories.*;
 import com.davies.lab.lander.Repositories.Data.*;
@@ -119,31 +121,67 @@ public class DashboardController {
             }
 
             if (lander.getADCPHead() != null) {
-                totals += adcpHeadRepository.getADCPHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.getADCPHeadByLanderId(lander.getASDBLanderID());
+
+                if (adcpHead.isPresent()) {
+                    totals += adcpHead.get().getData().size();
+                }
             }
             if (lander.getAlbexHead() != null) {
-                totals += albexCTDHeadRepository.getAlbexHeadsByLanderId(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedAlbexCTDHeader> albexHead = albexCTDHeadRepository.getAlbexHeadsByLanderId(lander.getASDBLanderID());
+
+                if (albexHead.isPresent()) {
+                    totals += albexHead.get().getData().size();
+                }
             }
             if (lander.getCTDHead() != null) {
-                totals += ctdHeadRepository.getCTDHeadsByLanderId(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedCTDHead> ctdHead = ctdHeadRepository.getCTDHeadsByLanderId(lander.getASDBLanderID());
+
+                if (ctdHead.isPresent()) {
+                    totals += ctdHead.get().getData().size();
+                }
             }
             if (lander.getDOHead() != null) {
-                totals += doHeadRepository.getDOHeadsByLanderID(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedDOHead> doHead = doHeadRepository.getDOHeadsByLanderID(lander.getASDBLanderID());
+
+                if (doHead.isPresent()) {
+                    totals += doHead.get().getData().size();
+                }
             }
             if (lander.getFLNTUHead() != null) {
-                totals += flntuHeadRepository.getFLNTUHeadsByLanderID(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedFLNTUHead> flntuHead = flntuHeadRepository.getFLNTUHeadsByLanderID(lander.getASDBLanderID());
+
+                if (flntuHead.isPresent()) {
+                    totals += flntuHead.get().getData().size();
+                }
             }
             if (lander.getBatteryHead() != null) {
-                totals += batteryHeadRepository.getBatteryHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedBatteryHeader> batteryHead = batteryHeadRepository.getBatteryHeadByLanderId(lander.getASDBLanderID());
+
+                if (batteryHead.isPresent()) {
+                    totals += batteryHead.get().getData().size();
+                }
             }
             if (lander.getBeaconHead() != null) {
-                totals += beaconHeadRepository.getBeaconHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedBeaconHeader> beaconHead = beaconHeadRepository.getBeaconHeadByLanderId(lander.getASDBLanderID());
+
+                if (beaconHead.isPresent()) {
+                    totals += beaconHead.get().getData().size();
+                }
             }
             if (lander.getCameraHead() != null) {
-                totals += cameraHeadRepository.getCameraHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedCameraHeader> cameraHead = cameraHeadRepository.getCameraHeadByLanderId(lander.getASDBLanderID());
+
+                if (cameraHead.isPresent()) {
+                    totals += cameraHead.get().getData().size();
+                }
             }
             if (lander.getSedimentTrapHead() != null) {
-                totals += sedimentTrapHeadRepository.getSedimentTrapHeadByLanderId(lander.getASDBLanderID()).get().getData().size();
+                Optional<ProcessedSedimentTrapHeader> sedTrapHead = sedimentTrapHeadRepository.getSedimentTrapHeadByLanderId(lander.getASDBLanderID());
+
+                if (sedTrapHead.isPresent()) {
+                    totals += sedTrapHead.get().getData().size();
+                }
             }
 
             pointsPerYear.put(landerDates.get(lander).getYear(), totals);

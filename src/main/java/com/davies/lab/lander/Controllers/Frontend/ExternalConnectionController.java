@@ -60,6 +60,7 @@ public class ExternalConnectionController {
     @Autowired
     private ProcessedSedimentTrapDataRepository sedimentTrapDataRepository;
 
+    //Route for external apps to ping API
     @GetMapping("/online")
     public ResponseEntity<APIOnlineResponse> checkOnlineStatus() {
         APIOnlineResponse res = new APIOnlineResponse(200);
@@ -144,6 +145,7 @@ public class ExternalConnectionController {
         }
 
 
+        //get, create and place ADCPData
         Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.getADCPHeadByLanderId(selLander.getASDBLanderID());
 
         if (adcpHead.isPresent()) {
@@ -156,6 +158,7 @@ public class ExternalConnectionController {
             selLander.setAdcpHead(newADCPHead);
         }
 
+        //get, create and place BatteryData
         Optional<ProcessedBatteryHeader> batteryHead = batteryHeadRepository.getBatteryHeadByLanderId(selLander.getASDBLanderID());
 
         if (batteryHead.isPresent()) {
@@ -168,7 +171,7 @@ public class ExternalConnectionController {
             selLander.setBatteryHead(newBatteryHead);
         }
 
-//        TODO: update the method with SedimentTrap heads
+        //get, create and place BeaconData
         Optional<ProcessedBeaconHeader> beaconHead = beaconHeadRepository.getBeaconHeadByLanderId(selLander.getASDBLanderID());
 
         if (beaconHead.isPresent()) {
@@ -181,6 +184,7 @@ public class ExternalConnectionController {
             selLander.setBeaconHead(newBeaconHead);
         }
 
+        //get, create and place CameraData
         Optional<ProcessedCameraHeader> cameraHead = cameraHeadRepository.getCameraHeadByLanderId(selLander.getASDBLanderID());
 
         if (cameraHead.isPresent()) {
@@ -193,6 +197,7 @@ public class ExternalConnectionController {
             selLander.setCameraHead(newCameraHead);
         }
 
+        //get, create and place SedimentTrapData
         Optional<ProcessedSedimentTrapHeader> sedimentTrapHead = sedimentTrapHeadRepository.getSedimentTrapHeadByLanderId(selLander.getASDBLanderID());
 
         if (sedimentTrapHead.isPresent()) {
@@ -277,6 +282,7 @@ public class ExternalConnectionController {
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
 
+    //GET Lander AlbexCTD
     @GetMapping("/lander/id/{id}/albex_ctd")
     public ResponseEntity<ALBEXCTDHeadResponseExternal> getAlbexByLanderId(@PathVariable("id") String id) {
         Optional<ProcessedAlbexCTDHeader> selHead = albexHeaderRepository.getAlbexHeadsByLanderId(id);
@@ -297,6 +303,7 @@ public class ExternalConnectionController {
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
 
+    //GET Lander ADCP
     @GetMapping("/lander/id/{id}/adcp")
     public ResponseEntity<ADCPHeadResponseExternal> getAdcpByLanderId(@PathVariable("id") String id) {
         Optional<ProcessedADCPHead> selHead = adcpHeadRepository.getADCPHeadByLanderId(id);
@@ -317,6 +324,7 @@ public class ExternalConnectionController {
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
 
+    //GET Lander Battery
     @GetMapping("/lander/id/{id}/battery")
     public ResponseEntity<BatteryHeadResponseExternal> getBatteryByLanderId(@PathVariable("id") String id) {
         Optional<ProcessedBatteryHeader> selHead = batteryHeadRepository.getBatteryHeadByLanderId(id);
@@ -338,6 +346,7 @@ public class ExternalConnectionController {
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
 
+    //GET Lander Beacon
     @GetMapping("/lander/id/{id}/beacon")
     public ResponseEntity<BeaconHeadResponseExternal> getBeaconByLanderId(@PathVariable("id") String id) {
         Optional<ProcessedBeaconHeader> selHead = beaconHeadRepository.getBeaconHeadByLanderId(id);
@@ -355,6 +364,7 @@ public class ExternalConnectionController {
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
 
+    //GET Lander Camera
     @GetMapping("/lander/id/{id}/camera")
     public ResponseEntity<CameraHeadResponseExternal> getCameraByLanderId(@PathVariable("id") String id) {
         Optional<ProcessedCameraHeader> selHead = cameraHeadRepository.getCameraHeadByLanderId(id);
@@ -372,6 +382,7 @@ public class ExternalConnectionController {
         return new ResponseEntity<>(newHead, HttpStatus.OK);
     }
 
+    //GET Lander SedimentTrap
     @GetMapping("/lander/id/{id}/sediment_trap")
     public ResponseEntity<SedimentTrapHeadResponseExternal> getSedimentTrapByLanderId(@PathVariable("id") String id) {
         Optional<ProcessedSedimentTrapHeader> selHead = sedimentTrapHeadRepository.getSedimentTrapHeadByLanderId(id);
