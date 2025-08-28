@@ -70,6 +70,22 @@ public class ProcessedBatteryController {
         return res;
     }
 
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<BatteryHeadResponse> findHeadWithoutDataById(@PathVariable("id") Long id) {
+        Optional<ProcessedBatteryHeader> head = headRepository.findById(id);
+        BatteryHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new BatteryHeadResponse(head.get());
+
+        res.setDataPointCount(head.get().getData().size());
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/headers/{id}")
     public ResponseEntity<BatteryHeadResponse> findHeadById(@PathVariable("id") Long id) {
         Optional<ProcessedBatteryHeader> head = headRepository.findById(id);

@@ -70,6 +70,22 @@ public class ProcessedBeaconController {
         return res;
     }
 
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<BeaconHeadResponse> findHeadWithoutDataById(@PathVariable("id") Long id) {
+        Optional<ProcessedBeaconHeader> head = headRepository.findById(id);
+        BeaconHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+
+        res = new BeaconHeadResponse(head.get());
+
+        res.setDataPointCount(head.get().getData().size());
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/headers/{id}")
     public ResponseEntity<BeaconHeadResponse> findHeadById(@PathVariable("id") Long id) {
         Optional<ProcessedBeaconHeader> head = headRepository.findById(id);

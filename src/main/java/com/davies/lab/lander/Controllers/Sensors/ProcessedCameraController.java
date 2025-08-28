@@ -71,6 +71,22 @@ public class ProcessedCameraController {
         return res;
     }
 
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<CameraHeadResponse> findHeadWithoutDataById(@PathVariable("id") Long id) {
+        Optional<ProcessedCameraHeader> head = headRepository.findById(id);
+        CameraHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        res = new CameraHeadResponse(head.get());
+
+        res.setDataPointCount(head.get().getData().size());
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/headers/{id}")
     public ResponseEntity<CameraHeadResponse> findHeadById(@PathVariable("id") Long id) {
         Optional<ProcessedCameraHeader> head = headRepository.findById(id);

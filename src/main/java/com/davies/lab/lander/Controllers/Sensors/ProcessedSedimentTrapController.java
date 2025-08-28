@@ -69,6 +69,21 @@ public class ProcessedSedimentTrapController {
         return res;
     }
 
+    @GetMapping("/headers/sanitized/{id}")
+    public ResponseEntity<SedimentTrapHeadResponse> findHeadWithoutDataById(@PathVariable("id") Long id) {
+        Optional<ProcessedSedimentTrapHeader> head = headRepository.findById(id);
+        SedimentTrapHeadResponse res;
+
+        if (head.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        res = new SedimentTrapHeadResponse(head.get());
+
+        res.setDataPointCount(head.get().getData().size());
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/headers/{id}")
     public ResponseEntity<SedimentTrapHeadResponse> findHeadById(@PathVariable("id") Long id) {
         Optional<ProcessedSedimentTrapHeader> head = headRepository.findById(id);
