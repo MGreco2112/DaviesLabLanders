@@ -198,7 +198,7 @@ public class ExternalConnectionController {
         if (sedimentTrapHead.isPresent()) {
             SedimentTrapHeadResponseExternal newSedimentTrapHead = new SedimentTrapHeadResponseExternal(sedimentTrapHead.get());
 
-            List<SedimentTrapDataResponseExternal> sedimentTrapList = SedimentTrapDataResponseExternal.createDataResponse(sedimentTrapHead.get().getData());
+            List<SedimentTrapDataResponseExternal> sedimentTrapList = SedimentTrapDataResponseExternal.createDataResponse(sedimentTrapDataRepository.findDataByHeadId(sedimentTrapHead.get().getHeadID()));
 
             newSedimentTrapHead.setData(sedimentTrapList);
 
