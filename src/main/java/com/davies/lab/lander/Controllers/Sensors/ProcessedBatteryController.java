@@ -3,9 +3,12 @@ package com.davies.lab.lander.Controllers.Sensors;
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Battery_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateBatteryDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head.UpdateBatteryHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BatteryDataResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.DataProgressResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.TotalDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.BatteryHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedBatteryData;
 import com.davies.lab.lander.Models.Headers.ProcessedBatteryHeader;
@@ -16,6 +19,9 @@ import com.davies.lab.lander.Repositories.LanderRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +30,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/battery")
+@EnableCaching
 public class ProcessedBatteryController {
     @Autowired
     private LanderRepository landerRepository;
@@ -134,7 +143,59 @@ public class ProcessedBatteryController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-//    TODO: create methods for progress bar uploads once entity is defined
+    @GetMapping("/data/count/{landerID}")
+    public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("id") String landerID) {
+        Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (selLander.getBatteryHead() != null) {
+            ProcessedBatteryHeader selHead = headRepository.findById(selLander.getBatteryHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            Integer dataCount = repository.findCountByHeadID(selHead.getHeadID());
+
+//            TODO: Update with conditional for Start Time, End Time, Burst Count, and Burst Time
+//            double hoursBetween = calculateDataSize(selHead);
+//            return new ResponseEntity<>(new DataProgressResponse((dataCount / hoursBetween)), httpStatus.OK);
+
+            return new ResponseEntity<>(new DataProgressResponse(dataCount), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
+    }
+
+    @Cacheable(value = "BatteryCount")
+    private double calculateDataSize(ProcessedBatteryHeader selHead) {
+//        TODO: update with added header getter methods
+        LocalDateTime startTime; //= selHead.getStartTime();
+        LocalDateTime endTime; //= selHead.getEndTime();
+        int burstCount = 0; //= selHead.getBurstCnt();
+        int burstTime = 0; //= selHead.getBurstTime();
+
+        double hoursBetween = 0.0; //= ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return hoursBetween;
+    }
+
+    @PostMapping("/data/count/headless")
+    @Cacheable(value = "BatteryCount-Headless")
+    public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        int burstCount = request.getBurstCnt();
+        int burstTime = request.getBurstTime();
+
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return new ResponseEntity<>(new TotalDataResponse((int) hoursBetween), HttpStatus.OK);
+    }
+
 //    TODO: Update POST/PUT Routes once Entity is better defined
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String landerID) {
@@ -188,6 +249,7 @@ public class ProcessedBatteryController {
         //TODO: process rawData into ProcessedBatteryData
         dashboardController.evictMyCache();
         landerController.evictLandersCache();
+        clearBatteryCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
     }
@@ -312,6 +374,7 @@ public class ProcessedBatteryController {
 
             dashboardController.evictMyCache();
             landerController.evictLandersCache();
+            clearBatteryCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
@@ -339,7 +402,10 @@ public class ProcessedBatteryController {
         }
     }
 
-    //create private void method clearBatteryCache using the cacheEvict annotation
+    @CacheEvict(value = {"BatteryCount", "BatteryCount-Headless"}, allEntries = true)
+    private void clearBatteryCache() {
+
+    }
 
     @PutMapping("/update/header/{id}")
     public ResponseEntity<String> updateBatteryHeader(@PathVariable("id") Long id, @RequestBody UpdateBatteryHeaderRequest updates) {

@@ -3,9 +3,12 @@ package com.davies.lab.lander.Controllers.Sensors;
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Camera_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateCameraDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head.UpdateCameraHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.CameraDataResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.DataProgressResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.TotalDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.CameraHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedCameraData;
 import com.davies.lab.lander.Models.Headers.ProcessedCameraHeader;
@@ -15,7 +18,10 @@ import com.davies.lab.lander.Repositories.Header.ProcessedCameraHeadRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +30,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/camera")
+@Cacheable
 public class ProcessedCameraController {
     @Autowired
     private LanderRepository landerRepository;
@@ -135,6 +144,58 @@ public class ProcessedCameraController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/count/{landerID}")
+    public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
+        Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (selLander.getCameraHead() != null) {
+            ProcessedCameraHeader selHead = headRepository.findById(selLander.getCameraHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            Integer dataCount = repository.findCountOfDataByHeadID(selHead.getHeadID());
+
+//            TODO: update with conditional for startTime, endTime, burstCnt, burstTime
+//            double hoursBetween = calculateDataSize(selHead);
+//            return new ResponseEntity<>(new DataProgressResponse((dataCount / hoursBetween)), httpStatus.OK);
+
+            return new ResponseEntity<>(new DataProgressResponse(dataCount), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
+    }
+
+    @Cacheable(value = "CameraCount")
+    private double calculateDataSize(ProcessedCameraHeader selHead) {
+        LocalDateTime startTime; //= selHead.getStartTime();
+        LocalDateTime endTime; //= selHead.getEndTime();
+        int burstCount = 0; //= selHead.getBurstCnt();
+        int burstTime = 0; //= selHead.getBurstTime();
+
+        double hoursBetween = 0.00; //= ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return hoursBetween;
+    }
+
+    @PostMapping("/data/count/headless")
+    @Cacheable(value = "CameraCount-Headless")
+    public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        int burstCount = request.getBurstCnt();
+        int burstTime = request.getBurstTime();
+
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return new ResponseEntity<>(new TotalDataResponse((int) hoursBetween ), HttpStatus.OK);
+    }
+
     //TODO: Add POST/PUT mappings after model is defined
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String landerID) {
@@ -187,6 +248,7 @@ public class ProcessedCameraController {
 
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
+        clearCameraCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
     }
@@ -311,6 +373,7 @@ public class ProcessedCameraController {
 
             landerController.evictLandersCache();
             dashboardController.evictMyCache();
+            clearCameraCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
@@ -338,7 +401,10 @@ public class ProcessedCameraController {
         }
     }
 
-    //create private void method clearBatteryCache using the cacheEvict annotation
+    @CacheEvict(value = {"CameraCount", "CameraCount-Headless"}, allEntries = true)
+    private void clearCameraCache() {
+
+    }
 
     @PutMapping("/update/header/{id}")
     public ResponseEntity<String> updateCameraHeader(@PathVariable("id") Long id, @RequestBody UpdateCameraHeaderRequest updates) {

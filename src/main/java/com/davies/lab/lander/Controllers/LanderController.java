@@ -377,6 +377,7 @@ public class LanderController {
         }
 
         repository.delete(selLander);
+        evictLandersCache();
 
         return new ResponseEntity<>("Deleted Lander", HttpStatus.OK);
     }

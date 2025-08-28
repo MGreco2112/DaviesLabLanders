@@ -452,6 +452,7 @@ public class ProcessedADCPController {
         }
 
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
     }
@@ -467,6 +468,7 @@ public class ProcessedADCPController {
         }
 
         dashboardController.evictMyCache();
+        landerController.evictLandersCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
     }

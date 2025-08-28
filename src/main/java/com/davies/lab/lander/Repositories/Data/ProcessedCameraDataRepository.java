@@ -15,4 +15,7 @@ public interface ProcessedCameraDataRepository extends JpaRepository<ProcessedCa
 
     @Query(value = "SELECT COUNT(*) FROM processed_camera_data", nativeQuery = true)
     Integer findCountOfData();
+
+    @Query(value = "SELECT COUNT(*) FROM processed_camera_data WHERE head_id = :id", nativeQuery = true)
+    Integer findCountOfDataByHeadID(@Param("id") Long id);
 }

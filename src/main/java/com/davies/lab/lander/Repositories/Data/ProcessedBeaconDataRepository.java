@@ -15,4 +15,7 @@ public interface ProcessedBeaconDataRepository extends JpaRepository<ProcessedBe
 
     @Query(value = "SELECT COUNT(*) FROM processed_beacon_data", nativeQuery = true)
     Integer findCountOfData();
+
+    @Query(value = "SELECT COUNT(*) FROM processed_beacon_data WHERE head_id = :id", nativeQuery = true)
+    Integer findCountByHeadID(@Param("id") Long id);
 }

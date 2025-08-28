@@ -15,4 +15,7 @@ public interface ProcessedSedimentTrapDataRepository extends JpaRepository<Proce
 
     @Query(value = "SELECT COUNT(*) FROM processed_sediment_trap_data", nativeQuery = true)
     Integer findCountOfData();
+
+    @Query(value = "SELECT COUNT(*) FROM processed_sediment_trap_data WHERE head_id = :id", nativeQuery = true)
+    Integer findCountOfDataByHead(@Param("id") Long id);
 }

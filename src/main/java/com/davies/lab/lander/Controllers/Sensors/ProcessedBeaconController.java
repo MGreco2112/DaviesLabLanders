@@ -3,9 +3,12 @@ package com.davies.lab.lander.Controllers.Sensors;
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.Beacon_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateBeaconDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head.UpdateBeaconHeaderRequest;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.BeaconDataResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.DataProgressResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.TotalDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.BeaconHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedBeaconData;
 import com.davies.lab.lander.Models.Headers.ProcessedBeaconHeader;
@@ -15,7 +18,10 @@ import com.davies.lab.lander.Repositories.Header.ProcessedBeaconHeadRepository;
 import com.davies.lab.lander.Repositories.LanderRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +30,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @CrossOrigin
@@ -133,6 +141,58 @@ public class ProcessedBeaconController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/count/{landerID}")
+    public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
+        Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (selLander.getBeaconHead() != null) {
+            ProcessedBeaconHeader selHead = headRepository.findById(selLander.getBeaconHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            Integer dataCount = repository.findCountByHeadID(selHead.getHeadID());
+
+//            TODO: add conditional here for startTime, endTime, burstCnt, burstTime
+//            double hoursBetween = calculateDataSize(selHead);
+//            return new ResponseEntity<>(new DataProgressResponse((dataCount / hoursBetween)), httpStatus.OK);
+
+            return new ResponseEntity<>(new DataProgressResponse(dataCount), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
+    }
+
+    @Cacheable(value = "BeaconCount")
+    private double calculateDataSize(ProcessedBeaconHeader selHead) {
+        LocalDateTime startTime; //= selHead.getStartTime();
+        LocalDateTime endTime; //= selHead.getEndTime();
+        int burstCount = 0; //= selHead.getBurstCnt();
+        int burstTime = 0; //selHead.getBurstTime();
+
+        double hoursBetween = 0.0; //ChronoUnit.HOURS.between(startTime, endTIme);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return hoursBetween;
+    }
+
+    @PostMapping("/data/count/headless")
+    @Cacheable(value = "BeaconCount-Headless")
+    public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        int burstCount = request.getBurstCnt();
+        int burstTime = request.getBurstTime();
+
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return new ResponseEntity<>(new TotalDataResponse((int) hoursBetween ), HttpStatus.OK);
+    }
+
     //TODO: Create POST/PUT routes once parent entities are fully updated
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile") MultipartFile processedFile, @PathVariable("landerId") String landerID) {
@@ -185,6 +245,7 @@ public class ProcessedBeaconController {
 
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
+        clearBeaconCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
     }
@@ -309,6 +370,7 @@ public class ProcessedBeaconController {
 
             landerController.evictLandersCache();
             dashboardController.evictMyCache();
+            clearBeaconCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
@@ -336,7 +398,10 @@ public class ProcessedBeaconController {
         }
     }
 
-    //create private void method clearBeaconCache using the evictCache annotation
+    @CacheEvict(value = {"BeaconCache", "BeaconCache-Headless"}, allEntries = true)
+    private void clearBeaconCache() {
+
+    }
 
     @PutMapping("/update/header/{id}")
     public ResponseEntity<String> updateBeaconHeader(@PathVariable("id") Long id, @RequestBody UpdateBeaconHeaderRequest updates) {

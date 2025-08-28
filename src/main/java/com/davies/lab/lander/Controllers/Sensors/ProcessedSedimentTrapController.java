@@ -3,9 +3,12 @@ package com.davies.lab.lander.Controllers.Sensors;
 import com.davies.lab.lander.Controllers.Frontend.DashboardController;
 import com.davies.lab.lander.Controllers.LanderController;
 import com.davies.lab.lander.FormattedModels.RequestBody.CSVBodies.SedimentTrap_CSV_Request;
+import com.davies.lab.lander.FormattedModels.RequestBody.HeaderDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Data.UpdateSedimentTrapDataRequest;
 import com.davies.lab.lander.FormattedModels.RequestBody.Updates.Head.UpdateSedimentTrapHeaderRequest;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.DataProgressResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Data.SedimentTrapDataResponse;
+import com.davies.lab.lander.FormattedModels.ResponseBody.Data.TotalDataResponse;
 import com.davies.lab.lander.FormattedModels.ResponseBody.Head.SedimentTrapHeadResponse;
 import com.davies.lab.lander.Models.Data.ProcessedSedimentTrapData;
 import com.davies.lab.lander.Models.Headers.ProcessedSedimentTrapHeader;
@@ -16,6 +19,8 @@ import com.davies.lab.lander.Repositories.LanderRepository;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +29,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @CrossOrigin
@@ -114,6 +121,58 @@ public class ProcessedSedimentTrapController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/count/{landerID}")
+    public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
+        Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (selLander.getSedimentTrapHead() != null) {
+            ProcessedSedimentTrapHeader selHead = headRepository.findById(selLander.getSedimentTrapHead().getHeadID()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            Integer dataCount = repository.findCountOfDataByHead(selHead.getHeadID());
+
+            //TODO: update with conditional with startATime, endTime, burstCnt, burstTime
+            //double hoursBetween = calculateDataSize(selHead);
+            //return new ResponseEntity<>(new DataProgressResponse((dataCount / hoursBetween)), httpStatus.OK);
+
+            return new ResponseEntity<>(new DataProgressResponse(dataCount), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new DataProgressResponse(0.00), HttpStatus.OK);
+    }
+
+    @Cacheable(value = "SedimentCount")
+    private double CalculateDataSize(ProcessedSedimentTrapHeader selHead) {
+        LocalDateTime startTime; //= selHead.getStartTime();
+        LocalDateTime endTime; //= selHead.getEndTime();
+        int burstCount = 0; //= selHead.getBurstCnt();
+        int burstTime = 0; //= selHead.getBurstTime();
+
+        double hoursBetween = 0.00; //= ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return hoursBetween;
+    }
+
+    @PostMapping("/data/count/headless")
+    @Cacheable(value = "SedimentCount-Headless")
+    public ResponseEntity<TotalDataResponse> getHeaderlessPercentage(@RequestBody HeaderDataRequest request) {
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        int burstCount = request.getBurstCnt();
+        int burstTime = request.getBurstTime();
+
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
+
+        hoursBetween *= (60.0 / burstTime);
+
+        hoursBetween *= burstCount;
+
+        return new ResponseEntity<>(new TotalDataResponse((int) hoursBetween ), HttpStatus.OK);
+    }
+
     //TODO: Create POST/PUT routes one entity details are identified
     @PostMapping("/upload_csv/data/{landerId}")
     public ResponseEntity<String> uploadProcessedCSV(@RequestParam("processedFile")MultipartFile processedFile, @PathVariable("landerId") String landerID) {
@@ -166,6 +225,7 @@ public class ProcessedSedimentTrapController {
 
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
+        evictSedimentCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
     }
@@ -290,6 +350,7 @@ public class ProcessedSedimentTrapController {
 
             landerController.evictLandersCache();
             dashboardController.evictMyCache();
+            evictSedimentCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
@@ -317,7 +378,10 @@ public class ProcessedSedimentTrapController {
         }
     }
 
-    //create private void method clearSedimentTrapCache using the cacheEvict annotation
+    @CacheEvict(value = {"SedimentCount", "SedimentCount-Headless"}, allEntries = true)
+    public void evictSedimentCache() {
+
+    }
 
     @PutMapping("/update/header/{id}")
     public ResponseEntity<String> updateSedimentTrapHeader(@PathVariable("id") Long id, @RequestBody UpdateSedimentTrapHeaderRequest updates) {
