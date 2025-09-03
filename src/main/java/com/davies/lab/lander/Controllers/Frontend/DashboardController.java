@@ -87,7 +87,7 @@ public class DashboardController {
     @CacheEvict(value = "dashboard", allEntries = true)
     @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
     public void evictMyCache() {
-        System.out.println("Cache Cleared");
+        System.out.println("Dashboard Cache Cleared");
     }
 
     private DashboardResponse populateDashboard() {

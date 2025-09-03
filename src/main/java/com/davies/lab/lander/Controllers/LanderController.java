@@ -211,7 +211,7 @@ public class LanderController {
     @CacheEvict(value = "latest-landers", allEntries = true)
     @Scheduled(fixedRate = 86_400_000) //24 hours to dump cache
     public void evictMyCache() {
-        System.out.println("Cleared Cache");
+        System.out.println("Lander Cache Cleared");
     }
 
     @CacheEvict(value = "landers-cache", allEntries = true)
