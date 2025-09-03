@@ -2,7 +2,6 @@ package com.davies.lab.lander.HelperClasses;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 public class StringFormatting {
 
@@ -20,7 +19,7 @@ public class StringFormatting {
         return LocalDateTime.of(year, month, day, hour, minute);
     }
 
-    public static LocalDateTime formatFrontendDateString (String inputDate) {
+    public static LocalDateTime formatFrontendDateString(String inputDate) {
         String[] dateSplit = inputDate.split("-");
         int year = Integer.parseInt(dateSplit[0]);
         int month = Integer.parseInt(dateSplit[1]);
