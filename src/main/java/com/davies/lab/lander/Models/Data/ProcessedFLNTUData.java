@@ -12,17 +12,11 @@ public class ProcessedFLNTUData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-    @Column(nullable = false)
     private LocalDateTime Date;
-    @Column(nullable = false)
     private Double TempDegC;
-    @Column(nullable = false)
     private Double ChlFluPPB;
-    @Column(nullable = false)
     private Double ChlAUgL;
-    @Column(nullable = false)
     private Double TurbMFTU;
-    @Column(nullable = false)
     private Double BattV;
     private Boolean isAligned;
     @ManyToOne
