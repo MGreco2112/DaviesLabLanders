@@ -1,6 +1,6 @@
 package com.davies.lab.lander.Models.Data.Aligned;
 
-import com.davies.lab.lander.FormattedModels.RequestBody.AlignedCTDRequest;
+import com.davies.lab.lander.FormattedModels.RequestBody.Aligned.AlignedCTDRequest;
 import com.davies.lab.lander.Models.Data.ProcessedCTDData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

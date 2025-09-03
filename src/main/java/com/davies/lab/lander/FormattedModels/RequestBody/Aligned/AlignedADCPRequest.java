@@ -1,4 +1,4 @@
-package com.davies.lab.lander.FormattedModels.RequestBody;
+package com.davies.lab.lander.FormattedModels.RequestBody.Aligned;
 
 public class AlignedADCPRequest {
     private Long rawID;
