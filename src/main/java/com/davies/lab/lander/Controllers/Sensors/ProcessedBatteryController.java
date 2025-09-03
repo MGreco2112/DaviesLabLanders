@@ -262,7 +262,6 @@ public class ProcessedBatteryController {
             return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        //TODO: process rawData into ProcessedBatteryData
         dashboardController.evictMyCache();
         landerController.evictLandersCache();
         clearBatteryCache();
