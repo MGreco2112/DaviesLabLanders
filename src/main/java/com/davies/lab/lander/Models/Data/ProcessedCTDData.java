@@ -15,17 +15,11 @@ public class ProcessedCTDData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-    @Column(nullable = false)
     private LocalDateTime Date;
-    @Column(nullable = false)
     private Double TempDegC;
-    @Column(nullable = false)
     private Double Sal;
-    @Column(nullable = false)
     private Double CondMsCm;
-    @Column(nullable = false)
     private Double Ec25UsCm;
-    @Column(nullable = false)
     private Double BattV;
     private Boolean isAligned;
     @OneToOne(mappedBy = "rawData")
