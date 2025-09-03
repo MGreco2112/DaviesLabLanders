@@ -4,6 +4,7 @@ import com.davies.lab.lander.Models.Data.ProcessedSedimentTrapData;
 import com.davies.lab.lander.Models.Lander;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,7 @@ public class ProcessedSedimentTrapHeader {
     private List<ProcessedSedimentTrapData> data;
 
     public ProcessedSedimentTrapHeader() {
+        data = new ArrayList<>();
     }
 
     private void addData(ProcessedSedimentTrapData dataPoint) {
