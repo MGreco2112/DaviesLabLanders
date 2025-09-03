@@ -103,7 +103,6 @@ public class ExternalConnectionController {
             selLander.setCtdHead(newCtdHead);
         }
 
-
         //get, create, and place DOData
         Optional<ProcessedDOHead> doHead = doHeadRepository.getDOHeadsByLanderID(selLander.getASDBLanderID());
 
@@ -130,7 +129,6 @@ public class ExternalConnectionController {
             selLander.setFlntuHead(newFlntuHead);
         }
 
-
         //get, create and place ALBEXData
         Optional<ProcessedAlbexCTDHeader> albexHead = albexHeaderRepository.getAlbexHeadsByLanderId(selLander.getASDBLanderID());
 
@@ -143,7 +141,6 @@ public class ExternalConnectionController {
 
             selLander.setAlbexHead(newAlbexHead);
         }
-
 
         //get, create and place ADCPData
         Optional<ProcessedADCPHead> adcpHead = adcpHeadRepository.getADCPHeadByLanderId(selLander.getASDBLanderID());
