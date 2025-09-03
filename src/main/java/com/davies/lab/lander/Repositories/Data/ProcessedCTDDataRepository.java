@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ProcessedCTDDataRepository extends JpaRepository<ProcessedCTDData, Long> {
-    //TODO Add custom SQL Query routes as needed by Frontend
     @Query(value = "SELECT * FROM processedctddata WHERE head_id = :id", nativeQuery = true)
     List<ProcessedCTDData> findDataByHeadId(@Param("id") Long id);
 
