@@ -72,6 +72,8 @@ public class FrontendCacheController {
 
         CTDHeadResponse headResponse = new CTDHeadResponse(head.get());
 
+        headResponse.setDataPointCount(data.size());
+
         for (ProcessedCTDData dataPoint : data) {
             headResponse.createFullDataResponse(dataPoint);
         }
@@ -114,6 +116,8 @@ public class FrontendCacheController {
         }
 
         DOHeadResponse headResponse = new DOHeadResponse(head.get());
+
+        headResponse.setDataPointCount(data.size());
 
         for (ProcessedDOData dataPoint : data) {
             headResponse.createFullDataResponse(dataPoint);
@@ -158,6 +162,8 @@ public class FrontendCacheController {
 
         FLNTUHeadResponse headResponse = new FLNTUHeadResponse(head.get());
 
+        headResponse.setDataPointCount(data.size());
+
         for (ProcessedFLNTUData dataPoint : data) {
             headResponse.createFullDataResponse(dataPoint);
         }
@@ -201,6 +207,8 @@ public class FrontendCacheController {
 
         AlbexCTDHeadResponse headResponse = new AlbexCTDHeadResponse(head.get());
 
+        headResponse.setDataPointCount(data.size());
+
         for (ProcessedAlbexCTDData dataPoint : data) {
             headResponse.createFullDataResponse(dataPoint);
         }
@@ -243,6 +251,8 @@ public class FrontendCacheController {
         }
 
         ADCPHeadResponse headResponse = new ADCPHeadResponse(head.get());
+
+        headResponse.setDataPointCount(data.size());
 
         for (ProcessedADCPData dataPoint : data) {
             headResponse.createFullDataResponse(dataPoint);
