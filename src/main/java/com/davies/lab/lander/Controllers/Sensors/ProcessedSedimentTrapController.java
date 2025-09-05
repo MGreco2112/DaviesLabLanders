@@ -138,6 +138,41 @@ public class ProcessedSedimentTrapController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/data/headId/{id}")
+    public ResponseEntity<List<SedimentTrapDataResponse>> findDataByHeadId(@PathVariable("id") Long id) {
+        List<ProcessedSedimentTrapData> data = repository.findDataByHeadId(id);
+        List<SedimentTrapDataResponse> res = new ArrayList<>();
+
+        if (data.size() == 0) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        for (ProcessedSedimentTrapData elem : data) {
+            res.add(new SedimentTrapDataResponse(
+                    elem
+            ));
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<SedimentTrapDataResponse>> getDataByRange(@PathVariable("id") Long headId, @PathVariable("startDate") LocalDateTime startDate, @PathVariable("endDate") LocalDateTime endDate) {
+        List<SedimentTrapDataResponse> res = new ArrayList<>();
+
+        List<ProcessedSedimentTrapData> data = repository.findDataByHeadAndDateRange(headId, startDate, endDate);
+
+        for (ProcessedSedimentTrapData selData : data) {
+            res.add(
+                    new SedimentTrapDataResponse(
+                            selData
+                    )
+            );
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/data/count/{landerID}")
     public ResponseEntity<DataProgressResponse> getDataCountFromHeadID(@PathVariable("landerID") String landerID) {
         Lander selLander = landerRepository.findById(landerID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

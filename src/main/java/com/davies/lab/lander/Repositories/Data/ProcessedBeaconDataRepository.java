@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,7 @@ public interface ProcessedBeaconDataRepository extends JpaRepository<ProcessedBe
 
     @Query(value = "SELECT COUNT(*) FROM processed_beacon_data WHERE head_id = :id", nativeQuery = true)
     Integer findCountByHeadID(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM processed_beacon_data WHERE head_id = :id AND date BETWEEN :startDate AND :endDate", nativeQuery = true)
+    List<ProcessedBeaconData> findDataByHeadAndDateRange(Long id, LocalDateTime startDate, LocalDateTime endDate);
 }

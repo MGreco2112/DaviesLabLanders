@@ -51,6 +51,7 @@ public class ProcessedBatteryController {
     private LanderController landerController;
 
     //Head Routes
+    @GetMapping("/headers")
     public List<BatteryHeadResponse> findAllHeads() {
         List<ProcessedBatteryHeader> heads = headRepository.findAll();
         List<BatteryHeadResponse> res = new ArrayList<>();
@@ -152,6 +153,23 @@ public class ProcessedBatteryController {
             res.add(
                     new BatteryDataResponse(
                             elem
+                    )
+            );
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/headId/{id}/startDate/{startDate}/endDate/{endDate}")
+    public ResponseEntity<List<BatteryDataResponse>> getDataByDateRange(@PathVariable("id") Long headId, @PathVariable("startDate") LocalDateTime startDate, @PathVariable("endDate") LocalDateTime endDate) {
+        List<BatteryDataResponse> res = new ArrayList<>();
+
+        List<ProcessedBatteryData> data = repository.findDataByHeadAndDateRange(headId, startDate, endDate);
+
+        for (ProcessedBatteryData selData : data) {
+            res.add(
+                    new BatteryDataResponse(
+                            selData
                     )
             );
         }
