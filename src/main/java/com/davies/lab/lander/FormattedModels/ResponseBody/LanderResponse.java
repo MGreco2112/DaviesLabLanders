@@ -11,6 +11,7 @@ public class LanderResponse {
     private String ADDBROVDiveID;
     public LocalDateTime deploymentDate;
     public LocalDateTime recoveryDate;
+
     private CTDHeadResponse CTDHead;
     private DOHeadResponse DOHead;
     private FLNTUHeadResponse FLNTUHead;
