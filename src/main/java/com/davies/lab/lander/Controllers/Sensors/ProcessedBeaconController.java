@@ -202,7 +202,7 @@ public class ProcessedBeaconController {
         int burstCount = 0; //= selHead.getBurstCnt();
         int burstTime = 0; //selHead.getBurstTime();
 
-        double hoursBetween = 0.0; //ChronoUnit.HOURS.between(startTime, endTIme);
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
 
         hoursBetween *= (60.0 / burstTime);
 

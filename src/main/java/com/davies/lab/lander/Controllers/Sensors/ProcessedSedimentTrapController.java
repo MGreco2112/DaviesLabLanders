@@ -199,7 +199,7 @@ public class ProcessedSedimentTrapController {
         int burstCount = 0; //= selHead.getBurstCnt();
         int burstTime = 0; //= selHead.getBurstTime();
 
-        double hoursBetween = 0.00; //= ChronoUnit.HOURS.between(startTime, endTime);
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
 
         hoursBetween *= (60.0 / burstTime);
 
