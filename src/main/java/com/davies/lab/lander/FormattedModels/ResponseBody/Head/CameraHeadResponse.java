@@ -3,23 +3,30 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.Head;
 import com.davies.lab.lander.Models.Data.ProcessedCameraData;
 import com.davies.lab.lander.Models.Headers.ProcessedCameraHeader;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CameraHeadResponse {
     private Long HeadID;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     private String LanderID;
     private Integer dataPointCount;
     private List<CameraDataResponse> data;
 
-    public CameraHeadResponse(Long headID, String landerID) {
+    public CameraHeadResponse(Long headID, String landerID, LocalDateTime startTime, LocalDateTime endTime) {
         HeadID = headID;
         LanderID = landerID;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public CameraHeadResponse(ProcessedCameraHeader head) {
         HeadID = head.getHeadID();
         LanderID = head.getLanderID().getASDBLanderID();
+        startTime = head.getStartTime();
+        endTime = head.getEndTime();
     }
 
     public void createDataResponse(ProcessedCameraData dataPoint) {
@@ -34,6 +41,22 @@ public class CameraHeadResponse {
 
     public void setHeadID(Long headID) {
         HeadID = headID;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getLanderID() {

@@ -3,18 +3,23 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.Head;
 import com.davies.lab.lander.Models.Data.ProcessedSedimentTrapData;
 import com.davies.lab.lander.Models.Headers.ProcessedSedimentTrapHeader;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SedimentTrapHeadResponse {
     private Long HeadID;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String LanderID;
     private Integer dataPointCount;
     private List<SedimentTrapDataResponse> data = new ArrayList<>();
 
-    public SedimentTrapHeadResponse(Long headID, String landerID) {
+    public SedimentTrapHeadResponse(Long headID, String landerID, LocalDateTime startTime, LocalDateTime endTime) {
         HeadID = headID;
         LanderID = landerID;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public SedimentTrapHeadResponse(ProcessedSedimentTrapHeader head) {
@@ -36,6 +41,22 @@ public class SedimentTrapHeadResponse {
 
     public void setHeadID(Long headID) {
         HeadID = headID;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getLanderID() {

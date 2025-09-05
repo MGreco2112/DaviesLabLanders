@@ -181,12 +181,12 @@ public class ProcessedBatteryController {
     @Cacheable(value = "BatteryCount")
     private double calculateDataSize(ProcessedBatteryHeader selHead) {
 //        TODO: update with added header getter methods
-        LocalDateTime startTime; //= selHead.getStartTime();
-        LocalDateTime endTime; //= selHead.getEndTime();
+        LocalDateTime startTime = selHead.getStartTime();
+        LocalDateTime endTime= selHead.getEndTime();
         int burstCount = 0; //= selHead.getBurstCnt();
         int burstTime = 0; //= selHead.getBurstTime();
 
-        double hoursBetween = 0.0; //= ChronoUnit.HOURS.between(startTime, endTime);
+        double hoursBetween = ChronoUnit.HOURS.between(startTime, endTime);
 
         hoursBetween *= (60.0 / burstTime);
 
@@ -431,6 +431,12 @@ public class ProcessedBatteryController {
         if (updates.getLanderID() != null) {
             selHead.setLanderID(updates.getLanderID());
         }
+        if (updates.getStartTime() != null) {
+            selHead.setStartTime(updates.getStartTime());
+        }
+        if (updates.getEndTime() != null) {
+            selHead.setEndTime(updates.getEndTime());
+        }
         if (updates.getData() != null) {
             selHead.setData(updates.getData());
         }
@@ -473,6 +479,7 @@ public class ProcessedBatteryController {
 
         dashboardController.evictMyCache();
         landerController.evictLandersCache();
+        clearBatteryCache();
 
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
     }
@@ -489,6 +496,7 @@ public class ProcessedBatteryController {
 
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
+        clearBatteryCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
     }

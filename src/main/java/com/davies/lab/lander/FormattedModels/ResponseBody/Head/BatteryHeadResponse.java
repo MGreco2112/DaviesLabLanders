@@ -3,12 +3,16 @@ package com.davies.lab.lander.FormattedModels.ResponseBody.Head;
 import com.davies.lab.lander.Models.Data.ProcessedBatteryData;
 import com.davies.lab.lander.Models.Headers.ProcessedBatteryHeader;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BatteryHeadResponse {
     private Long HeadID;
     private String LanderID;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Integer dataPointCount;
     private List<BatteryDataResponse> data = new ArrayList<>();
 
@@ -20,6 +24,8 @@ public class BatteryHeadResponse {
     public BatteryHeadResponse(ProcessedBatteryHeader head) {
         this.HeadID = head.getHeadID();
         this.LanderID = head.getLanderID().getASDBLanderID();
+        startTime = head.getStartTime();
+        endTime = head.getEndTime();
     }
 
     public void createDataResponse(ProcessedBatteryData dataPoint) {
@@ -41,6 +47,22 @@ public class BatteryHeadResponse {
 
     public void setLanderID(String landerID) {
         LanderID = landerID;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public Integer getDataPointCount() {

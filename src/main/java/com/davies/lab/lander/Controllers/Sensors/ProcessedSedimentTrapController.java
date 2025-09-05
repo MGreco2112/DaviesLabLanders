@@ -21,6 +21,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/processed/sediment_trap")
+@EnableCaching
 public class ProcessedSedimentTrapController {
     @Autowired
     private LanderRepository landerRepository;
@@ -157,8 +159,8 @@ public class ProcessedSedimentTrapController {
 
     @Cacheable(value = "SedimentCount")
     private double CalculateDataSize(ProcessedSedimentTrapHeader selHead) {
-        LocalDateTime startTime; //= selHead.getStartTime();
-        LocalDateTime endTime; //= selHead.getEndTime();
+        LocalDateTime startTime = selHead.getStartTime();
+        LocalDateTime endTime = selHead.getEndTime();
         int burstCount = 0; //= selHead.getBurstCnt();
         int burstTime = 0; //= selHead.getBurstTime();
 
@@ -240,7 +242,7 @@ public class ProcessedSedimentTrapController {
 
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
-        evictSedimentCache();
+        clearSedimentCache();
 
         return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
     }
@@ -365,7 +367,7 @@ public class ProcessedSedimentTrapController {
 
             landerController.evictLandersCache();
             dashboardController.evictMyCache();
-            evictSedimentCache();
+            clearSedimentCache();
 
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
@@ -394,7 +396,7 @@ public class ProcessedSedimentTrapController {
     }
 
     @CacheEvict(value = {"SedimentCount", "SedimentCount-Headless"}, allEntries = true)
-    public void evictSedimentCache() {
+    public void clearSedimentCache() {
 
     }
 
@@ -404,6 +406,12 @@ public class ProcessedSedimentTrapController {
 
         if (updates.getLanderID() != null) {
             selHead.setLanderID(updates.getLanderID());
+        }
+        if (updates.getStartTime() != null) {
+            selHead.setStartTime(updates.getStartTime());
+        }
+        if (updates.getEndTime() != null) {
+            selHead.setEndTime(updates.getEndTime());
         }
         if (updates.getData() != null) {
             selHead.setData(updates.getData());
@@ -447,6 +455,7 @@ public class ProcessedSedimentTrapController {
 
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
+        clearSedimentCache();
 
         return new ResponseEntity<>("Deleted Head", HttpStatus.OK);
     }
@@ -463,6 +472,7 @@ public class ProcessedSedimentTrapController {
 
         landerController.evictLandersCache();
         dashboardController.evictMyCache();
+        clearSedimentCache();
 
         return new ResponseEntity<>("Deleted Data", HttpStatus.OK);
     }
