@@ -96,7 +96,13 @@ public class ExternalConnectionController {
         if (ctdHead.isPresent()) {
             CTDHeadResponseExternal newCtdHead = new CTDHeadResponseExternal(ctdHead.get());
 
-            List<CTDDataResponseExternal> ctdDataList = CTDDataResponseExternal.createBulkResponses(ctdDataRepository.findDataByHeadAndAlingedStatus(ctdHead.get().getHeadID(), true));
+            List<CTDDataResponseExternal> ctdDataList =
+                    CTDDataResponseExternal.createBulkResponses(
+                            ctdDataRepository.findDataByHeadAndAlingedStatus(
+                                    ctdHead.get().getHeadID(),
+                                    true
+                            )
+                    );
 
             newCtdHead.setData(ctdDataList);
 
@@ -109,7 +115,12 @@ public class ExternalConnectionController {
         if (doHead.isPresent()) {
             DOHeadResponseExternal newDoHead = new DOHeadResponseExternal(doHead.get());
 
-            List<DODataResponseExternal> doDataList = DODataResponseExternal.createDataResponses(doDataRepository.findDoDataByHeadId(doHead.get().getHeadID()));
+            List<DODataResponseExternal> doDataList =
+                    DODataResponseExternal.createDataResponses(
+                            doDataRepository.findDoDataByHeadId(
+                                    doHead.get().getHeadID()
+                            )
+                    );
 
             newDoHead.setData(doDataList);
 
@@ -122,7 +133,12 @@ public class ExternalConnectionController {
         if (flntuHead.isPresent()) {
             FLNTUHeadResponseExternal newFlntuHead = new FLNTUHeadResponseExternal(flntuHead.get());
 
-            List<FLNTUDataResponseExternal> flntuDataList = FLNTUDataResponseExternal.createDataResponse(flntuDataRepository.findDataFromHeadId(flntuHead.get().getHeadID()));
+            List<FLNTUDataResponseExternal> flntuDataList =
+                    FLNTUDataResponseExternal.createDataResponse(
+                            flntuDataRepository.findDataFromHeadId(
+                                    flntuHead.get().getHeadID()
+                            )
+                    );
 
             newFlntuHead.setData(flntuDataList);
 
@@ -135,7 +151,12 @@ public class ExternalConnectionController {
         if (albexHead.isPresent()) {
             ALBEXCTDHeadResponseExternal newAlbexHead = new ALBEXCTDHeadResponseExternal(albexHead.get());
 
-            List<ALBEXCTDDataResponseExternal> albexDataList = ALBEXCTDDataResponseExternal.createBulkResponses(albexDataRepository.findDataByHeadId(albexHead.get().getHeadID()));
+            List<ALBEXCTDDataResponseExternal> albexDataList =
+                    ALBEXCTDDataResponseExternal.createBulkResponses(
+                            albexDataRepository.findDataByHeadId(
+                                    albexHead.get().getHeadID()
+                            )
+                    );
 
             newAlbexHead.setData(albexDataList);
 
@@ -148,7 +169,13 @@ public class ExternalConnectionController {
         if (adcpHead.isPresent()) {
             ADCPHeadResponseExternal newADCPHead = new ADCPHeadResponseExternal(adcpHead.get());
 
-            List<ADCPDataResponseExternal> adcpDataList = ADCPDataResponseExternal.createBulkResponses(adcpDataRepository.findDataByHeadAndAlignedStatus(adcpHead.get().getHeadID(), true));
+            List<ADCPDataResponseExternal> adcpDataList =
+                    ADCPDataResponseExternal.createBulkResponses(
+                            adcpDataRepository.findDataByHeadAndAlignedStatus(
+                                    adcpHead.get().getHeadID(),
+                                    true
+                            )
+                    );
 
             newADCPHead.setData(adcpDataList);
 
@@ -161,7 +188,12 @@ public class ExternalConnectionController {
         if (batteryHead.isPresent()) {
             BatteryHeadResponseExternal newBatteryHead = new BatteryHeadResponseExternal(batteryHead.get());
 
-            List<BatteryDataResponseExternal> batteryDataList = BatteryDataResponseExternal.createDataResponse(batteryDataRepository.findDataByHeadId(batteryHead.get().getHeadID()));
+            List<BatteryDataResponseExternal> batteryDataList =
+                    BatteryDataResponseExternal.createDataResponse(
+                            batteryDataRepository.findDataByHeadId(
+                                    batteryHead.get().getHeadID()
+                            )
+                    );
 
             newBatteryHead.setData(batteryDataList);
 
@@ -174,7 +206,12 @@ public class ExternalConnectionController {
         if (beaconHead.isPresent()) {
             BeaconHeadResponseExternal newBeaconHead = new BeaconHeadResponseExternal(beaconHead.get());
 
-            List<BeaconDataResponseExternal> beaconList = BeaconDataResponseExternal.createDataResponse(beaconDataRepository.findDataByHeadId(beaconHead.get().getHeadID()));
+            List<BeaconDataResponseExternal> beaconList =
+                    BeaconDataResponseExternal.createDataResponse(
+                            beaconDataRepository.findDataByHeadId(
+                                    beaconHead.get().getHeadID()
+                            )
+                    );
 
             newBeaconHead.setData(beaconList);
 
@@ -187,7 +224,12 @@ public class ExternalConnectionController {
         if (cameraHead.isPresent()) {
             CameraHeadResponseExternal newCameraHead = new CameraHeadResponseExternal(cameraHead.get());
 
-            List<CameraDataResponseExternal> cameraList = CameraDataResponseExternal.createDataResponse(cameraDataRepository.findDataByHeadId(cameraHead.get().getHeadID()));
+            List<CameraDataResponseExternal> cameraList =
+                    CameraDataResponseExternal.createDataResponse(
+                            cameraDataRepository.findDataByHeadId(
+                                    cameraHead.get().getHeadID()
+                            )
+                    );
 
             newCameraHead.setData(cameraList);
 
@@ -200,7 +242,12 @@ public class ExternalConnectionController {
         if (sedimentTrapHead.isPresent()) {
             SedimentTrapHeadResponseExternal newSedimentTrapHead = new SedimentTrapHeadResponseExternal(sedimentTrapHead.get());
 
-            List<SedimentTrapDataResponseExternal> sedimentTrapList = SedimentTrapDataResponseExternal.createDataResponse(sedimentTrapDataRepository.findDataByHeadId(sedimentTrapHead.get().getHeadID()));
+            List<SedimentTrapDataResponseExternal> sedimentTrapList =
+                    SedimentTrapDataResponseExternal.createDataResponse(
+                            sedimentTrapDataRepository.findDataByHeadId(
+                                    sedimentTrapHead.get().getHeadID()
+                            )
+                    );
 
             newSedimentTrapHead.setData(sedimentTrapList);
 
