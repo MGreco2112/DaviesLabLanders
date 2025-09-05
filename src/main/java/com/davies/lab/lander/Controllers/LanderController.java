@@ -98,6 +98,22 @@ public class LanderController {
                  LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.getADCPHead().getHeadID());
                  res.createADCPHeadResponse(lander.getADCPHead(), startTime, endTime);
              }
+             if (lander.getBatteryHead() != null) {
+                 //TODO: add startTime and endTime values to constructor call
+                 res.createBatteryHeadResponse(lander.getBatteryHead(), null, null);
+             }
+             if (lander.getBeaconHead() != null) {
+                 //TODO: add startTime and endTime values to constructor call
+                 res.createBeaconHeadResponse(lander.getBeaconHead(), null, null);
+             }
+             if (lander.getCameraHead() != null) {
+                 //TODO: add startTime and endTime values to constructor call
+                 res.createCameraHeadResponse(lander.getCameraHead(), null, null);
+             }
+             if (lander.getSedimentTrapHead() != null) {
+                 //TODO: add startTime and endTime values to constructor call
+                 res.createSedimentTrapHeadResponse(lander.getSedimentTrapHead(), null, null);
+             }
 
              if (lander.getDeploymentDateAndTime() != null) {
                  res.setDeploymentDate(lander.getDeploymentDateAndTime());
@@ -141,6 +157,22 @@ public class LanderController {
             LocalDateTime startTime = adcpDataRepository.findDeploymentDateByHeadID(lander.get().getADCPHead().getHeadID());
             LocalDateTime endTime = adcpDataRepository.findRecoveryDateByHeadID(lander.get().getADCPHead().getHeadID());
             res.createADCPHeadResponse(lander.get().getADCPHead(), startTime, endTime);
+        }
+        if (lander.get().getBatteryHead() != null) {
+            //TODO: add startTime and endTime values to constructor call
+            res.createBatteryHeadResponse(lander.get().getBatteryHead(), null, null);
+        }
+        if (lander.get().getBeaconHead() != null) {
+            //TODO: add startTime and endTime values to constructor call
+            res.createBeaconHeadResponse(lander.get().getBeaconHead(), null, null);
+        }
+        if (lander.get().getCameraHead() != null) {
+            //TODO: add startTime and endTime values to constructor call
+            res.createCameraHeadResponse(lander.get().getCameraHead(), null, null);
+        }
+        if (lander.get().getSedimentTrapHead() != null) {
+            //TODO: add startTime and endTime values to constructor call
+            res.createSedimentTrapHeadResponse(lander.get().getSedimentTrapHead(), null, null);
         }
 
         if (lander.get().getDeploymentDateAndTime() != null) {
@@ -264,6 +296,18 @@ public class LanderController {
         }
         if (updates.getADCPHead() != null) {
             selLander.setADCPHead(updates.getADCPHead());
+        }
+        if (updates.getBatteryHead() != null) {
+            selLander.setBatteryHead(updates.getBatteryHead());
+        }
+        if (updates.getBeaconHead() != null) {
+            selLander.setBeaconHead(updates.getBeaconHead());
+        }
+        if (updates.getCameraHead() != null) {
+            selLander.setCameraHead(updates.getCameraHead());
+        }
+        if (updates.getSedimentTrapHead() != null) {
+            selLander.setSedimentTrapHead(updates.getSedimentTrapHead());
         }
 
         repository.save(selLander);
