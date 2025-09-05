@@ -19,7 +19,7 @@ public class UpdateCameraHeaderRequest {
         LanderID = landerID;
         this.data = data;
         this.startTime = startTime;
-        this.endTime = endTime
+        this.endTime = endTime;
     }
 
     public Lander getLanderID() {
