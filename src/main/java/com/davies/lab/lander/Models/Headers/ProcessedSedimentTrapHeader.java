@@ -4,6 +4,7 @@ import com.davies.lab.lander.Models.Data.ProcessedSedimentTrapData;
 import com.davies.lab.lander.Models.Lander;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,8 @@ public class ProcessedSedimentTrapHeader {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long HeadID;
+    private LocalDateTime StartTime;
+    private LocalDateTime EndTime;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lander_id", referencedColumnName = "ASDBLanderID")
@@ -33,6 +36,22 @@ public class ProcessedSedimentTrapHeader {
 
     public void setHeadID(Long headID) {
         HeadID = headID;
+    }
+
+    public LocalDateTime getStartTime() {
+        return StartTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        StartTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return EndTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        EndTime = endTime;
     }
 
     public Lander getLanderID() {

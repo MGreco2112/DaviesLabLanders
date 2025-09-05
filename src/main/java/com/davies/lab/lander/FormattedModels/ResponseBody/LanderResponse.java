@@ -75,10 +75,18 @@ public class LanderResponse {
         BatteryHead.setEndTime(endTime);
     }
 
+    public void createBatteryHeadResponse(ProcessedBatteryHeader head) {
+        BatteryHead = new BatteryHeadResponse(head);
+    }
+
     public void createBeaconHeadResponse(ProcessedBeaconHeader head, LocalDateTime startTime, LocalDateTime endTime) {
         BeaconHead = new BeaconHeadResponse(head.getHeadID());
         BeaconHead.setStartTime(startTime);
         BeaconHead.setEndTime(endTime);
+    }
+
+    public void createBeaconHeadResponse(ProcessedBeaconHeader head) {
+        BeaconHead = new BeaconHeadResponse(head);
     }
 
     public void createCameraHeadResponse(ProcessedCameraHeader head, LocalDateTime startTime, LocalDateTime endTime) {
@@ -87,10 +95,18 @@ public class LanderResponse {
         CameraHead.setEndTime(endTime);
     }
 
+    public void createCameraHeadResponse(ProcessedCameraHeader head) {
+        CameraHead = new CameraHeadResponse(head);
+    }
+
     public void createSedimentTrapHeadResponse(ProcessedSedimentTrapHeader head, LocalDateTime startTime, LocalDateTime endTime) {
         SedimentTrapHead = new SedimentTrapHeadResponse(head.getHeadID());
         SedimentTrapHead.setStartTime(startTime);
         SedimentTrapHead.setEndTime(endTime);
+    }
+
+    public void createSedimentTrapHeadResponse(ProcessedSedimentTrapHeader head) {
+        SedimentTrapHead = new SedimentTrapHeadResponse(head);
     }
 
     public String getASDBLanderID() {
@@ -472,6 +488,12 @@ public class LanderResponse {
             HeadID = headID;
         }
 
+        public BatteryHeadResponse(ProcessedBatteryHeader head) {
+            HeadID = head.getHeadID();
+            startTime = head.getStartTime();
+            endTime = head.getEndTime();
+        }
+
         public Long getHeadID() {
             return HeadID;
         }
@@ -507,6 +529,12 @@ public class LanderResponse {
 
         public BeaconHeadResponse(Long headID) {
             HeadID = headID;
+        }
+
+        public BeaconHeadResponse(ProcessedBeaconHeader head) {
+            HeadID = head.getHeadID();
+            startTime = head.getStartTime();
+            endTime = head.getEndTime();
         }
 
         public Long getHeadID() {
@@ -546,6 +574,12 @@ public class LanderResponse {
             HeadID = headID;
         }
 
+        public CameraHeadResponse(ProcessedCameraHeader head) {
+            HeadID = head.getHeadID();
+            startTime = head.getStartTime();
+            endTime = head.getEndTime();
+        }
+
         public Long getHeadID() {
             return HeadID;
         }
@@ -581,6 +615,12 @@ public class LanderResponse {
 
         public SedimentTrapHeadResponse(Long headID) {
             HeadID = headID;
+        }
+
+        public SedimentTrapHeadResponse(ProcessedSedimentTrapHeader head) {
+            HeadID = head.getHeadID();
+            startTime = head.getStartTime();
+            endTime = head.getEndTime();
         }
 
         public Long getHeadID() {

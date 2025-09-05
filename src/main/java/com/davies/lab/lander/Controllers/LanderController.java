@@ -99,20 +99,16 @@ public class LanderController {
                  res.createADCPHeadResponse(lander.getADCPHead(), startTime, endTime);
              }
              if (lander.getBatteryHead() != null) {
-                 //TODO: add startTime and endTime values to constructor call
-                 res.createBatteryHeadResponse(lander.getBatteryHead(), null, null);
+                 res.createBatteryHeadResponse(lander.getBatteryHead());
              }
              if (lander.getBeaconHead() != null) {
-                 //TODO: add startTime and endTime values to constructor call
-                 res.createBeaconHeadResponse(lander.getBeaconHead(), null, null);
+                 res.createBeaconHeadResponse(lander.getBeaconHead());
              }
              if (lander.getCameraHead() != null) {
-                 //TODO: add startTime and endTime values to constructor call
-                 res.createCameraHeadResponse(lander.getCameraHead(), null, null);
+                 res.createCameraHeadResponse(lander.getCameraHead());
              }
              if (lander.getSedimentTrapHead() != null) {
-                 //TODO: add startTime and endTime values to constructor call
-                 res.createSedimentTrapHeadResponse(lander.getSedimentTrapHead(), null, null);
+                 res.createSedimentTrapHeadResponse(lander.getSedimentTrapHead());
              }
 
              if (lander.getDeploymentDateAndTime() != null) {
@@ -159,20 +155,16 @@ public class LanderController {
             res.createADCPHeadResponse(lander.get().getADCPHead(), startTime, endTime);
         }
         if (lander.get().getBatteryHead() != null) {
-            //TODO: add startTime and endTime values to constructor call
-            res.createBatteryHeadResponse(lander.get().getBatteryHead(), null, null);
+            res.createBatteryHeadResponse(lander.get().getBatteryHead());
         }
         if (lander.get().getBeaconHead() != null) {
-            //TODO: add startTime and endTime values to constructor call
-            res.createBeaconHeadResponse(lander.get().getBeaconHead(), null, null);
+            res.createBeaconHeadResponse(lander.get().getBeaconHead());
         }
         if (lander.get().getCameraHead() != null) {
-            //TODO: add startTime and endTime values to constructor call
-            res.createCameraHeadResponse(lander.get().getCameraHead(), null, null);
+            res.createCameraHeadResponse(lander.get().getCameraHead());
         }
         if (lander.get().getSedimentTrapHead() != null) {
-            //TODO: add startTime and endTime values to constructor call
-            res.createSedimentTrapHeadResponse(lander.get().getSedimentTrapHead(), null, null);
+            res.createSedimentTrapHeadResponse(lander.get().getSedimentTrapHead());
         }
 
         if (lander.get().getDeploymentDateAndTime() != null) {
