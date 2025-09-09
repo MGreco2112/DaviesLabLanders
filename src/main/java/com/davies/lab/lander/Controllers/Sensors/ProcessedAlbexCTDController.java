@@ -81,7 +81,7 @@ public class ProcessedAlbexCTDController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        res = new AlbexCTDHeadResponse(head.get().getHeadID(), head.get().getLanderID().getASDBLanderID());
+        res = new AlbexCTDHeadResponse(head.get());
 
         res.setDataPointCount(head.get().getData().size());
 
@@ -100,7 +100,7 @@ public class ProcessedAlbexCTDController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        res = new AlbexCTDHeadResponse(head.get().getHeadID(), head.get().getLanderID().getASDBLanderID());
+        res = new AlbexCTDHeadResponse(head.get());
 
         for (ProcessedAlbexCTDData data : head.get().getData()) {
             res.createDataResponse(data);

@@ -154,7 +154,11 @@ public class ProcessedCTDController {
         List<AlignedCTDDataResponse> res = new ArrayList<>();
 
         for (ProcessedCTDData dataPoint : data) {
-            res.add(new AlignedCTDDataResponse(dataPoint));
+            res.add(
+                    new AlignedCTDDataResponse(
+                            dataPoint
+                    )
+            );
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -166,9 +170,11 @@ public class ProcessedCTDController {
         List<CTDDataResponse> res = new ArrayList<>();
 
         for (ProcessedCTDData dataPoint : data) {
-            res.add(new CTDDataResponse(
-                    dataPoint
-            ));
+            res.add(
+                    new CTDDataResponse(
+                        dataPoint
+                    )
+            );
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -200,9 +206,11 @@ public class ProcessedCTDController {
         }
 
         for (ProcessedCTDData elem : data) {
-            res.add(new CTDDataResponse(
-                    elem
-            ));
+            res.add(
+                    new CTDDataResponse(
+                            elem
+                    )
+            );
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -233,7 +241,9 @@ public class ProcessedCTDController {
 
         for (ProcessedCTDData dataPoint : data) {
             res.add(
-                    new AlignedCTDDataResponse(dataPoint)
+                    new AlignedCTDDataResponse(
+                            dataPoint
+                    )
             );
         }
 

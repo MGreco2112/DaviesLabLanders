@@ -199,9 +199,11 @@ public class ProcessedFLNTUController {
         }
 
         for (ProcessedFLNTUData elem : data) {
-            res.add(new FLNTUDataResponse(
-                    elem
-            ));
+            res.add(
+                    new FLNTUDataResponse(
+                            elem
+                    )
+            );
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);

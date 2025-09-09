@@ -88,7 +88,7 @@ public class ProcessedADCPController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        res = new ADCPHeadResponse(head.get().getHeadID(), head.get().getLanderID().getASDBLanderID());
+        res = new ADCPHeadResponse(head.get());
 
         res.setDataPointCount(head.get().getData().size());
         res.setAlignedDataPointCount(repository.findAlignedCountByHeadID(head.get().getHeadID()));
@@ -108,7 +108,7 @@ public class ProcessedADCPController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        res = new ADCPHeadResponse(head.get().getHeadID(), head.get().getLanderID().getASDBLanderID());
+        res = new ADCPHeadResponse(head.get());
 
         for (ProcessedADCPData data : head.get().getData()) {
             res.createDataResponse(data);

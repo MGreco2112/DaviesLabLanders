@@ -199,9 +199,11 @@ public class ProcessedDOController {
         }
 
         for (ProcessedDOData elem : data) {
-            res.add(new DODataResponse(
-                    elem
-            ));
+            res.add(
+                    new DODataResponse(
+                        elem
+                    )
+            );
         }
 
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -325,10 +327,12 @@ public class ProcessedDOController {
 
         try {
             for (DO_CSV_Request dataElement : rawData) {
-                repository.save(new ProcessedDOData(
-                        dataElement,
-                        savedHead
-                ));
+                repository.save(
+                        new ProcessedDOData(
+                            dataElement,
+                            savedHead
+                        )
+                );
             }
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
