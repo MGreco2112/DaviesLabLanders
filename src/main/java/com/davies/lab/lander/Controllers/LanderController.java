@@ -77,7 +77,7 @@ public class LanderController {
          List<LanderResponse> resList = new ArrayList<>();
 
          for (Lander lander : landerList) {
-             LanderResponse res = new LanderResponse(lander.getASDBLanderID(), lander.getLanderPlatform(), lander.getASDBROVDiveID());
+             LanderResponse res = new LanderResponse(lander);
 
              if (lander.getCTDHead() != null) {
                  res.createBasicCTDHeadResponse(lander.getCTDHead());
@@ -111,13 +111,6 @@ public class LanderController {
                  res.createSedimentTrapHeadResponse(lander.getSedimentTrapHead());
              }
 
-             if (lander.getDeploymentDateAndTime() != null) {
-                 res.setDeploymentDate(lander.getDeploymentDateAndTime());
-             }
-
-             if (lander.getRecoveryDateAndTime() != null) {
-                 res.setRecoveryDate(lander.getRecoveryDateAndTime());
-             }
 
              resList.add(res);
          }
@@ -187,9 +180,7 @@ public class LanderController {
         for (Lander lander : landers) {
             res.add(
                     new LanderResponse(
-                            lander.getASDBLanderID(),
-                            lander.getLanderPlatform(),
-                            lander.getASDBROVDiveID()
+                            lander
                     )
             );
         }
@@ -205,9 +196,7 @@ public class LanderController {
         for (Lander selLander : landerSet) {
             res.add(
                     new LanderResponse(
-                            selLander.getASDBLanderID(),
-                            selLander.getLanderPlatform(),
-                            selLander.getASDBROVDiveID()
+                            selLander
                     )
             );
         }
@@ -222,11 +211,11 @@ public class LanderController {
         List<LanderResponse> res = new ArrayList<>();
 
         for (Lander lander : landers) {
-            LanderResponse temp = new LanderResponse(lander);
-            temp.setDeploymentDate(lander.getDeploymentDateAndTime());
-            temp.setRecoveryDate(lander.getRecoveryDateAndTime());
-
-            res.add(temp);
+            res.add(
+                    new LanderResponse(
+                            lander
+                    )
+            );
         }
 
         return new ResponseEntity<>(new LatestLandersResponse(res), HttpStatus.OK);

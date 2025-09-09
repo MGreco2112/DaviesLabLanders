@@ -32,6 +32,8 @@ public class LanderResponse {
         ASDBLanderID = lander.getASDBLanderID();
         LanderPlatform = lander.getLanderPlatform();
         ADDBROVDiveID = lander.getASDBROVDiveID();
+        deploymentDate = lander.getDeploymentDateAndTime();
+        recoveryDate = lander.getRecoveryDateAndTime();
     }
 
     public void createCTDHeadResponse(ProcessedCTDHead head) {
